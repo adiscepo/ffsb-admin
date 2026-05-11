@@ -24,7 +24,6 @@ return new class extends Migration
         Schema::create('docu_production_house', function (Blueprint $table) {
             $table->foreignId('docu_id')->constrained()->cascadeOnDelete();
             $table->foreignId('production_house_id')->constrained()->cascadeOnDelete();
-            $table->timestamps();
         });
     }
 

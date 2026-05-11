@@ -23,6 +23,7 @@ class DocuFactory extends Factory
             'title' => fake()->sentence(3),
             'summary' => fake()->text(),
             'duration' => fake()->randomNumber(2),
+            'year' => fake()->year('+1 year'),
             'lang' => fake()->randomElement(DocuLang::cases()),
             'subtitles' => fake()->boolean(50) ? fake()->randomElement(DocuLang::cases()) : null,
             'found_by' => fake()->numberBetween(1, User::latest('id')->first()->id)

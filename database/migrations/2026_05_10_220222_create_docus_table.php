@@ -15,13 +15,43 @@ return new class extends Migration
     {
         Schema::create('docus', function (Blueprint $table) {
             $table->id();
-            $table->string(column: "title", length: 255);
-            $table->string(column: "summary")->nullable();
-            $table->integer("duration");
-            $table->foreignIdFor(User::class, "found_by")->constrained()->cascadeOnDelete();
-            $table->enum("lang", DocuLang::cases());
-            $table->enum("subtitles", DocuLang::cases())->nullable();
+            $table->string('title', 255);
+            $table->string('summary')->nullable();
+            $table->integer('duration');
+            $table->year('year');
+            $table->foreignIdFor(User::class, 'found_by')->constrained()->cascadeOnDelete();
+            $table->enum('lang', DocuLang::cases());
+            $table->enum('subtitles', DocuLang::cases())->nullable();
+            $table->text('comment')->nullable();
             $table->timestamps();
+        });
+
+        // The fields of the documentary (Biology, Math, etc.)
+        // Use a pivot table
+        Schema::create('fields', function (Blueprint $table) {
+            $table->id();
+            $table->string('field')->unique();
+            $table->string('color');
+            $table->timestamps();
+        });
+
+        Schema::create('docu_field', function (Blueprint $table) {
+            $table->foreignId('docu_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('field_id')->constrained()->cascadeOnDelete();
+        });
+
+        // The tags of the documentary (selected, removed, bonus, jury, etc.)
+        // Use a pivot table
+        Schema::create('tags', function (Blueprint $table) {
+            $table->id();
+            $table->string('tag')->unique();
+            $table->string('color');
+            $table->timestamps();
+        });
+
+        Schema::create('docu_tag', function (Blueprint $table) {
+            $table->foreignId('docu_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('tag_id')->constrained()->cascadeOnDelete();
         });
     }
 
@@ -30,6 +60,8 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('docu_fields');
+        Schema::dropIfExists('fields');
         Schema::dropIfExists('docus');
     }
 };

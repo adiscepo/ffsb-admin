@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Pivot\ProductionHouseDocu;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -19,12 +18,36 @@ class Docu extends Model
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * Relation to the production houses that own the documentary
+     *
+     * @return BelongsToMany
+     */
     public function from(): BelongsToMany {
         return $this->belongsToMany(
             ProductionHouse::class, # The pivot table of the relation
+            // Don't need of the following arguments, they are found
+            // automatically by Laravel
             // 'production_house_docu',    # The name of the pivot table in db
             // 'docu_id',                  # The name of the foreign pivot key
             // 'production_house_id',
         );
+    }
+
+    /**
+     * Relation to the link to see the documentary
+     *
+     * @return HasMany
+     */
+    public function see_at(): HasMany {
+        return $this->hasMany(DocuLink::class);
+    }
+
+    public function fields(): BelongsToMany {
+        return $this->belongsToMany(Field::class);
+    }
+
+    public function tags(): BelongsToMany {
+        return $this->belongsToMany(Tag::class);
     }
 }

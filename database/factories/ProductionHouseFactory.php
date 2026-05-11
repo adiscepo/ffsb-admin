@@ -24,7 +24,7 @@ class ProductionHouseFactory extends Factory
             'website' => FakerBinary::percentChance(50, fake()->url()),
             'contact_email' => fake()->safeEmail(),
             'contact_phone' => fake('fr_BE')->phoneNumber(),
-            'remark' => fake()->text(75)
+            'remark' => fake()->text(75),
         ];
     }
 }

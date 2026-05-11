@@ -16,7 +16,7 @@
                         {{ __('Tableau de bord') }}
                     </flux:sidebar.item>
                     @if (Route::has("docus"))
-                    <flux:sidebar.item icon="film" :href="route('docus')" :current="request()->routeIs('docu')" wire:navigate>
+                    <flux:sidebar.item icon="film" :href="route('docus')" :current="request()->routeIs('docus')" wire:navigate>
                         {{ __('Documentaires') }}
                     </flux:sidebar.item>
                     @endif
