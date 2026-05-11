@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Docu;
+use App\Models\ProductionHouse;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -27,6 +28,8 @@ class DatabaseSeeder extends Seeder
             'email' => 'margaux.vandererven@ulb.be',
         ]);
 
-        Docu::factory()->count(50)->create();
+        $production_houses = ProductionHouse::factory()->count(10)->create();
+
+        Docu::factory()->count(50)->hasAttached($production_houses, [], 'from')->create();
     }
 }
