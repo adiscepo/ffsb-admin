@@ -1,0 +1,19 @@
+[data-timeline] {
+    display: flex;
+    flex-direction: column;
+    gap: 1.7rem;
+    border-left: 1px solid theme(--color-zinc-200);
+    padding-left: 27px;
+}
+
+[data-timeline-item] {
+    gap: 5px;
+    position: relative;
+    color: theme(--color-zinc-500);
+}
+
+[data-timeline-item] [data-timeline-icon] {
+    position: absolute;
+    left: -43px;
+    box-shadow: 0 0 0 5px white;
+}
