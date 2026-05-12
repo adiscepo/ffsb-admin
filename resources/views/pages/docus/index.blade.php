@@ -3,7 +3,7 @@
 use Livewire\Component;
 
 new class extends Component {
-    //
+
 };
 ?>
 
@@ -15,8 +15,5 @@ new class extends Component {
     <flux:modal.trigger name="create-docu">
         <flux:button size="sm" variant="primary" color="violet" class="cursor-pointer">Ajouter un documentaire</flux:button>
     </flux:modal.trigger>
-
-    <flux:modal flyout name="create-docu">
-        <livewire:docu.create />
-    </flux:modal>
+    <x-docu.create/>
 </div>

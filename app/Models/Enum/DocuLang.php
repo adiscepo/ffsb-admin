@@ -4,18 +4,18 @@ namespace App\Models\Enum;
 
 enum DocuLang: string
 {
-    case BIL = 'bilinqual';
-    case FR = 'french';
-    case EN = 'english';
+    case FR = 'fr';
+    case EN = 'en';
+    case BIL = 'bil';
     // case NL = 'nederlands';
     // case SP = 'spanish';
     // case IT = 'italian';
 
     function label() : string {
        return match($this) {
-        self::BIL => "Bilingue",
         self::FR => "Français",
         self::EN => "Anglais",
+        self::BIL => "Bilingue",
         // self::SP => "Espagnol",
         // self::IT => "Italien",
         // self::NL => "Néerlandais",
