@@ -3,6 +3,7 @@
 use Livewire\Component;
 use App\Livewire\Forms\DocuForm;
 use App\Models\Enum\DocuLang;
+use App\Models\ProductionHouse;
 
 new class extends Component {
     public DocuForm $form;
@@ -12,7 +13,7 @@ new class extends Component {
     public function __construct()
     {
         // Development only
-        // Flux::modal('create-docu')->show();
+        Flux::modal('create-docu')->show();
     }
 
     public function save()
@@ -53,8 +54,9 @@ new class extends Component {
                 <div class="grid grid-cols-[1fr_2fr] gap-5">
                     <flux:input label="Année de production" type="number" placeholder="{{ date('Y') }}" />
                     <div class="flex items-end gap-2">
-                        <flux:select label="Maison de production">
-                            <flux:select.option>ARTE</flux:select.option>
+                        <flux:field>
+                            <flux:label>Maison de production</flux:label>
+                            <livewire:docu.search-bar-dropdown /> 
                         </flux:select>
                         <flux:modal.trigger name="create-house-prod">
                             <flux:button class="cursor-pointer" icon="plus"/>

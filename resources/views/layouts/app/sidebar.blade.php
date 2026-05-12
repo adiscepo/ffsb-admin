@@ -11,7 +11,7 @@
             </flux:sidebar.header>
 
             <flux:sidebar.nav>
-                <flux:sidebar.group :heading="__('Raccourcis')" class="grid">
+                <flux:sidebar.group :heading="__('Pages')" class="grid">
                     <flux:sidebar.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
                         {{ __('Tableau de bord') }}
                     </flux:sidebar.item>

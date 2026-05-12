@@ -23,12 +23,21 @@ new class extends Component {
 ?>
 
 <div class="space-y-4">
-    <flux:heading size="xl" class="text-zinc-900 dark:text-white">
-        Documentaires
-    </flux:heading>
-    <flux:subheading class="text-zinc-600 dark:text-zinc-400">
-        Il y a actuellement <span class="font-bold">{{ $this->docus->total() }}</span> documentaires encodés
-    </flux:subheading>
+    <header class="flex justify-between">
+        <div>
+            <flux:heading size="xl" class="text-zinc-900 dark:text-white">
+                Documentaires
+            </flux:heading>
+            <flux:subheading class="text-zinc-600 dark:text-zinc-400">
+                Il y a actuellement <span class="font-bold">{{ $this->docus->total() }}</span> documentaires encodés
+            </flux:subheading>
+        </div>
+        <flux:modal.trigger name="create-docu">
+            <flux:button size="sm" variant="primary" color="violet" class="cursor-pointer">Ajouter un documentaire
+            </flux:button>
+        </flux:modal.trigger>
+    </header>
+        <x-docu.create />
     <flux:separator variant="subtle" />
 
     <flux:table :paginate="$this->docus">
@@ -91,9 +100,9 @@ new class extends Component {
 
                     <flux:table.cell>
                         @if ($docu->target)
-                        <flux:badge size="sm" inset="top bottom">
-                            {{ $docu->target() }}
-                        </flux:badge>
+                            <flux:badge size="sm" inset="top bottom">
+                                {{ $docu->target() }}
+                            </flux:badge>
                         @endif
                     </flux:table.cell>
 
@@ -105,12 +114,8 @@ new class extends Component {
                     <flux:table.cell>
                         <flux:avatar.group>
                             @foreach ($docu->evaluations as $evaluation)
-                            <flux:avatar 
-                                circle
-                                size="xs"
-                                :initials="$evaluation->user->initials()"
-                                :src="$evaluation->user->profile_picture"
-                            />
+                                <flux:avatar circle size="xs" :initials="$evaluation->user->initials()"
+                                    :src="$evaluation->user->profile_picture" />
                             @endforeach
                         </flux:avatar.group>
                     </flux:table.cell>
@@ -118,9 +123,4 @@ new class extends Component {
             @endforeach
         </flux:table.rows>
     </flux:table>
-    <flux:modal.trigger name="create-docu">
-        <flux:button size="sm" variant="primary" color="violet" class="cursor-pointer">Ajouter un documentaire
-        </flux:button>
-    </flux:modal.trigger>
-    <x-docu.create />
 </div>
