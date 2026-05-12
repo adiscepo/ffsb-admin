@@ -12,7 +12,7 @@ new class extends Component {
     public function __construct()
     {
         // Development only
-        Flux::modal('create-docu')->show();
+        // Flux::modal('create-docu')->show();
     }
 
     public function save()
@@ -51,7 +51,7 @@ new class extends Component {
                 </div>
                 <flux:textarea label="Synopsis"></flux:textarea>
                 <div class="grid grid-cols-[1fr_2fr] gap-5">
-                    <flux:input label="Année de production" />
+                    <flux:input label="Année de production" type="number" placeholder="{{ date('Y') }}" />
                     <div class="flex items-end gap-2">
                         <flux:select label="Maison de production">
                             <flux:select.option>ARTE</flux:select.option>

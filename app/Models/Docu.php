@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Enum\DocuTarget;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -14,7 +15,7 @@ class Docu extends Model
 
     protected $fillable = ['title', 'summary', 'duration', 'lang', 'subtitles'];
 
-    public function found_by(): BelongsTo {
+    public function user(): BelongsTo {
         return $this->belongsTo(User::class);
     }
 
@@ -49,5 +50,15 @@ class Docu extends Model
 
     public function tags(): BelongsToMany {
         return $this->belongsToMany(Tag::class);
+    }
+
+    public function evaluations(): HasMany {
+        return $this->hasMany(Evaluation::class);
+    }
+
+    public function target() {
+        if ($this->target) {
+            return DocuTarget::from($this->target)->label();
+        }
     }
 }

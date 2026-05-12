@@ -13,6 +13,10 @@ class DocuLink extends Model
 
     protected $fillable = ['url', 'password', 'deadline'];
 
+    public function password() : ?string {
+        return $this->password ? $this->password : null; 
+    }
+
     public function for(): BelongsTo {
         return $this->belongsTo(Docu::class);
     }

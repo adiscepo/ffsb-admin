@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Models\DocuLink;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -19,7 +18,9 @@ class FieldFactory extends Factory
     {
         return [
             'field' => fake()->unique()->randomElement(['Biologie', 'Math', 'Physique', 'Biologie', 'Informatique', 'Chimie']),
-            'color' => fake()->hexColor(),
+            'color' => fake()->unique()->randomElement([
+                'red', 'orange', 'amber', 'yellow', 'lime', 'green', 'emerald', 'teal', 'cyan', 'sky', 'blue', 'indigo', 'violet', 'purple', 'fuchsia', 'pink', 'rose ',
+            ])
         ];
     }
 }

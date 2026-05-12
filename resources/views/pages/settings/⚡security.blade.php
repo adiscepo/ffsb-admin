@@ -63,7 +63,7 @@ new #[Title('Security settings')] class extends Component {
 
         $this->reset('current_password', 'password', 'password_confirmation');
 
-        Flux::toast(variant: 'success', text: __('Password updated.'));
+        Flux::toast(variant: 'success', text: __('Mot de passe mis à jour !.'));
     }
 
     /**
@@ -89,13 +89,13 @@ new #[Title('Security settings')] class extends Component {
 <section class="w-full">
     @include('partials.settings-heading')
 
-    <flux:heading class="sr-only">{{ __('Security settings') }}</flux:heading>
+    <flux:heading class="sr-only">{{ __('Paramètres de sécurités') }}</flux:heading>
 
-    <x-pages::settings.layout :heading="__('Update password')" :subheading="__('Ensure your account is using a long, random password to stay secure')">
+    <x-pages::settings.layout :heading="__('Mettre à jour le mot de passe')" :subheading="__('Utilisez un mot de passe sécurisé (j\'ai la flemme de rajouter une vérification pour ça, je vous fais confiance)')">
         <form method="POST" wire:submit="updatePassword" class="mt-6 space-y-6">
             <flux:input
                 wire:model="current_password"
-                :label="__('Current password')"
+                :label="__('Mot de passe actuel')"
                 type="password"
                 required
                 autocomplete="current-password"
@@ -103,7 +103,7 @@ new #[Title('Security settings')] class extends Component {
             />
             <flux:input
                 wire:model="password"
-                :label="__('New password')"
+                :label="__('Nouveau mot de passe')"
                 type="password"
                 required
                 autocomplete="new-password"
@@ -111,7 +111,7 @@ new #[Title('Security settings')] class extends Component {
             />
             <flux:input
                 wire:model="password_confirmation"
-                :label="__('Confirm password')"
+                :label="__('Confirmer le mot de passe')"
                 type="password"
                 required
                 autocomplete="new-password"
@@ -120,7 +120,7 @@ new #[Title('Security settings')] class extends Component {
 
             <div class="flex items-center gap-4">
                 <flux:button variant="primary" type="submit" data-test="update-password-button">
-                    {{ __('Save') }}
+                    {{ __('Sauvegarder') }}
                 </flux:button>
             </div>
         </form>

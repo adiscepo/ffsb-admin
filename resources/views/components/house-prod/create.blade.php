@@ -6,7 +6,7 @@ new class extends Component {
     //
     public function __construct()
     {
-        Flux::modal('create-house-prod')->show();
+        // Flux::modal('create-house-prod')->show();
     }
 };
 ?>

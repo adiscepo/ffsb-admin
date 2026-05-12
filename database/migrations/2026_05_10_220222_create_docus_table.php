@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Enum\DocuTarget;
 use App\Models\Enum\DocuLang;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
@@ -19,9 +20,10 @@ return new class extends Migration
             $table->string('summary')->nullable();
             $table->integer('duration');
             $table->year('year');
-            $table->foreignIdFor(User::class, 'found_by')->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete();
             $table->enum('lang', DocuLang::cases());
             $table->enum('subtitles', DocuLang::cases())->nullable();
+            $table->enum('target', DocuTarget::cases())->nullable();
             $table->text('comment')->nullable();
             $table->timestamps();
         });

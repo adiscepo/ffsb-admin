@@ -13,6 +13,7 @@ new #[Title('Profile settings')] class extends Component {
 
     public string $name = '';
     public string $email = '';
+    public ?string $profile_picture = '';
 
     /**
      * Mount the component.
@@ -21,6 +22,7 @@ new #[Title('Profile settings')] class extends Component {
     {
         $this->name = Auth::user()->name;
         $this->email = Auth::user()->email;
+        $this->profile_picture = Auth::user()->profile_picture;
     }
 
     /**
@@ -40,7 +42,7 @@ new #[Title('Profile settings')] class extends Component {
 
         $user->save();
 
-        Flux::toast(variant: 'success', text: __('Profile updated.'));
+        Flux::toast(variant: 'success', text: __('Profil mis à jour !.'));
     }
 
     /**
@@ -58,7 +60,7 @@ new #[Title('Profile settings')] class extends Component {
 
         $user->sendEmailVerificationNotification();
 
-        Flux::toast(text: __('A new verification link has been sent to your email address.'));
+        Flux::toast(text: __('Un email de confirmation a été envoyé à votre adresse mail.'));
     }
 
     #[Computed]
@@ -80,11 +82,19 @@ new #[Title('Profile settings')] class extends Component {
 <section class="w-full">
     @include('partials.settings-heading')
 
-    <flux:heading class="sr-only">{{ __('Profile settings') }}</flux:heading>
+    <flux:heading class="sr-only">{{ __('Profil') }}</flux:heading>
 
-    <x-pages::settings.layout :heading="__('Profile')" :subheading="__('Update your name and email address')">
+    <x-pages::settings.layout :heading="__('Profil')" :subheading="__('Mettre à jour votre nom ou email')">
         <form wire:submit="updateProfileInformation" class="my-6 w-full space-y-6">
-            <flux:input wire:model="name" :label="__('Name')" type="text" required autofocus autocomplete="name" />
+                {{-- <flux:profile
+                    :initials="auth()->user()->initials()" 
+                    {{ $this->profile_picture ? ":avatar='" .$this->profil_picture . "'" : "" }}
+                /> --}}
+                <flux:profile
+                    :initials="auth()->user()->initials()" 
+                    :avatar="$this->profile_picture"
+                />
+            <flux:input wire:model="name" :label="__('Nom')" type="text" required autofocus autocomplete="name" />
 
             <div>
                 <flux:input wire:model="email" :label="__('Email')" type="email" required autocomplete="email" />
@@ -92,10 +102,10 @@ new #[Title('Profile settings')] class extends Component {
                 @if ($this->hasUnverifiedEmail)
                     <div>
                         <flux:text class="mt-4">
-                            {{ __('Your email address is unverified.') }}
+                            {{ __('Votre email n\'est pas vérifié.') }}
 
                             <flux:link class="text-sm cursor-pointer" wire:click.prevent="resendVerificationNotification">
-                                {{ __('Click here to re-send the verification email.') }}
+                                {{ __('Cliquez ici pour renvoyer un mail de confirmation.') }}
                             </flux:link>
                         </flux:text>
 
@@ -105,7 +115,7 @@ new #[Title('Profile settings')] class extends Component {
 
             <div class="flex items-center gap-4">
                 <flux:button variant="primary" type="submit" data-test="update-profile-button">
-                    {{ __('Save') }}
+                    {{ __('Sauvegarder') }}
                 </flux:button>
             </div>
         </form>

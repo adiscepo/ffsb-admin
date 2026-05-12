@@ -25,12 +25,13 @@ class DatabaseSeeder extends Seeder
         $user = User::factory()->create([
             'name' => 'Attilio',
             'email' => 'attiliodiscepoli@hotmail.be',
-            'password' => Hash::make("Epanadiplose")
+            'password' => Hash::make('Epanadiplose'),
+            'profile_picture' => 'images/avatars/wizard.png'
         ]);
         User::factory()->create([
             'name' => 'Margaux',
             'email' => 'margaux.vandererven@ulb.be',
-            'password' => Hash::make("Epanadiplose")
+            'password' => Hash::make('Epanadiplose'),
         ]);
 
         $production_houses = ProductionHouse::factory()->count(10)->create();
@@ -38,16 +39,20 @@ class DatabaseSeeder extends Seeder
         $docu_tags = Tag::factory()->count(3)->create();
 
         $docus = Docu::factory()->count(50)
-                       ->hasAttached($production_houses, [], 'from')
-                       ->has(DocuLink::factory()->count(rand(1, 2)), 'see_at')
-                       ->create();
-        
-        Evaluation::factory()->count(10)->for($user)->for($docus->random())->create();
-        
+            ->hasAttached($production_houses->random(1), [], 'from')
+            ->has(Evaluation::factory()->count(1)->for($user))
+            ->has(DocuLink::factory()->count(rand(1, 2)), 'see_at')
+            ->create();
+
+        // Evaluation::factory()->count(10)->for($user)->for($docus->random())->create();
+
         // use ($var) is needed to include $var to the closure's environment
         $docus->each(function (Docu $docu) use ($docu_fields, $docu_tags) {
-            $docu->fields()->attach($docu_fields->random(random_int(1, 2)));
-            if (fake()->boolean()) $docu->tags()->attach($docu_tags->random(random_int(0, 2)));
+            $docu->fields()
+                 ->attach($docu_fields->random(random_int(1, 2)));
+            if (fake()->boolean()) {
+                $docu->tags()->attach($docu_tags->random(random_int(0, 2)));
+            }
         });
     }
 }
