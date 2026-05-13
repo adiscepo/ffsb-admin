@@ -65,7 +65,7 @@ new class extends Component {
     {
         $this->results = [];
         foreach ($this->datas as $i => $data) {
-            if (str_contains($data['name'], $this->query)) {
+            if (str_contains(strtolower($data['name']), strtolower($this->query))) {
                 array_push($this->results, $data);
             }
         }
@@ -75,16 +75,10 @@ new class extends Component {
 ?>
 
 <div class="relative">
-    <flux:input type="text" placeholder="Maison de production" wire:model.live="query" wire:keydown.escape="resetData"
+    <flux:input type="text" class="max-w-50" placeholder="Maison de production" wire:model.live="query" wire:keydown.escape="resetData"
         wire:keydown.backspace="resetSelection"
         wire:keydown.arrow-up="decrementHighlight" wire:keydown.arrow-down="incrementHighlight"
         wire:keydown.enter="selectResult" value="query" />
-    {{-- <div wire:loading
-        class="absolute rounded-lg border-zinc-200 border-b-zinc-300/80 flex items-center z-10 w-full bg-white rounded-t-none shadow-lg list-group">
-        <div class="py-2 flex items-center justify-center">
-            <flux:icon.loading></flux:icon.loading>
-        </div>
-    </div> --}}
     @if (!empty($query) and !$selected)
         <div class="fixed top-0 bottom-0 left-0 right-0" wire:click="resetData"></div>
         <div class="absolute text-sm flex flex-col gap-y-1 z-10 w-full bg-white py-2 rounded-t-none rounded-lg shadow-lg border-zinc-200 border-b-zinc-300/80">
