@@ -82,18 +82,18 @@ new #[Title('Profile settings')] class extends Component {
 <section class="w-full">
     @include('partials.settings-heading')
 
-    <flux:heading class="sr-only">{{ __('Profil') }}</flux:heading>
+    <flux:heading class="sr-only text-lg">{{ __('Profil') }}</flux:heading>
 
     <x-pages::settings.layout :heading="__('Profil')" :subheading="__('Mettre à jour votre nom ou email')">
         <form wire:submit="updateProfileInformation" class="my-6 w-full space-y-6">
-                {{-- <flux:profile
+            <div class="flex gap-3">
+                <flux:avatar
+                    size="xl"
                     :initials="auth()->user()->initials()" 
-                    {{ $this->profile_picture ? ":avatar='" .$this->profil_picture . "'" : "" }}
-                /> --}}
-                <flux:profile
-                    :initials="auth()->user()->initials()" 
-                    :avatar="$this->profile_picture"
+                    :src="$this->profile_picture"
                 />
+                <livewire:file-upload size="sm" class=""/>
+            </div>
             <flux:input wire:model="name" :label="__('Nom')" type="text" required autofocus autocomplete="name" />
 
             <div>

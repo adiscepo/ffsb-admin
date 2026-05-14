@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\ProductionHouse;
 use Livewire\Component;
 
 new class extends Component {
@@ -22,10 +23,13 @@ new class extends Component {
                 </flux:text>
             </div>
             <div class="space-y-4">
-                <flux:input label="Nom" placeholder="Arte" />
-                <flux:input label="Site web" badge="optionel" placeholder="https://www.arte.tv" type="email" />
-                <flux:input label="Contact téléphonique" badge="optionel" placeholder="07 63 93 02" type="phone" />
-                <flux:textarea label="Remarque" badge="optionel" placeholder="Nom de la personne de contact, etc."></flux:textarea>
+                <flux:input label="Nom" placeholder="Arte" wire:model="form.name" />
+                <flux:input label="Site web" badge="optionel" placeholder="https://www.arte.tv" type="email"
+                    wire:model="form.email" />
+                <flux:input label="Contact téléphonique" badge="optionel" placeholder="07 63 93 02" type="phone"
+                    wire:model="form.phone" />
+                <flux:textarea label="Remarque" badge="optionel" placeholder="Nom de la personne de contact, etc."
+                    wire:model="form.remark"></flux:textarea>
                 <flux:button class="w-full" variant="primary" color="green">Ajouter</flux:button>
             </div>
         </form>
