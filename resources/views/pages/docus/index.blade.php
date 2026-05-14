@@ -115,7 +115,7 @@ new class extends Component {
                         <flux:avatar.group>
                             @foreach ($docu->evaluations as $evaluation)
                                 <flux:avatar circle size="xs" :initials="$evaluation->user->initials()"
-                                    :src="$evaluation->user->profile_picture" />
+                                    :src="$evaluation->user->getProfilePicture()" />
                             @endforeach
                         </flux:avatar.group>
                     </flux:table.cell>

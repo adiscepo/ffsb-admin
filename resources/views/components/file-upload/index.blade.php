@@ -2,6 +2,22 @@
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
+/** Pour la prochaine màj du composant:
+ *  - intégrer un choix de fichier différents (utiliser l'argument $formats)
+ *  - Afficher une icone différentes selon le type de fichier (pour l'instant
+ *    <img> est possible uniquement parceque les types passés sont des images)
+ *  - intégrer l'upload multiple (ça nécéssite un attribut livewire et une
+ *    modification dans alpine)
+ *  - Avec l'upload multiple, afficher une liste des documents soumis en dessous
+ *    ou a coté du bouton aved une option pour les supprimer
+ *  - Choisir le dossier de destination (j'ai tenté et j'ai eu des pbs à cause
+ *    de l'attribut qui disparaissait)
+ */
+
+/**
+ * Dispatch the event 'file-upload' when the file has been saved
+ *  
+ */
 new class extends Component {
     use WithFileUploads;
 
@@ -10,13 +26,15 @@ new class extends Component {
     public $upload;
     #[Locked]
     public string $uuid;
-    // public ?string $error = "This is an error message";
-    public ?string $error;
-    public ?string $client_filename;
-    public ?string $filename;
-    public ?int $file_size;
-    public $fileclick;
-    public $photo;
+    public ?string $error; // Error message
+    public ?string $client_filename; // Name of the file submitted
+    public ?string $filename; // Filename stored
+    public ?int $file_size; // File size
+    public string $folder_storage;
+
+    public function __construct(string $folder_storage = "") {
+        $this->folder_storage = $folder_storage;
+    }
 
     public function mount(array $formats = ['png', 'jpg', 'gif']): void
     {
@@ -36,9 +54,10 @@ new class extends Component {
             $this->client_filename = $this->upload->getClientOriginalName();
             $this->filename = Auth::user()->id . '.' . $extension;
             $this->file_size = $this->upload->getSize();
-            $this->upload->storeAs('avatars', Auth::user()->id . '.' . $extension, 'public');
+            $this->upload->storeAs($this->folder_storage, Auth::user()->id . '.' . $extension, 'public');
+            $this->dispatch('file-uploaded', $this->filename);
         } else {
-            $this->error = 'Extension incorrecte !';
+            $this->error = 'Extension incorrecte (' . strtolower($this->getFormats()) . ')';
         }
     }
 
@@ -76,60 +95,57 @@ new class extends Component {
 
 @php
     $classes =
-        'flex items-center p-2 bg-zinc-50 w-full justify-center border-dashed border border-zinc-200 rounded-lg [:where(&)] data-dragging:bg-zinc-100 group';
+        'flex items-center justify-center p-2 bg-zinc-50 w-full justify-center border-dashed border border-zinc-200 rounded-lg [:where(&)] data-dragging:bg-zinc-100 data-dragging:shadow-inner group active:bg-zinc-100 active:shadow-inner';
+
+    $class_btn = match ($size) {
+        'sm' => 'flex items-center justify-center gap-4 px-3 group-data-loading:invisible',
+        'lg' => 'flex flex-col items-center gap-2 group-data-loading:invisible',
+    };
 @endphp
 
-<div x-data="dropzone({
+<label for="{{ $this->uuid }}" wire:model='filename' value="{{ $filename }}" {{ $attributes->only('class')->merge(['class' => $classes]) }} x-data="dropzone({
     _this: @this,
     uuid: @js($uuid),
     max_size: @js($this->max_size)
-})" x-on:dragleave.prevent="onDragleave($event)" x-on:dragover.prevent="onDragover($event)"
-    x-on:drop.prevent="onDrop" {{ $attributes->only('class')->merge(['class' => $classes]) }}>
-    <input type="file" x-data="uploadClick({_this: @this, uuid: @js($uuid), max_size: @js($this->max_size)})" x-on:input.prevent="onInput" class="hidden" id="input">
-    <label for="input">
-        @if ($filename)
-            <div class="flex items-center gap-4 px-3">
-                <img wire:model='filename'
-                    class="border border-transparent rounded-lg box-border w-10 h-10 overflow-hidden"
-                    src="{{ Storage::url('avatars/' . $filename) }}?{{ time() }}" />
-                <div>
-                    <p class="text-sm text-zinc-600">{{ $this->client_filename }}</p>
-                    <p wire:model='filename' class="text-xs text-zinc-600">{{ $this->getSize() }}
-                    </p>
+})"
+    x-on:dragleave.prevent="onDragleave($event)" x-on:dragover.prevent="onDragover($event)" x-on:drop.prevent="onDrop">
+    <input type="file" x-data="uploadClick({
+        _this: @this,
+        uuid: @js($uuid),
+        max_size: @js($this->max_size)
+    })" x-on:input.prevent="onInput" class="sr-only" id="{{ $this->uuid }}" />
+    @if ($filename)
+        <div class="flex gap-2">
+            <flux:avatar wire:model='filename' {{-- class="border border-transparent rounded-lg box-border overflow-hidden" --}}
+                src="{{ Storage::temporaryUrl($this->folder_storage. '/' . $filename, now()) }}" />
+            <div>
+                <p class="text-sm text-zinc-600">{{ $this->client_filename }}</p>
+                <p wire:model='filename' class="text-xs text-zinc-600">{{ $this->getSize() }}
+                </p>
+            </div>
+        </div>
+    @else
+        <div class="{{ $class_btn }}">
+            @if ($error)
+                <flux:icon.exclamation-triangle color="red"></flux:icon.exclamation-triangle>
+                <p wire:model="error" class="text-sm text-red-600">{{ $error }}</p>
+            @else
+                <flux:icon.cloud-arrow-up class="text-[#9f9fa9] group-data-dragging:text-black" variant="solid" />
+                <div class="not-group-data-dragging:hidden group-data-dragging:visible">
+                    <p class="text-xs text-zinc-800">Tu peux lâcher !</p>
                 </div>
-            </div>
-        @else
-            <div class="group-data-loading:hidden">
-                @if ($size === 'sm')
-                    <div class="flex items-center gap-4 px-3">
-                    @else
-                        <div class="flex flex-col items-center gap-2">
-                @endif
-                @if ($error)
-                    <flux:icon.exclamation-triangle color="red"></flux:icon.exclamation-triangle>
-                @else
-                    <flux:icon.cloud-arrow-up class="text-[#9f9fa9] group-data-dragging:text-black" variant="solid" />
-                @endif
-                @if ($error)
-                    <p wire:model="error" class="text-sm text-red-600">{{ $error }}</p>
-                @else
-                    <div class="not-group-data-dragging:hidden group-data-dragging:visible">
-                        <p class="text-xs text-zinc-800">Tu peux lâcher !</p>
-                    </div>
-                    <div class="not-group-data-dragging:visible group-data-dragging:hidden">
-                        <p class="text-xs text-zinc-800">Glissez ou cliquez pour ajouter votre fichier</p>
-                        <p class="text-zinc-400 text-xs text-center" wire:loaded>{{ $this->getFormats() }} de max
-                            {{ $this->max_size / 1000000 }} MB</p>
-                    </div>
-                @endif
-            </div>
-</div>
-@endif
+                <div class="not-group-data-dragging:visible group-data-dragging:hidden">
+                    <p class="text-xs text-zinc-800">Glissez ou cliquez pour ajouter votre fichier</p>
+                    <p class="text-zinc-400 text-xs text-center" wire:loaded>{{ $this->getFormats() }} de max
+                        {{ $this->max_size / 1000000 }} MB</p>
+                </div>
+            @endif
+        </div>
+    @endif
+    <div class="group-data-loading:visible invisible">
+        <flux:icon.loading />
+    </div>
 </label>
-<div class="group-data-loading:visible invisible">
-    <flux:icon.loading />
-</div>
-</div>
 @script
     <script>
         Alpine.data('dropzone', ({
@@ -175,7 +191,8 @@ new class extends Component {
                     // To refresh the image (need to wait that the file is
                     // uploaded)
                     setTimeout(() => {
-                        $wire.$refresh()
+                        $refresh()
+                        console.log("refreshed")
                     }, 700);
                 },
                 onDragenter() {
@@ -198,7 +215,7 @@ new class extends Component {
             _this,
             uuid,
             max_size
-       }) => {
+        }) => {
             return ({
                 onInput(e) {
                     const file = e.target.files[0]
@@ -206,12 +223,14 @@ new class extends Component {
                         const args = ['upload', file, () => {
                             // Upload completed
                             $wire.save()
+                            this.$el.parentElement.removeAttribute('data-loading');
                         }, (error) => {
                             // An error occurred while uploading
                             console.log('livewire-dropzone upload error', error);
                             $wire.setError("Une erreur est survenue");
                         }, () => {
                             // Uploading is in progress
+                            this.$el.parentElement.setAttribute('data-loading', '');
                         }];
 
                         // Upload file
@@ -220,13 +239,8 @@ new class extends Component {
                         $wire.setError("La taille du fichier est trop grande (max: " + max_size / 1000000 +
                             "MB)");
                     }
-                    // To refresh the image (need to wait that the file is
-                    // uploaded)
-                    setTimeout(() => {
-                        $wire.$refresh()
-                    }, 700);
                 }
             })
-       })
+        })
     </script>
 @endscript

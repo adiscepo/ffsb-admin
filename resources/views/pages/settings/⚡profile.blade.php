@@ -14,6 +14,15 @@ new #[Title('Profile settings')] class extends Component {
     public string $name = '';
     public string $email = '';
     public ?string $profile_picture = '';
+    protected string $storage_folder = 'avatars';
+
+    protected $listeners = [
+        'file-uploaded' => 'handleFileUpload',
+    ];
+
+    public function handleFileUpload($data) {
+        $this->profile_picture = $this->storage_folder . "/" . $data;
+    }
 
     /**
      * Mount the component.
@@ -35,14 +44,16 @@ new #[Title('Profile settings')] class extends Component {
         $validated = $this->validate($this->profileRules($user->id));
 
         $user->fill($validated);
+        $user->fill(['profile_picture' => $this->profile_picture]);
 
         if ($user->isDirty('email')) {
             $user->email_verified_at = null;
         }
 
         $user->save();
+        redirect(request()->header('Referer'));
 
-        Flux::toast(variant: 'success', text: __('Profil mis à jour !.'));
+        Flux::toast(variant: 'success', text: __('Profil mis à jour !'));
     }
 
     /**
@@ -90,9 +101,9 @@ new #[Title('Profile settings')] class extends Component {
                 <flux:avatar
                     size="xl"
                     :initials="auth()->user()->initials()" 
-                    :src="$this->profile_picture"
+                    :src="Storage::url($this->profile_picture)"
                 />
-                <livewire:file-upload size="sm" class=""/>
+                <livewire:file-upload size="sm" :folder_storage="$this->storage_folder" />
             </div>
             <flux:input wire:model="name" :label="__('Nom')" type="text" required autofocus autocomplete="name" />
 

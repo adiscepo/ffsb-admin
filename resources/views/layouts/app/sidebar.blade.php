@@ -41,7 +41,7 @@
             <flux:spacer />
 
             {{-- <flux:sidebar.nav>
-                <flux:sidebar.item icon="folder-git-2" href="https://github.com/laravel/livewire-starter-kit" target="_blank">
+                <flux:sidebar.item icon="zanzibar-git-2" href="https://github.com/laravel/livewire-starter-kit" target="_blank">
                     {{ __('Repository') }}
                 </flux:sidebar.item>
 
@@ -62,10 +62,9 @@
             <flux:dropdown position="top" align="end">
                 <flux:profile
                     :initials="auth()->user()->initials()"
-                    :avatar="auth()->user()->profile_picture"
+                    :avatar="Auth::user()->getProfilePicture()"
                     icon-trailing="chevron-down"
                 />
-
                 <flux:menu>
                     <flux:menu.radio.group>
                         <div class="p-0 text-sm font-normal">
@@ -73,7 +72,7 @@
                                 <flux:avatar
                                     :name="auth()->user()->name"
                                     :initials="auth()->user()->initials()"
-                                    :src="auth()->user()->profile_picture"
+                                    :avatar="Auth::user()->getProfilePicture()"
                                 />
 
                                 <div class="grid flex-1 text-start text-sm leading-tight">
