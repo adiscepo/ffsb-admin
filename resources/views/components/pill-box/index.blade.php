@@ -4,7 +4,7 @@ use App\Models\ProductionHouse;
 
 new class extends Component {
     public string $query = '';
-    public bool $selected = false;
+    public array $selected = [];
 
     public array $datas = [];
     public array $results = [];
@@ -29,13 +29,12 @@ new class extends Component {
     query: '',
     open: true,
     highlighted_id: 1,
-    selected: [],
+    selected: @js($this->selected),
     showed: [],
     items: @js($this->datas),
     getShowed() {
         if (this.query == '') {
             return this.items.map(function(obj) {
-                console.log(obj.id + ' ' + obj.name)
                 return obj.id;
             });
         }
@@ -60,50 +59,51 @@ new class extends Component {
             this.removeSelected(id)
         }
     },
-    decrementHighlight() {
-        if (this.highlighted_id == this.items[0].id) {
-            this.highlighted_id = this.items.length
-            this.dropdownScroll()
-            return
-        }
-        this.highlighted_id -= 1
-        this.dropdownScroll()
+    getHigh() {
+        return this.highlighted_id
+    },
+    onlyOneElement() {
+        return this.getShowed().length == 1
     },
     incrementHighlight() {
-        dropdown = document.getElementById('dropdown-element')
-        if (this.items.length == 0) {
-            this.highlighted_id = 1;
-            this.dropdownScroll()
-            return;
-        }
-        if (this.highlighted_id == this.items.length) {
-            this.highlighted_id = 1
+        var showed = this.getShowed()
+        if (this.onlyOneElement()) { this.highlighted_id = showed[0]; return} 
+        var max_showed = showed[showed.length - 1]
+        if (this.getHigh() + 1 > max_showed) {
+            this.highlighted_id = showed[0]
             this.dropdownScroll()
             return
         }
-        this.highlighted_id += 1
+        this.highlighted_id = showed[showed.indexOf(this.highlighted_id) + 1]
+        this.dropdownScroll()
+    },
+    decrementHighlight() {
+        var showed = this.getShowed()
+        if (this.onlyOneElement()) { this.highlighted_id = showed[0]; return} 
+        if (this.getHigh() == showed[0]) {
+            this.highlighted_id = showed[showed.length - 1]
+            this.dropdownScroll()
+            return
+        }
+        this.highlighted_id = showed[showed.indexOf(this.highlighted_id) - 1]
         this.dropdownScroll()
     },
     updateElements() {
-        console.log(this.query)
         this.showed = []
         for (id in this.items) {
-
             if (this.items[id].name.toLowerCase().includes(this.query.toLowerCase())) {
-                this.showed.push(id)
+                this.showed.push(this.items[id].id)
             }
         }
+        this.highlighted_text = this.showed[0] - 1
+        this.dropdownScroll()
     },
     dropdownScroll() {
+        console.log(this.highlighted_id)
         dropdown_current = document.getElementById('dropdown-item-' + this.highlighted_id)
-        var scroll_offset = (this.highlighted_id - 1) * (dropdown_current.offsetHeight + 10);
-        console.log(scroll_offset)
-        {{-- dropdown.scroll({
-            top: scroll_offset,
-            behavior: 'smooth',
-        }); --}}
+        if (dropdown_current) {
         dropdown_current.scrollIntoView({ behavior: 'smooth', block: 'center',})
-        
+        }
     }
 }" class="relative" @click="open = true" @click.outside="open = false">
     <div class="flex flex-wrap gap-x-1">
@@ -120,6 +120,7 @@ new class extends Component {
     <div class="w-full flex flex-col text-sm items-stretch rounded-lg shadow-lg bg-white max-h-50 overflow-y-scroll rounded-t-none border-t-0 absolute border"
         x-show="open" x-id="['element']" id="dropdown-element">
         <template x-for="item in getShowed()" :key="item">
+            {{-- <span x-text='item'></span> --}}
             <li x-bind:id="'dropdown-item-' + item" class="{{ $class_element }}" x-bind:class="item == highlighted_id ? 'bg-zinc-200' : ''"
                 @click="toggleSelected(item)">
                 <flux:icon.check x-show="selected.includes(item)" variant="micro" />
