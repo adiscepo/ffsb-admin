@@ -11,12 +11,11 @@ new class extends Component {
 
     public int $highlight_id = 0;
 
-    public function mount()
+    public function mount(array $datas)
     {
-        $this->datas = ProductionHouse::all()->toArray();
+        $this->datas = $datas;
     }
 };
-
 ?>
 
 @php
@@ -27,17 +26,13 @@ new class extends Component {
 
 <div x-data="{
     query: '',
-    open: true,
+    open: false,
     highlighted_id: 1,
     selected: @js($this->selected),
     showed: [],
     items: @js($this->datas),
     getShowed() {
-        if (this.query == '') {
-            return this.items.map(function(obj) {
-                return obj.id;
-            });
-        }
+        if (this.query == '') this.updateElements()
         return this.showed;
     },
     removeSelected(id) {
@@ -67,7 +62,7 @@ new class extends Component {
     },
     incrementHighlight() {
         var showed = this.getShowed()
-        if (this.onlyOneElement()) { this.highlighted_id = showed[0]; return} 
+        if (this.onlyOneElement()) { this.highlighted_id = showed[0]; return }
         var max_showed = showed[showed.length - 1]
         if (this.getHigh() + 1 > max_showed) {
             this.highlighted_id = showed[0]
@@ -79,7 +74,7 @@ new class extends Component {
     },
     decrementHighlight() {
         var showed = this.getShowed()
-        if (this.onlyOneElement()) { this.highlighted_id = showed[0]; return} 
+        if (this.onlyOneElement()) { this.highlighted_id = showed[0]; return }
         if (this.getHigh() == showed[0]) {
             this.highlighted_id = showed[showed.length - 1]
             this.dropdownScroll()
@@ -91,7 +86,7 @@ new class extends Component {
     updateElements() {
         this.showed = []
         for (id in this.items) {
-            if (this.items[id].name.toLowerCase().includes(this.query.toLowerCase())) {
+            if (this.items[id].name.toLowerCase().includes(this.query.toLowerCase()) || this.query == '') {
                 this.showed.push(this.items[id].id)
             }
         }
@@ -99,16 +94,15 @@ new class extends Component {
         this.dropdownScroll()
     },
     dropdownScroll() {
-        console.log(this.highlighted_id)
         dropdown_current = document.getElementById('dropdown-item-' + this.highlighted_id)
         if (dropdown_current) {
-        dropdown_current.scrollIntoView({ behavior: 'smooth', block: 'center',})
+            dropdown_current.scrollIntoView({ behavior: 'smooth', block: 'center', })
         }
     }
 }" class="relative" @click="open = true" @click.outside="open = false">
     <div class="flex flex-wrap gap-x-1">
         <template x-for="id_selected in selected" :key="id_selected">
-            <flux:badge size="small" class="text-xs mb-2">
+            <flux:badge size="small" color="violet" class="text-xs mb-2">
                 <span x-text="items[id_selected - 1].name"></span>
                 <flux:badge.close @click="removeSelected(id_selected)" />
             </flux:badge>
@@ -121,8 +115,8 @@ new class extends Component {
         x-show="open" x-id="['element']" id="dropdown-element">
         <template x-for="item in getShowed()" :key="item">
             {{-- <span x-text='item'></span> --}}
-            <li x-bind:id="'dropdown-item-' + item" class="{{ $class_element }}" x-bind:class="item == highlighted_id ? 'bg-zinc-200' : ''"
-                @click="toggleSelected(item)">
+            <li x-bind:id="'dropdown-item-' + item" class="{{ $class_element }}"
+                x-bind:class="item == highlighted_id ? 'bg-zinc-200' : ''" @click="toggleSelected(item)">
                 <flux:icon.check x-show="selected.includes(item)" variant="micro" />
                 <span x-text="items[item - 1].name"></span>
             </li>
