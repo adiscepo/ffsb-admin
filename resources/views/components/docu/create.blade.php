@@ -10,7 +10,7 @@ new class extends Component {
 
     public string $lang = '';
 
-    public function __construct()
+    public function mount()
     {
         // Development only
         Flux::modal('create-docu')->show();
@@ -34,37 +34,55 @@ new class extends Component {
                     Un nouveau documentaire dans la liste !
                 </flux:text>
             </div>
-            <div class="space-y-3">
-                <div class="grid grid-cols-[auto_auto_auto] items-center gap-x-5">
-                    <flux:input label="Nom" placeholder="Fire of Love" />
-                    <flux:input.group class="max-w-32" label="Durée">
-                        <flux:input placeholder="90" type="number" />
-                        <flux:input.group.suffix>min</flux:input.group.suffix>
-                    </flux:input.group>
-                    <flux:radio.group variant="buttons" class="" label="Audio">
-                        @foreach (DocuLang::cases() as $lang)
-                            <flux:radio class="cursor-pointer border-0 grayscale-100 data-checked:grayscale-0">
-                                <img class="w-8" src="{{ url('/images/flags/' . $lang->value . '.png') }}"
-                                    alt="" srcset="">
-                            </flux:radio>
-                        @endforeach
-                    </flux:radio.group>
-                </div>
-                <flux:textarea label="Synopsis"></flux:textarea>
-                <div class="grid grid-cols-[1fr_2fr] gap-5">
-                    <flux:input label="Année de production" type="number" placeholder="{{ date('Y') }}" />
-                    <div class="flex items-end gap-2">
-                        <flux:field>
-                            <flux:label>Maison de production</flux:label>
-                            <livewire:docu.search-bar-dropdown /> 
-                        </flux:select>
-                        <flux:modal.trigger name="create-house-prod">
-                            <flux:button class="cursor-pointer" icon="plus"/>
-                        </flux:modal.trigger>
+            <flux:fieldset>
+                <flux:legend>Informations</flux:legend>
+                <div class="space-y-3">
+                    <div class="grid grid-cols-[auto_auto_auto] items-center gap-x-5">
+                        <flux:input label="Nom" placeholder="Fire of Love" />
+                        <flux:input.group class="max-w-32" label="Durée">
+                            <flux:input placeholder="90" type="number" />
+                            <flux:input.group.suffix>min</flux:input.group.suffix>
+                        </flux:input.group>
+                        <flux:radio.group variant="buttons" class="" label="Audio">
+                            @foreach (DocuLang::cases() as $lang)
+                                <flux:radio class="cursor-pointer border-0 grayscale-100 data-checked:grayscale-0">
+                                    <img class="w-8" src="{{ url('/images/flags/' . $lang->value . '.png') }}"
+                                        alt="" srcset="">
+                                </flux:radio>
+                            @endforeach
+                        </flux:radio.group>
+                    </div>
+                    <flux:textarea label="Synopsis"></flux:textarea>
+                    <div class="grid grid-cols-2 gap-5">
+                        <flux:input label="Année de production" type="number" placeholder="{{ date('Y') }}" />
+                        <div class="flex items-end gap-2">
+                            <flux:field class="w-50">
+                                <flux:label>Maison de production</flux:label>
+                                <livewire:pill-box.index :datas="ProductionHouse::all()->sortBy('name')->toArray()" />
+                            </flux:field>
+                            <flux:modal.trigger name="create-house-prod">
+                                <flux:button class="cursor-pointer" icon="plus" />
+                            </flux:modal.trigger>
+                        </div>
                     </div>
                 </div>
+            </flux:fieldset>
+            <flux:fieldset class="space-y-3">
+                <flux:legend>FFSB</flux:legend>
+                <flux:input iconLeading="link" label="Lien" placeholder="https://arte.tv/documentaries/19" />
+                <div class="grid grid-cols-2 gap-x-5">
+                    <flux:input iconLeading="key" badge="optionnel" label="Mot de passe" placeholder="Jclcwdl@2e42" />
+                    {{-- <flux:input iconLeading="calendar-days" badge="optionnel" label="Deadline" placeholder="" /> --}}
+                    <flux:field>
+                        <flux:label badge="optionnel">Date limite de visionnage</flux:label>
+                        <livewire:date-picker />
+                    </flux:field>
+                </div>
+            </flux:fieldset>
+            <div>
+                <flux:button variant="primary" color="green">Ajouter</flux:button>
             </div>
         </form>
     </flux:modal>
-    <x:house-prod.create/>
+    <livewire:house-prod.create />
 </div>

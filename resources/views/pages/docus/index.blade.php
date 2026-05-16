@@ -37,7 +37,7 @@ new class extends Component {
             </flux:button>
         </flux:modal.trigger>
     </header>
-        <x-docu.create />
+        <livewire:docu.create />
     <flux:separator variant="subtle" />
 
     <flux:table :paginate="$this->docus">
@@ -83,13 +83,21 @@ new class extends Component {
                     <flux:table.cell class="flex gap-3 items-baseline">
                         @if ($docu->see_at)
                             @foreach ($docu->see_at as $link)
-                                <div class="flex items-center">
+                                <div class="flex items-center gap-0.5">
                                     <flux:link href="{{ $link->url }}">Lien</flux:link>
                                     @if ($link->password())
                                         <flux:tooltip toggleable>
                                             <flux:button icon="key" size="xs" variant="subtle" />
                                             <flux:tooltip.content class="max-w-[20rem] space-y-2">
                                                 <p>{{ $link->password }}</p>
+                                            </flux:tooltip.content>
+                                        </flux:tooltip>
+                                    @endif
+                                    @if ($link->deadline)
+                                        <flux:tooltip toggleable >
+                                            <flux:button icon="clock" size="xs" variant="subtle" class="size-4 {{ !$link->stillAvailable() ? 'text-red-600!' : '' }}"/>
+                                            <flux:tooltip.content class="max-w-[20rem] space-y-2 {{  (!$link->stillAvailable()) ? 'bg-red-500!' : '' }}" >
+                                                <p>{{ $link->remainingDays() }}</p>
                                             </flux:tooltip.content>
                                         </flux:tooltip>
                                     @endif
