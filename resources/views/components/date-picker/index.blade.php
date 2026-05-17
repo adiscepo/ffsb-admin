@@ -12,6 +12,9 @@ new class extends Component {
 
     public int $highlight_id = 0;
 
+    public int $current_month;
+    public int $current_year;
+
     private array $months = [
         1 => 'Janvier',
         2 => 'Février',
@@ -30,7 +33,9 @@ new class extends Component {
     public function mount()
     {
         // $this->datas = $datas;
-        $this->getCurrentMonth(5, 2026);
+        $this->current_month = 5;
+        $this->current_year = 2026;
+        $this->getCurrentMonth($this->current_month, $this->current_year);
     }
 
     public function getCurrentMonth($month, int $year)
@@ -64,16 +69,39 @@ new class extends Component {
     $class_clickable = 'rounded cursor-pointer hover:bg-zinc-100';
 @endphp
 
-<div class="relative" x-data="{
+<div class="relative" x-on:click.outside='open = false' x-data="{
     query: '',
     open: true,
-    selected_date: '',
-    current_month: @js($this->getCurrentMonth(5, 2026)),
+    selected_date: @js('1/' . $this->current_month . '/' . $this->current_year),
+    current_month: @js($this->getCurrentMonth($this->current_month, $this->current_year)),
+    min_date: '17/05/2025',
+    max_date: '17/05/2034',
+    getDay(date) {
+        if (date) return parseInt(date.split('/')[0])
+    },
+    getMonth(date) {
+        if (date) return parseInt(date.split('/')[1])
+    },
+    getYear(date) {
+        if (date) return parseInt(date.split('/')[2])
+    },
     changeMonth(month, year) {
+        if (this.isFirstMonth(month, year)) {
+            month = this.getMonth(this.min_date)
+            year = this.getYear(this.min_date)
+        } else if (this.isLastMonth(month, year)) {
+            month = this.getMonth(this.max_date)
+            year = this.getYear(this.max_date)
+        }
         $wire.getCurrentMonth(month, year).then((res) => {
             this.current_month = res
         })
-        console.log(this.current_month)
+    },
+    isFirstMonth(month, year) {
+        return (month == this.getMonth(this.min_date) && year == this.getYear(this.min_date))
+    },
+    isLastMonth(month, year) {
+        return (month == this.getMonth(this.max_date) && year == this.getYear(this.max_date))
     },
     decrementMonth() {
         var new_month = this.current_month['month'] - 1
@@ -93,35 +121,87 @@ new class extends Component {
         }
         this.changeMonth(new_month, year)
     },
+    isValid(date) {
+        var month = this.getMonth(date)
+        var year = this.getYear(date)
+        if (year > this.getYear(this.min_date)) {
+            return true
+        } else if (month >= this.getMonth(this.min_date)) {
+            return true
+        }
+        return false
+    },
     selectDate(date) {
-        var selected_month = date.split('/')[1]
-        var month = this.current_month['month']
-        if (selected_month == month + 1) {
-            this.incrementMonth()
-        } else if (selected_month == month - 1) {
-            this.decrementMonth()
-         }
-        this.selected_date = date;
+        // Rewrite the date with leading 0 (ex: 5 -> 05)
+        date = (this.getDay(date).toString().padStart(2, '0')) + '/' + (this.getMonth(date).toString().padStart(2, '0')) + '/' + (this.getYear(date))
+        if (this.isValid(date)) {
+            console.log('Selected: ' + date)
+            var month = this.current_month['month']
+            var year = this.current_month['year']
+            var selected_month = this.getMonth(date)
+            var selected_year = this.getYear(date)
+            this.changeMonth(selected_month, selected_year)
+            this.selected_date = date;
+        }
+    },
+    selectYear(year) {
+        if (year == this.getYear(this.max_date)) {
+            if (this.current_month['month'] >= this.getMonth(this.max_date)) {
+                this.changeMonth(this.getMonth(this.max_date), year)
+                return
+            }
+        } else if (year == this.getYear(this.min_date)) {
+            if (this.current_month['month'] <= this.getMonth(this.min_date)) {
+                this.changeMonth(this.getMonth(this.min_date), year)
+                return
+            }
+        } else {
+            console.log('Pas trop loin')
+        }
+        this.changeMonth(this.current_month['month'], year)
     },
     isSelected(date) {
         return date == this.selected_date;
+    },
+    getYearsInterval() {
+        var min_year = parseInt(this.min_date.split('/')[2])
+        var max_year = parseInt(this.max_date.split('/')[2])
+        years = []
+        while (min_year <= max_year) {
+            years.push(min_year);
+            min_year += 1;
+        }
+        return years;
     }
 }">
-    <div class="{{ $classes }} cursor-pointer flex gap-x-2" x-on:click="open = !open" 
+    <div class="{{ $classes }} cursor-pointer flex gap-x-2" 
         x-bind:class="open ? 'rounded-b-none border-b-0' : ''"><flux:icon.calendar-days variant="mini"
             class="text-zinc-400" />
-        <span x-text="selected_date"></span>
+        {{-- <span x-text="selected_date"></span> --}}
+        <input type="text" @click="open = true" @keyup.enter="selectDate(selected_date)" x-model='selected_date'
+            x-bind:value="selected_date" />
     </div>
-    <div class="w-full flex flex-col text-sm items-stretch rounded-lg shadow-lg bg-white overflow-y-scroll rounded-t-none border-t-0 absolute border p-3 space-y-5" x-on:click.outside='open = false'
+    <div class="w-full flex flex-col text-sm items-stretch rounded-lg shadow-lg bg-white overflow-y-scroll rounded-t-none border-t-0 absolute border p-3 space-y-5"
         x-show="open">
         <div class="flex justify-between">
             <div>
                 <span x-text="current_month['month_text']"></span>
-                <span x-text="current_month['year']"></span>
+                <select>
+                    <template x-for="year in getYearsInterval()">
+                        <template x-if="true">
+                            <option x-text="year" x-bind:value="year"
+                                x-bind:selected="year == current_month['year']" @click="selectYear(year)" />
+                        </template>
+                    </template>
+                </select>
             </div>
             <div class="flex">
-                <flux:icon.chevron-left variant="mini" class="{{ $class_clickable }}" @click="decrementMonth()" />
-                <flux:icon.chevron-right variant="mini" class="{{ $class_clickable }}" @click="incrementMonth()"  />
+                <flux:icon.chevron-left variant="mini"
+                    x-show="!isFirstMonth(current_month['month'], current_month['year'])" class="{{ $class_clickable }}"
+                    @click="decrementMonth()" />
+                <flux:icon.chevron-right variant="mini"
+                    x-show="!isLastMonth(current_month['month'], current_month['year'])" class="{{ $class_clickable }}"
+                    @click="incrementMonth()" />
             </div>
         </div>
         <div class="grid grid-cols-7 grid-rows-5 gap-2 place-items-center justify-items-center">
@@ -133,105 +213,13 @@ new class extends Component {
             <span class="text-zinc-600">Sa</span>
             <span class="text-zinc-600">Di</span>
             <template x-for="date in current_month['dates']">
-                <div class="{{ $class_clickable }} w-8 h-8 text-center flex items-center justify-center" x-bind:class="isSelected(date['path']) ? 'bg-violet-400 text-white hover:bg-violet-400!' : ''" @click="selectDate(date['path'])">
+                <div class="{{ $class_clickable }} w-8 h-8 text-center flex items-center justify-center"
+                    x-bind:class="isSelected(date['path']) ? 'bg-violet-400 text-white hover:bg-violet-400!' : ''"
+                    @click="selectDate(date['path'])">
                     <span x-text="date['day']"
                         x-bind:class="date['month'] == current_month['month'] ? '' : 'text-zinc-400';"></span>
                 </div>
             </template>
         </div>
     </div>
-
-    {{-- <div x-data="{
-    query: '',
-    open: true,
-    highlighted_id: 1,
-    selected: @js($this->selected),
-    showed: [],
-    items: @js($this->datas),
-    getShowed() {
-        if (this.query == '') this.updateElements()
-        return this.showed;
-    },
-    removeSelected(id) {
-        var index = this.selected.indexOf(id);
-        if (index !== -1) {
-            this.selected.splice(index, 1);
-        }
-    },
-    addSelected(id) {
-        var index = this.selected.indexOf(id);
-        if (index == -1) {
-            this.selected.push(id)
-        }
-    },
-    toggleSelected(id) {
-        if (this.selected.indexOf(id) == -1) {
-            this.addSelected(id)
-        } else {
-            this.removeSelected(id)
-        }
-    },
-    getHigh() {
-        return this.highlighted_id
-    },
-    onlyOneElement() {
-        return this.getShowed().length == 1
-    },
-    incrementHighlight() {
-        var showed = this.getShowed()
-        if (this.onlyOneElement()) { this.highlighted_id = showed[0]; return }
-        var max_showed = showed[showed.length - 1]
-        if (this.getHigh() + 1 > max_showed) {
-            this.highlighted_id = showed[0]
-            this.dropdownScroll()
-            return
-        }
-        this.highlighted_id = showed[showed.indexOf(this.highlighted_id) + 1]
-        this.dropdownScroll()
-    },
-    decrementHighlight() {
-        var showed = this.getShowed()
-        if (this.onlyOneElement()) { this.highlighted_id = showed[0]; return }
-        if (this.getHigh() == showed[0]) {
-            this.highlighted_id = showed[showed.length - 1]
-            this.dropdownScroll()
-            return
-        }
-        this.highlighted_id = showed[showed.indexOf(this.highlighted_id) - 1]
-        this.dropdownScroll()
-    },
-    updateElements() {
-        this.showed = []
-        for (id in this.items) {
-            if (this.items[id].name.toLowerCase().includes(this.query.toLowerCase()) || this.query == '') {
-                this.showed.push(this.items[id].id)
-            }
-        }
-        this.highlighted_text = this.showed[0] - 1
-        this.dropdownScroll()
-    },
-    getDays() {
-        dropdown_current = document.getElementById('dropdown-item-' + this.highlighted_id)
-        if (dropdown_current) {
-            dropdown_current.scrollIntoView({ behavior: 'smooth', block: 'center', })
-        }
-    }
-}" class="relative" @click="open = true" @click.outside="open = false">
-    <div class="flex flex-wrap gap-x-1">
-        <template x-for="id_selected in selected" :key="id_selected">
-            <flux:badge size="small" color="violet" class="text-xs mb-2">
-                <span x-text="items[id_selected - 1].name"></span>
-                <flux:badge.close @click="removeSelected(id_selected)" />
-            </flux:badge>
-        </template>
-    </div>
-    <input class="{{ $classes }}" x-model='query' x-bind:class="open ? 'rounded-b-none border-b-0' : ''"
-        x-on:input="open = true; updateElements()" x-on:keyup.up="decrementHighlight()"
-        x-on:keyup.down="incrementHighlight()" x-on:keyup.enter="toggleSelected(highlighted_id)" />
-    <div class="w-full flex flex-col text-sm items-stretch rounded-lg shadow-lg bg-white max-h-50 overflow-y-scroll rounded-t-none border-t-0 absolute border"
-        x-show="open" x-id="['element']" id="dropdown-element">
-        <template x-for="item in getDays()" :key="item">
-        </template>
-        <li class="{{ $class_element }} hover:bg-white" x-show="getShowed() == 0">Pas de résultats</li>
-    </div>
-</div> --}}
+</div>
