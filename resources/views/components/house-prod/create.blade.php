@@ -25,11 +25,13 @@ new class extends Component {
         $validated = $this->validate($this->rules());
         ProductionHouse::create($validated);
         $this->reset();
+        $this->dispatch('new-prod-house');
         Flux::modal('create-house-prod')->close();
         Flux::toast(variant: 'success', text: 'Nouvelle maison de production !');
     }
 };
 ?>
+
 <div>
     <flux:modal name="create-house-prod" class="max-w-max">
         <div class="space-y-2">

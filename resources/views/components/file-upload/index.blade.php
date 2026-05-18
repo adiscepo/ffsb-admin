@@ -95,7 +95,7 @@ new class extends Component {
 
 @php
     $classes =
-        'flex items-center justify-center p-2 bg-zinc-50 w-full justify-center border-dashed border border-zinc-200 rounded-lg [:where(&)] data-dragging:bg-zinc-100 data-dragging:shadow-inner group active:bg-zinc-100 active:shadow-inner';
+        'flex items-center justify-center p-2 bg-zinc-50 w-full justify-center border-dashed border border-zinc-200 rounded-lg [:where(&)] data-dragging:bg-zinc-100 data-dragging:shadow-inner group active:bg-zinc-100 active:shadow-inner dark:bg-zinc-600 dark:border-zinc-500';
 
     $class_btn = match ($size) {
         'sm' => 'flex items-center justify-center gap-4 px-3 group-data-loading:invisible',
@@ -119,23 +119,23 @@ new class extends Component {
             <flux:avatar wire:model='filename' {{-- class="border border-transparent rounded-lg box-border overflow-hidden" --}}
                 src="{{ Storage::temporaryUrl($this->folder_storage. '/' . $filename, now()) }}" />
             <div>
-                <p class="text-sm text-zinc-600">{{ $this->client_filename }}</p>
-                <p wire:model='filename' class="text-xs text-zinc-600">{{ $this->getSize() }}
+                <p class="text-sm text-zinc-600 dark:text-zinc-200">{{ $this->client_filename }}</p>
+                <p wire:model='filename' class="text-xs text-zinc-600 dark:text-zinc-200">{{ $this->getSize() }}
                 </p>
             </div>
         </div>
     @else
         <div class="{{ $class_btn }}">
             @if ($error)
-                <flux:icon.exclamation-triangle color="red"></flux:icon.exclamation-triangle>
-                <p wire:model="error" class="text-sm text-red-600">{{ $error }}</p>
+                <flux:icon.exclamation-triangle class="text-red-500 dark:text-red-300"></flux:icon.exclamation-triangle>
+                <p wire:model="error" class="text-sm text-red-600 dark:text-red-300">{{ $error }}</p>
             @else
                 <flux:icon.cloud-arrow-up class="text-[#9f9fa9] group-data-dragging:text-black" variant="solid" />
                 <div class="not-group-data-dragging:hidden group-data-dragging:visible">
-                    <p class="text-xs text-zinc-800">Tu peux lâcher !</p>
+                    <p class="text-xs text-zinc-800 dark:text-zinc-200">Tu peux lâcher !</p>
                 </div>
                 <div class="not-group-data-dragging:visible group-data-dragging:hidden">
-                    <p class="text-xs text-zinc-800">Glissez ou cliquez pour ajouter votre fichier</p>
+                    <p class="text-xs text-zinc-800 dark:text-zinc-200">Glissez ou cliquez pour ajouter votre fichier</p>
                     <p class="text-zinc-400 text-xs text-center" wire:loaded>{{ $this->getFormats() }} de max
                         {{ $this->max_size / 1000000 }} MB</p>
                 </div>

@@ -11,8 +11,8 @@ new class extends Component {
 
     public int $highlight_id = 0;
 
-    public function mount() {
-        $this->datas = ProductionHouse::all()->toArray();
+    public function mount(array $datas) {
+        $this->datas = $datas;
     }
 
     public function resetData() {

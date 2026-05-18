@@ -14,6 +14,8 @@ new class extends Component {
 
     public int $current_month;
     public int $current_year;
+    public string $min_date;
+    public string $max_date;
 
     private array $months = [
         1 => 'Janvier',
@@ -30,9 +32,15 @@ new class extends Component {
         12 => 'Décembre',
     ];
 
-    public function mount()
+    public function errorMessage(string $message)
     {
-        // $this->datas = $datas;
+        Flux::toast(variant: 'danger', text: $message);
+    }
+
+    public function mount(string $min_date, string $max_date)
+    {
+        $this->min_date = $min_date;
+        $this->max_date = $max_date;
         $this->current_month = 5;
         $this->current_year = 2026;
         $this->getCurrentMonth($this->current_month, $this->current_year);
@@ -66,16 +74,16 @@ new class extends Component {
     $classes =
         'w-full border rounded-lg block disabled:shadow-none dark:shadow-none appearance-none text-base sm:text-sm py-2 h-10 leading-[1.375rem] ps-3 pe-3 bg-white dark:bg-white/10 dark:disabled:bg-white/[7%] text-zinc-700 disabled:text-zinc-500 placeholder-zinc-400 disabled:placeholder-zinc-400/70 dark:text-zinc-300 dark:disabled:text-zinc-400 dark:placeholder-zinc-400 dark:disabled:placeholder-zinc-500 shadow-xs border-zinc-200 border-b-zinc-300/80 disabled:border-b-zinc-200 dark:border-white/10 dark:disabled:border-white/5 data-invalid:shadow-none data-invalid:border-red-500 dark:data-invalid:border-red-500 disabled:data-invalid:border-red-500 dark:disabled:data-invalid:border-red-500 outline-none';
     $class_element = 'flex items-center gap-2 list-none p-2 w-full cursor-pointer [:where(&)]:hover:bg-zinc-200';
-    $class_clickable = 'rounded cursor-pointer hover:bg-zinc-100';
+    $class_clickable = 'rounded cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-500';
 @endphp
 
-<div class="relative" x-on:click.outside='open = false' x-data="{
+<div class="relative z-50" x-on:click.outside='open = false' x-data="{
     query: '',
-    open: true,
+    open: false,
     selected_date: @js('1/' . $this->current_month . '/' . $this->current_year),
     current_month: @js($this->getCurrentMonth($this->current_month, $this->current_year)),
-    min_date: '17/05/2025',
-    max_date: '17/05/2034',
+    min_date: @js($this->min_date),
+    max_date: @js($this->max_date),
     getDay(date) {
         if (date) return parseInt(date.split('/')[0])
     },
@@ -122,26 +130,63 @@ new class extends Component {
         this.changeMonth(new_month, year)
     },
     isValid(date) {
+        var day = this.getDay(date)
         var month = this.getMonth(date)
         var year = this.getYear(date)
-        if (year > this.getYear(this.min_date)) {
-            return true
-        } else if (month >= this.getMonth(this.min_date)) {
-            return true
+        if (day < 1 || day > 31) return false;
+        if (month < 1 || month > 12) return false;
+        return true;
+    },
+    isInInterval(date) {
+        var day = this.getDay(date)
+        var month = this.getMonth(date)
+        var year = this.getYear(date)
+        var min_day = this.getDay(this.min_date)
+        var min_month = this.getMonth(this.min_date)
+        var min_year = this.getYear(this.min_date)
+        var max_day = this.getDay(this.max_date)
+        var max_month = this.getMonth(this.max_date)
+        var max_year = this.getYear(this.max_date)
+        console.log('month: ' + month)
+        console.log('year: ' + year)
+        console.log('min month: ' + min_month)
+        console.log('min year: ' + min_year)
+        console.log('max month: ' + max_month)
+        console.log('max year: ' + max_year)
+        if (year < min_year) return false;
+        if (year > max_year) return false;
+        if (year == min_year) {
+            if (month < min_month) return false;
+            if (month == min_month) {
+                if (day < min_day) return false
+            }
         }
-        return false
+        if (year == max_year) {
+            if (month > max_month) return false;
+            if (month == max_month) {
+                if (day > max_day) return false
+            }
+        }
+        return true;
     },
     selectDate(date) {
         // Rewrite the date with leading 0 (ex: 5 -> 05)
         date = (this.getDay(date).toString().padStart(2, '0')) + '/' + (this.getMonth(date).toString().padStart(2, '0')) + '/' + (this.getYear(date))
         if (this.isValid(date)) {
-            console.log('Selected: ' + date)
-            var month = this.current_month['month']
-            var year = this.current_month['year']
-            var selected_month = this.getMonth(date)
-            var selected_year = this.getYear(date)
-            this.changeMonth(selected_month, selected_year)
-            this.selected_date = date;
+            if (this.isInInterval(date)) {
+                console.log('Selected: ' + date)
+                var month = this.current_month['month']
+                var year = this.current_month['year']
+                var selected_month = this.getMonth(date)
+                var selected_year = this.getYear(date)
+                this.changeMonth(selected_month, selected_year)
+                this.selected_date = date;
+                console.log('SELECTED')
+            } else {
+                $wire.errorMessage('La date doit être comprise dans l\'intervalle ' + this.min_date + ' - ' + this.max_date)
+            }
+        } else {
+            $wire.errorMessage('La date est invalide')
         }
     },
     selectYear(year) {
@@ -155,8 +200,6 @@ new class extends Component {
                 this.changeMonth(this.getMonth(this.min_date), year)
                 return
             }
-        } else {
-            console.log('Pas trop loin')
         }
         this.changeMonth(this.current_month['month'], year)
     },
@@ -174,14 +217,13 @@ new class extends Component {
         return years;
     }
 }">
-    <div class="{{ $classes }} cursor-pointer flex gap-x-2" 
-        x-bind:class="open ? 'rounded-b-none border-b-0' : ''"><flux:icon.calendar-days variant="mini"
-            class="text-zinc-400" />
+    <div class="{{ $classes }} cursor-pointer flex gap-x-2" x-bind:class="open ? 'rounded-b-none border-b-0' : ''">
+        <flux:icon.calendar-days variant="mini" class="text-zinc-400" />
         {{-- <span x-text="selected_date"></span> --}}
         <input type="text" @click="open = true" @keyup.enter="selectDate(selected_date)" x-model='selected_date'
             x-bind:value="selected_date" />
     </div>
-    <div class="w-full flex flex-col text-sm items-stretch rounded-lg shadow-lg bg-white overflow-y-scroll rounded-t-none border-t-0 absolute border p-3 space-y-5"
+    <div class="w-full flex flex-col text-sm items-stretch rounded-lg shadow-lg bg-white overflow-y-scroll rounded-t-none border-t-0 absolute border p-3 space-y-5 dark:bg-zinc-700 dark:border-zinc-700"
         x-show="open">
         <div class="flex justify-between">
             <div>
@@ -205,13 +247,13 @@ new class extends Component {
             </div>
         </div>
         <div class="grid grid-cols-7 grid-rows-5 gap-2 place-items-center justify-items-center">
-            <span class="text-zinc-600">Lu</span>
-            <span class="text-zinc-600">Ma</span>
-            <span class="text-zinc-600">Me</span>
-            <span class="text-zinc-600">Je</span>
-            <span class="text-zinc-600">Ve</span>
-            <span class="text-zinc-600">Sa</span>
-            <span class="text-zinc-600">Di</span>
+            <span class="text-zinc-600 dark:text-zinc-400">Lu</span>
+            <span class="text-zinc-600 dark:text-zinc-400">Ma</span>
+            <span class="text-zinc-600 dark:text-zinc-400">Me</span>
+            <span class="text-zinc-600 dark:text-zinc-400">Je</span>
+            <span class="text-zinc-600 dark:text-zinc-400">Ve</span>
+            <span class="text-zinc-600 dark:text-zinc-400">Sa</span>
+            <span class="text-zinc-600 dark:text-zinc-400">Di</span>
             <template x-for="date in current_month['dates']">
                 <div class="{{ $class_clickable }} w-8 h-8 text-center flex items-center justify-center"
                     x-bind:class="isSelected(date['path']) ? 'bg-violet-400 text-white hover:bg-violet-400!' : ''"
