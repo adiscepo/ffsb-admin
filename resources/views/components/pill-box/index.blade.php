@@ -78,7 +78,6 @@ new class extends Component {
         return this.showed;
     },
     getItem(id) {
-        console.log(id)
         return this.items.find(i => i.id === id);
     },
     severalElements() {
@@ -147,7 +146,6 @@ new class extends Component {
     dropdownScroll() {
         dropdown_current = document.getElementById('dropdown-item-' + this.highlighted_id)
         if (dropdown_current) {
-            console.log('DROPDOWN ' + dropdown_current)
             dropdown_current.scrollIntoView({ behavior: 'smooth', block: 'center' })
         }
     }

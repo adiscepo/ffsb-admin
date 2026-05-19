@@ -164,7 +164,6 @@ new class extends Component {
                     this.isDragging = false
 
                     const file = e.dataTransfer.files[0]
-                    console.log(file);
                     if (file.size <= max_size) {
                         const args = ['upload', file, () => {
                             // Upload completed
@@ -172,7 +171,6 @@ new class extends Component {
                             $wire.save()
                         }, (error) => {
                             // An error occurred while uploading
-                            console.log('livewire-dropzone upload error', error);
                             $wire.setError("Une erreur est survenue");
                         }, () => {
                             // Uploading is in progress
@@ -192,7 +190,6 @@ new class extends Component {
                     // uploaded)
                     setTimeout(() => {
                         $refresh()
-                        console.log("refreshed")
                     }, 700);
                 },
                 onDragenter() {
@@ -226,7 +223,6 @@ new class extends Component {
                             this.$el.parentElement.removeAttribute('data-loading');
                         }, (error) => {
                             // An error occurred while uploading
-                            console.log('livewire-dropzone upload error', error);
                             $wire.setError("Une erreur est survenue");
                         }, () => {
                             // Uploading is in progress
