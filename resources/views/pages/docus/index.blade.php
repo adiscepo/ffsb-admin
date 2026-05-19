@@ -46,6 +46,7 @@ new class extends Component {
             <flux:table.column>Nom</flux:table.column>
             <flux:table.column>Durée</flux:table.column>
             <flux:table.column wire:click="">Langue</flux:table.column>
+            <flux:table.column wire:click="">Sous-titre</flux:table.column>
             <flux:table.column wire:click="">Thèmes</flux:table.column>
             <flux:table.column wire:click="">Lien</flux:table.column>
             <flux:table.column wire:click="">Cible</flux:table.column>
@@ -60,7 +61,7 @@ new class extends Component {
                         {{-- <flux:avatar size="xs" src="{{ $docu->customer_avatar }}" /> --}}
                         {{ $docu->year }}
                     </flux:table.cell>
-                    <flux:table.cell class="flex items-center gap-3">
+                    <flux:table.cell>
                         {{-- <flux:avatar size="xs" src="{{ $docu->customer_avatar }}" /> --}}
                         {{ $docu->title }}
                     </flux:table.cell>
@@ -71,6 +72,10 @@ new class extends Component {
 
                     <flux:table.cell variant="strong"><img class="w-5"
                             src="{{ url('/images/flags/' . $docu->lang . '.png') }}" alt="" srcset="">
+                    </flux:table.cell>
+
+                    <flux:table.cell variant="strong"><img class="w-5"
+                            src="{{ url('/images/flags/' . $docu->subtitles . '.png') }}" alt="" srcset="">
                     </flux:table.cell>
 
                     <flux:table.cell class="whitespace-nowrap">

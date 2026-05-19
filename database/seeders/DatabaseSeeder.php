@@ -26,7 +26,6 @@ class DatabaseSeeder extends Seeder
             'name' => 'Attilio',
             'email' => 'attiliodiscepoli@hotmail.be',
             'password' => Hash::make('Epanadiplose'),
-            'profile_picture' => 'images/avatars/wizard.png'
         ]);
         User::factory()->create([
             'name' => 'Margaux',
@@ -34,13 +33,14 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('Epanadiplose'),
         ]);
 
-        $production_houses = ProductionHouse::factory()->count(10)->create();
+        // $production_houses = ProductionHouse::factory()->count(10)->create();
         $docu_fields = Field::factory()->count(5)->create();
         $docu_tags = Tag::factory()->count(3)->create();
 
         $docus = Docu::factory()->count(50)
-            ->hasAttached($production_houses->random(1), [], 'from')
+            // ->hasAttached($production_houses->random(1), [], 'from')
             ->has(Evaluation::factory()->count(1)->for($user))
+            ->has(ProductionHouse::factory()->count(rand(1, 3)), 'from')
             ->has(DocuLink::factory()->count(rand(1, 2)), 'see_at')
             ->create();
 

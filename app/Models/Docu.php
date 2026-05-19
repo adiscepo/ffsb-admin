@@ -13,7 +13,7 @@ class Docu extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'summary', 'duration', 'lang', 'subtitles'];
+    protected $fillable = ['title', 'summary', 'duration', 'year', 'user_id', 'lang', 'subtitles', 'target', 'comment'];
 
     public function user(): BelongsTo {
         return $this->belongsTo(User::class);

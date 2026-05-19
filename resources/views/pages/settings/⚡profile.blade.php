@@ -101,7 +101,7 @@ new #[Title('Profile settings')] class extends Component {
                 <flux:avatar
                     size="xl"
                     :initials="auth()->user()->initials()" 
-                    :src="Storage::url($this->profile_picture)"
+                    :src="auth()->user()->getProfilePicture()"
                 />
                 <livewire:file-upload size="sm" :folder_storage="$this->storage_folder" />
             </div>

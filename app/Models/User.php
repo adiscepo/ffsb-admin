@@ -47,7 +47,10 @@ class User extends Authenticatable
     }
 
     public function getProfilePicture(): ?string {
-        return Storage::url($this->profile_picture);
+        if ($this->profile_picture) {
+            return Storage::url($this->profile_picture);
+        }
+        return null;
     }
 
     public function docus(): HasMany {

@@ -151,7 +151,7 @@ new class extends Component {
             dropdown_current.scrollIntoView({ behavior: 'smooth', block: 'center' })
         }
     }
-}" class="relative" @click="open = true" @click.outside="open = false">
+}" class="relative" @click="open = true" @click.outside="open = false" @keyup.tab="open = false">
     <div class="flex flex-wrap gap-x-1">
         <template x-for="id_selected in selected" :key="id_selected">
             <flux:badge size="small" color="violet" class="text-xs mb-2">

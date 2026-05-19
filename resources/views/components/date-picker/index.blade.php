@@ -5,6 +5,7 @@ use App\Models\ProductionHouse;
 
 new class extends Component {
     public string $query = '';
+    public int $id;
     public array $selected = [];
 
     public array $datas = [];
@@ -37,12 +38,13 @@ new class extends Component {
         Flux::toast(variant: 'danger', text: $message);
     }
 
-    public function mount(string $min_date, string $max_date)
+    public function mount(string $min_date, string $max_date, int $id)
     {
         $this->min_date = $min_date;
         $this->max_date = $max_date;
         $this->current_month = 5;
         $this->current_year = 2026;
+        $this->id = $id;
         $this->getCurrentMonth($this->current_month, $this->current_year);
     }
 
@@ -70,6 +72,10 @@ new class extends Component {
 };
 ?>
 
+@props([
+    'value' => null,
+])
+
 @php
     $classes =
         'w-full border rounded-lg block disabled:shadow-none dark:shadow-none appearance-none text-base sm:text-sm py-2 h-10 leading-[1.375rem] ps-3 pe-3 bg-white dark:bg-white/10 dark:disabled:bg-white/[7%] text-zinc-700 disabled:text-zinc-500 placeholder-zinc-400 disabled:placeholder-zinc-400/70 dark:text-zinc-300 dark:disabled:text-zinc-400 dark:placeholder-zinc-400 dark:disabled:placeholder-zinc-500 shadow-xs border-zinc-200 border-b-zinc-300/80 disabled:border-b-zinc-200 dark:border-white/10 dark:disabled:border-white/5 data-invalid:shadow-none data-invalid:border-red-500 dark:data-invalid:border-red-500 disabled:data-invalid:border-red-500 dark:disabled:data-invalid:border-red-500 outline-none';
@@ -80,7 +86,9 @@ new class extends Component {
 <div class="relative z-50" x-on:click.outside='open = false' x-data="{
     query: '',
     open: false,
-    selected_date: @js('1/' . $this->current_month . '/' . $this->current_year),
+    id: @js($this->id),
+    selected_date: null,
+    {{-- selected_date: @js('1/' . $this->current_month . '/' . $this->current_year), --}}
     current_month: @js($this->getCurrentMonth($this->current_month, $this->current_year)),
     min_date: @js($this->min_date),
     max_date: @js($this->max_date),
@@ -147,12 +155,6 @@ new class extends Component {
         var max_day = this.getDay(this.max_date)
         var max_month = this.getMonth(this.max_date)
         var max_year = this.getYear(this.max_date)
-        console.log('month: ' + month)
-        console.log('year: ' + year)
-        console.log('min month: ' + min_month)
-        console.log('min year: ' + min_year)
-        console.log('max month: ' + max_month)
-        console.log('max year: ' + max_year)
         if (year < min_year) return false;
         if (year > max_year) return false;
         if (year == min_year) {
@@ -174,14 +176,13 @@ new class extends Component {
         date = (this.getDay(date).toString().padStart(2, '0')) + '/' + (this.getMonth(date).toString().padStart(2, '0')) + '/' + (this.getYear(date))
         if (this.isValid(date)) {
             if (this.isInInterval(date)) {
-                console.log('Selected: ' + date)
                 var month = this.current_month['month']
                 var year = this.current_month['year']
                 var selected_month = this.getMonth(date)
                 var selected_year = this.getYear(date)
                 this.changeMonth(selected_month, selected_year)
                 this.selected_date = date;
-                console.log('SELECTED')
+                $wire.dispatch('date-picker', { id: this.id, selected: this.selected_date })
             } else {
                 $wire.errorMessage('La date doit être comprise dans l\'intervalle ' + this.min_date + ' - ' + this.max_date)
             }

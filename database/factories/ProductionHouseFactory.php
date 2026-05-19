@@ -20,7 +20,7 @@ class ProductionHouseFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->company(),
+            'name' => fake()->text(15),
             'website' => FakerBinary::percentChance(50, fake()->url()),
             'contact_email' => fake()->safeEmail(),
             'contact_phone' => fake('fr_BE')->phoneNumber(),

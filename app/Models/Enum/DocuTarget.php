@@ -18,4 +18,16 @@ enum DocuTarget: string
         // self::NL => "Néerlandais",
        };
     }
+
+    static function toArray(): array {
+        // dd(self::cases()[0]);
+        $res = [];
+        for ($i=0; $i < sizeof(self::cases()); $i++) { 
+            array_push($res, [
+                'id' => $i + 1,
+                'name' => self::cases()[$i]->label()
+            ]);
+        }
+        return $res;
+    }
 }
