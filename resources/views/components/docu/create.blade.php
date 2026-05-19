@@ -66,8 +66,8 @@ new class extends Component {
     #[On('date-picker')]
     public function updateDate(int $id, string $selected)
     {
-        error_log($selected);
-        $this->links[$id]['deadline'] = $selected;
+        $date = date_create_from_format('d/m/Y', $selected);
+        $this->links[$id]['deadline'] = $date;
     }
 
     public array $db_production_houses = [];
@@ -75,7 +75,6 @@ new class extends Component {
 
     public function mount()
     {
-        Flux::modal('create-docu')->show();
         $this->fetchProductionHouses(false);
         $this->fetchFields(false);
     }
@@ -133,7 +132,6 @@ new class extends Component {
             'target' => $this->target,
         ]);
         foreach ($this->links as $id => $link) {
-            error_log('Deadline: ' . $link['deadline']);
             DocuLink::create([
                 'url' => $link['url'],
                 'password' => $link['password'],
@@ -238,6 +236,11 @@ new class extends Component {
                         <livewire:pill-box name="target" :datas="DocuTarget::toArray()" :one_result="true" />
                     </flux:field>
                 </div>
+                {{-- COMMENT --}}
+                <flux:field>
+                    <flux:label badge="optionnel">Commentaire</flux:label>
+                    <flux:textarea wire:model='comment' rows="2"></flux:textarea>
+                </flux:field>
                 {{-- LIEN --}}
                 <div>
                     @foreach ($links as $index => $link)
@@ -262,10 +265,6 @@ new class extends Component {
                         </div>
                     @endforeach
                 </div>
-                <flux:field>
-                    <flux:label badge="optionnel">Commentaire</flux:label>
-                    <flux:textarea wire:model='comment' rows="2"></flux:textarea>
-                </flux:field>
             </flux:fieldset>
             <div class="flex justify-between">
                 <flux:button iconLeading="link" wire:click="addLink()" class="cursor-pointer">Ajouter un lien

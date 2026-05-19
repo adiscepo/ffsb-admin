@@ -8,7 +8,8 @@ Route::view('/', 'welcome')->name('home');
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::view('dashboard', 'dashboard')->name('dashboard');
     // Route::resource('documentaries', DocuController::class);
-    Route::livewire('docus', 'pages::docus.index')->name('docus');
+    Route::livewire('docus', 'pages::docu.table')->name('docus');
+    Route::livewire('docu/{id}', 'pages::docu.single')->name('docu');
 });
 
 require __DIR__.'/settings.php';

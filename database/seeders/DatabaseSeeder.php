@@ -32,10 +32,27 @@ class DatabaseSeeder extends Seeder
             'email' => 'margaux.vandererven@ulb.be',
             'password' => Hash::make('Epanadiplose'),
         ]);
+        $docu = Docu::factory()->create([
+            'title' => 'Fire Of Love',
+            'subtitles' => 'fr',
+            'lang' => 'bil',
+            'comment' => 'Disponible sur Disney+',
+            'duration' => 93,
+            'summary' => ' Fire of Love tells the story of two French lovers, Katia and Maurice Krafft, who died in a volcanic explosion doing the very thing that brought them together: unraveling the mysteries of our planet, while simultaneously capturing the most explosive volcano imagery ever recorded. Along the way, they changed our understanding of the natural world, and saved tens of thousands of lives. Previously unseen hours of pristine 16-millimeter film and thousands of photographs reveal the birth of modern volcanology through an unlikely lens — the love of its two pioneers. ',
+            'target' => 'evening',
+            'user_id' => $user->id,
+            'year' => 2022
+        ]);
+
+        $production_house = ProductionHouse::factory()->create([
+            
+        ]);
 
         // $production_houses = ProductionHouse::factory()->count(10)->create();
         $docu_fields = Field::factory()->count(5)->create();
         $docu_tags = Tag::factory()->count(3)->create();
+
+        $docu->fields()->attach($docu_fields->find(2));
 
         $docus = Docu::factory()->count(50)
             // ->hasAttached($production_houses->random(1), [], 'from')
