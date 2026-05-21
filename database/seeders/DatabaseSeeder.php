@@ -9,6 +9,7 @@ use App\Models\Field;
 use App\Models\ProductionHouse;
 use App\Models\Tag;
 use App\Models\User;
+use App\Models\EvaluationCriterion;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -44,8 +45,54 @@ class DatabaseSeeder extends Seeder
             'year' => 2022
         ]);
 
+        EvaluationCriterion::factory()->create([
+            'name' => 'Montage et réalisation',
+            'description' => 'Produit par Francis Ford Coppola ou Même ma cousine de 5 ans a fait mieux avec iMovie',
+        ]);
+        EvaluationCriterion::factory()->create([
+            'name' => 'Qualité graphique',
+            'description' => 'Animations, illustrations des propos, etc.',
+        ]);
+        EvaluationCriterion::factory()->create([
+            'name' => 'Vulgarisation',
+            'description' => '',
+        ]);
+        EvaluationCriterion::factory()->create([
+            'name' => 'Facilité de compréhension',
+            'description' => 'Woaw, Mamy aurait tout compris ! ou Même l\'intervenant n\'a pas compris le docu',
+        ]);
+        EvaluationCriterion::factory()->create([
+            'name' => 'Précision des informations',
+            'description' => 'Est-ce que les intervenants du documentaires sont des experts du sujets ou des randoms qu\'on a pris dans la rue ?',
+        ]);
+        EvaluationCriterion::factory()->create([
+            'name' => 'Précision des informations',
+            'description' => 'Est-ce que les intervenants du documentaires sont des experts du sujets ou des randoms qu\'on a pris dans la rue ?',
+        ]);
+        EvaluationCriterion::factory()->create([
+            'name' => 'Capacité à susciter l\'intérêt',
+            'description' => 'C\'est parfait pour comprendre suffisement bien le propos ou je me suis endormi deux fois devant et c\'est toujours pas fini',
+        ]);
+        EvaluationCriterion::factory()->create([
+            'name' => 'Durée',
+            'description' => 'C\'est parfait pour comprendre suffisement bien le propos ou Je me suis endormi deux fois devant et c\'est toujours pas fini',
+        ]);
+        EvaluationCriterion::factory()->create([
+            'name' => 'Intérêt pour le Festival',
+            'description' => 'Prix du Jury ou Même si le festival est gratuit, faudra me payer pour aller le voir',
+        ]);
+        EvaluationCriterion::factory()->create([
+            'name' => 'Accès publique',
+            'description' => 'Le documentaire est un exclusivité qu\'on est les seul.e.s à avoir vu ou On trouve le docu en 2 secondes en tapant le sujet sur Google, même Théo a vu ce documentaire"',
+        ]);
+        EvaluationCriterion::factory()->create([
+            'name' => 'Impact général',
+            'description' => 'Ok, je change d\'études pour aller dans ce domaine ou Je souhaite que le rideau de douche froid colle au cul du réalisateur à chaque fois qu\'il se lave pour le restant de ses jours',
+        ]);
+
+
         $production_house = ProductionHouse::factory()->create([
-            
+
         ]);
 
         // $production_houses = ProductionHouse::factory()->count(10)->create();

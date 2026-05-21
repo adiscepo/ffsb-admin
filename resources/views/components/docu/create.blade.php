@@ -15,7 +15,7 @@ new class extends Component {
 
     // Fillable fields in the form
     public string $title = '';
-    public int $duration = 0;
+    public int $duration;
     public string $lang = '';
     public ?string $subtitle = null;
     public string $synopsis = '';
