@@ -144,7 +144,7 @@ new class extends Component {
         this.dropdownScroll();
     },
     dropdownScroll() {
-        dropdown_current = document.getElementById('dropdown-item-' + this.highlighted_id)
+        dropdown_current = document.getElementById(this.name + '-dropdown-item-' + this.highlighted_id)
         if (dropdown_current) {
             dropdown_current.scrollIntoView({ behavior: 'smooth', block: 'center' })
         }

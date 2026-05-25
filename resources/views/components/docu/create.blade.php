@@ -130,6 +130,7 @@ new class extends Component {
             'lang' => $this->lang,
             'subtitles' => $this->subtitle != 'null' ? $this->subtitle : null,
             'target' => $this->target,
+            'comment' => $this->comment,
         ]);
         foreach ($this->links as $id => $link) {
             DocuLink::create([

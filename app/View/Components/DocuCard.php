@@ -6,18 +6,14 @@ use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class CriterionField extends Component
+class DocuCard extends Component
 {
     /**
      * Create a new component instance.
      */
-    public int $note;
-    public string $comment;
-    public function __construct(
-        public string $name,
-        public string $description,
-    )
+    public function __construct()
     {
+        //
     }
 
     /**
@@ -25,6 +21,6 @@ class CriterionField extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.evaluation.criterion-field');
+        return view('components.docu-card');
     }
 }

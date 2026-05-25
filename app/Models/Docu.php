@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Enum\DocuTarget;
+use App\Models\EvaluationCriterion;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -61,4 +62,25 @@ class Docu extends Model
             return DocuTarget::from($this->target)->label();
         }
     }
+
+    /**
+     * Return the average note for all the evaluation on the docu
+     *
+     * @return integer
+     */
+    public function averageNoteEvaluation(): int {
+        $note = 0;
+        if ($this->evaluations()->count() > 0) {
+            foreach ($this->evaluations as $evaluation) {
+                $note += $evaluation->note();
+            }
+            return $note/$this->evaluations->count();
+        }
+        return $note;
+    }
+
+    public function maxNote(): int {
+        // 5 is the maximum notation for a criterion in a evaluation.
+        return EvaluationCriterion::count('id') * 5;
+    } 
 }

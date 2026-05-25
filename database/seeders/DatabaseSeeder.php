@@ -66,10 +66,6 @@ class DatabaseSeeder extends Seeder
             'description' => 'Est-ce que les intervenants du documentaires sont des experts du sujets ou des randoms qu\'on a pris dans la rue ?',
         ]);
         EvaluationCriterion::factory()->create([
-            'name' => 'Précision des informations',
-            'description' => 'Est-ce que les intervenants du documentaires sont des experts du sujets ou des randoms qu\'on a pris dans la rue ?',
-        ]);
-        EvaluationCriterion::factory()->create([
             'name' => 'Capacité à susciter l\'intérêt',
             'description' => 'C\'est parfait pour comprendre suffisement bien le propos ou je me suis endormi deux fois devant et c\'est toujours pas fini',
         ]);

@@ -95,7 +95,7 @@ new class extends Component {
 
 @php
     $classes =
-        'flex items-center justify-center p-2 bg-zinc-50 w-full justify-center border-dashed border border-zinc-200 rounded-lg [:where(&)] data-dragging:bg-zinc-100 data-dragging:shadow-inner group active:bg-zinc-100 active:shadow-inner dark:bg-zinc-600 dark:border-zinc-500';
+        'flex items-center justify-center p-2 bg-zinc-50 w-full justify-center border-dashed border border-zinc-200 rounded-lg [:where(&)] data-dragging:bg-zinc-100 data-dragging:shadow-inner group active:bg-zinc-100 active:shadow-inner dark:bg-zinc-600 dark:border-zinc-500 z-10';
 
     $class_btn = match ($size) {
         'sm' => 'flex items-center justify-center gap-4 px-3 group-data-loading:invisible',
@@ -103,12 +103,13 @@ new class extends Component {
     };
 @endphp
 
-<label for="{{ $this->uuid }}" wire:model='filename' value="{{ $filename }}" {{ $attributes->only('class')->merge(['class' => $classes]) }} x-data="dropzone({
+
+<div for="{{ $this->uuid }}" wire:model='filename' value="{{ $filename }}" {{ $attributes->only('class')->merge(['class' => $classes]) }} x-data="dropzone({
     _this: @this,
     uuid: @js($uuid),
     max_size: @js($this->max_size)
 })"
-    x-on:dragleave.prevent="onDragleave($event)" x-on:dragover.prevent="onDragover($event)" x-on:drop.prevent="onDrop">
+    x-on:dragleave.prevent="onDragleave($event)" x-on:dragover.prevent="onDragover($event)" x-on:dragenter.prevent="onDragenter($event)" x-on:drop.prevent="onDrop">
     <input type="file" x-data="uploadClick({
         _this: @this,
         uuid: @js($uuid),
@@ -145,7 +146,7 @@ new class extends Component {
     <div class="group-data-loading:visible invisible">
         <flux:icon.loading />
     </div>
-</label>
+</div>
 @script
     <script>
         Alpine.data('dropzone', ({
@@ -161,7 +162,7 @@ new class extends Component {
 
                 onDrop(e) {
                     this.isDropped = true
-                    this.isDragging = false
+                    // this.isDragging = false
 
                     const file = e.dataTransfer.files[0]
                     if (file.size <= max_size) {
@@ -181,7 +182,7 @@ new class extends Component {
                         _this.upload(...args)
                     } else {
                         this.isDropped = true
-                        this.isDragging = false
+                        // this.isDragging = false
                         this.$el.removeAttribute('data-dragging');
                         $wire.setError("La taille du fichier est trop grande (max: " + max_size / 1000000 +
                             "MB)");
@@ -189,21 +190,23 @@ new class extends Component {
                     // To refresh the image (need to wait that the file is
                     // uploaded)
                     setTimeout(() => {
-                        $refresh()
+                        // $wire.refresh()
                     }, 700);
                 },
                 onDragenter() {
+                    console.log("DragEnter")
                     this.isDragging = true
+                    this.$el.setAttribute('data-dragging', '');
                 },
                 onDragleave() {
+                    console.log("DragLeave")
                     this.isDragging = false
                     this.$el.removeAttribute('data-dragging');
                 },
                 onDragover() {
-                    this.isDragging = true
-                    this.$el.setAttribute('data-dragging', '');
-                    $wire.clearError();
-                    $wire.resetToUpload();
+                    // this.isDragging = true
+                    // $wire.clearError();
+                    // $wire.resetToUpload();
                 },
             });
         })

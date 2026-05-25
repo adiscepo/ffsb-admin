@@ -18,43 +18,43 @@ class EvaluationFactory extends Factory
     public function definition(): array
     {
         $json = json_encode([
-            'real' => [
+            '1' => [
                 'note' => fake()->numberBetween(0, 6),
                 'comment' => fake()->text(100),
             ],
-            'graphics' => [
+            '2' => [
                 'note' => fake()->numberBetween(0, 6),
                 'comment' => fake()->text(100),
             ],
-            'vulgarization' => [
+            '3' => [
                 'note' => fake()->numberBetween(0, 6),
                 'comment' => fake()->text(100),
             ],
-            'accessibility' => [
+            '4' => [
                 'note' => fake()->numberBetween(0, 6),
                 'comment' => fake()->text(100),
             ],
-            'source' => [
+            '5' => [
                 'note' => fake()->numberBetween(0, 6),
                 'comment' => fake()->text(100),
             ],
-            'general_impact' => [
+            '5' => [
                 'note' => fake()->numberBetween(0, 6),
                 'comment' => fake()->text(100),
             ],
-            'personal_interest' => [
+            '6' => [
                 'note' => fake()->numberBetween(0, 6),
                 'comment' => fake()->text(100),
             ],
-            'duration' => [
+            '7' => [
                 'note' => fake()->numberBetween(0, 6),
                 'comment' => fake()->text(100),
             ],
-            'festival_interest' => [
+            '8' => [
                 'note' => fake()->numberBetween(0, 6),
                 'comment' => fake()->text(100),
             ],
-            'findable' => [
+            '9' => [
                 'note' => fake()->numberBetween(0, 6),
                 'comment' => fake()->text(100),
             ],
