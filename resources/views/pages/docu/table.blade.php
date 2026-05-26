@@ -1,9 +1,11 @@
 <?php
 
+use Illuminate\Database\Eloquent\Builder;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\Attributes\Computed;
 use App\Models\Docu;
+use App\Models\EditionYear;
 use App\Models\Field;
 use App\Models\ProductionHouse;
 use function App\Helpers\HumanTiming\to_human;
@@ -11,6 +13,8 @@ use function App\Helpers\HumanTiming\to_human;
 new class extends Component {
     use WithPagination;
     public string $search = '';
+    public string $edition_year;
+    public bool $not_evaluated = false;
 
     // Permet d'avoir une URL dédiée à la recherche effectuée (on peut alors
     // la partager et retomber sur la même recherche)
@@ -18,7 +22,11 @@ new class extends Component {
         'search' => ['except' => ''],
     ];
 
-    #[Computed]
+    public function mount()
+    {
+        $this->edition_year = EditionYear::where('current', true)->first()->year;
+    }
+
     public function docus()
     {
         if (!empty($this->search)) {
@@ -32,10 +40,17 @@ new class extends Component {
             if ($prod_house->count() > 0) {
                 $query = $query->orWhereAttachedTo($prod_house, 'from');
             }
-            return $query->orderBy('id', 'DESC')->paginate(50);
+            return $query->whereRelation('edition_year', 'year', $this->edition_year)->orderBy('id', 'DESC')->paginate(50);
         }
 
-        return Docu::orderBy('id', 'DESC')->paginate(50);
+        if ($this->not_evaluated) {
+            $query = Docu::whereDoesntHave('evaluations', function (Builder $query) {
+                $query->where('user_id', Auth::user()->id);
+            });
+            return $query->whereRelation('edition_year', 'year', $this->edition_year)->orderBy('id', 'DESC')->paginate(50);
+        }
+
+        return Docu::whereRelation('edition_year', 'year', $this->edition_year)->orderBy('id', 'DESC')->paginate(50);
     }
 
     public function redirectDocu(int $id)
@@ -45,21 +60,19 @@ new class extends Component {
 };
 ?>
 
-<div class="space-y-4">
-    <header class="flex justify-between items-center sticky top-0 py-2 bg-white dark:bg-zinc-800 z-10">
-        <div class="space-y-2">
-            <flux:heading size="xl" class="text-zinc-900 dark:text-white">
-                Documentaires
-            </flux:heading>
-            <flux:subheading class="text-zinc-600 dark:text-zinc-400">
-                Il y a actuellement <span class="font-bold">{{ $this->docus->total() }}</span> documentaires encodés
-            </flux:subheading>
-            <flux:input wire:model.live='search' type="text" placeholder="Recherche" size="sm" />
-        </div>
+<x-slot name="header">
+    <header class="flex items-center justify-between w-full p-5 border-b border-zinc-200 max-h-15">
+        <nav>
+            <div class="flex gap-3 items-center text-sm">
+                <span class="text-zinc-500">Documentaires</span>
+                {{-- <flux:subheading class="text-zinc-600 dark:text-zinc-400">
+                    Il y a actuellement <span class="font-bold">{{ $this->docus->total() }}</span> documentaires encodés
+                </flux:subheading> --}}
+            </div>
+        </nav>
         <flux:modal.trigger name="create-docu">
             <flux:button size="sm" variant="primary" color="violet" class="cursor-pointer hidden! md:block!">
-                Ajouter
-                un documentaire
+                Ajouter un documentaire
             </flux:button>
             <flux:button size="sm" variant="primary" color="violet" class="cursor-pointer md:hidden"
                 icon="document-plus">
@@ -67,8 +80,23 @@ new class extends Component {
         </flux:modal.trigger>
     </header>
     <livewire:docu.create />
+</x-slot>
+<div class="space-y-4 px-10">
     <flux:separator variant="subtle" />
-    <flux:table :paginate="$this->docus">
+    <div class="flex flex-row-reverse gap-8">
+        <flux:select class="w-fit" size="sm" wire:model.live='edition_year'>
+            @foreach (EditionYear::orderBy('year', 'asc')->get() as $edition_year)
+                <flux:select.option value="{{ $edition_year->year }}">FFSB {{ $edition_year->year }}
+                </flux:select.option>
+            @endforeach
+        </flux:select>
+        <flux:field class="flex items-center whitespace-nowrap" variant="inline">
+            <flux:label>Pas évalués</flux:label>
+            <flux:checkbox wire:model.live="not_evaluated" />
+        </flux:field>
+        <flux:input wire:model.live='search' type="text" placeholder="Recherche" size="sm" />
+    </div>
+    <flux:table :paginate="$this->docus()">
         <flux:table.columns>
             <flux:table.column>Année</flux:table.column>
             <flux:table.column>Nom</flux:table.column>
@@ -83,7 +111,7 @@ new class extends Component {
         </flux:table.columns>
 
         <flux:table.rows>
-            @foreach ($this->docus as $docu)
+            @foreach ($this->docus() as $docu)
                 <flux:table.row wire:click="redirectDocu({{ $docu->id }})" :key="$docu->id"
                     class="hover:bg-zinc-50  dark:hover:bg-zinc-900 cursor-pointer">
                     <flux:table.cell class="">
@@ -105,8 +133,8 @@ new class extends Component {
 
                     <flux:table.cell variant="strong">
                         @if ($docu->subtitles)
-                        <img class="w-5"
-                            src="{{ url('/images/flags/' . $docu->subtitles . '.png') }}" alt="" srcset="">
+                            <img class="w-5" src="{{ url('/images/flags/' . $docu->subtitles . '.png') }}"
+                                alt="" srcset="">
                         @endif
                     </flux:table.cell>
 

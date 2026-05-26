@@ -16,17 +16,25 @@ new class extends Component {
         });
     }
 
-    public function redirectToDocu($id) {
-        $this->redirect("/docu/" . $id, navigate: true);
+    public function redirectToDocu($id)
+    {
+        $this->redirect('/docu/' . $id, navigate: true);
     }
 };
 ?>
+<x-slot name="header">
+    <header class="flex items-center justify-between w-full p-5 border-b border-zinc-200">
+        <nav>
+            <div class="flex gap-3 items-center text-sm">
+                <span class="text-zinc-500">Evaluations</span>
+            </div>
+        </nav>
+    </header>
+    <livewire:docu.create />
+</x-slot>
 
-<div>
+<div class="p-5">
     <div>
-        <flux:heading size="xl" class="text-zinc-900 dark:text-white">
-            Evaluations
-        </flux:heading>
         <flux:subheading class="text-zinc-600 dark:text-zinc-400">
             Liste des évaluations
         </flux:subheading>
@@ -75,8 +83,9 @@ new class extends Component {
             @endif
             @php $max_note = 0; @endphp
         @else
-                <flux:separator text="Les pas encore notés"></flux:separator>
+            <flux:separator text="Les pas encore notés"></flux:separator>
         @endif
-        <p wire:click='redirectToDocu({{ $docu->id }})'>{{ $docu->title }} ({{ $docu->evaluations->count() }}) = {{ $note }}</p>
+        <p wire:click='redirectToDocu({{ $docu->id }})'>{{ $docu->title }} ({{ $docu->evaluations->count() }}) =
+            {{ $note }}</p>
     @endforeach
 </div>

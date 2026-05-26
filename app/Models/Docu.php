@@ -36,6 +36,10 @@ class Docu extends Model
         );
     }
 
+    public function edition_year(): BelongsTo {
+        return $this->belongsTo(EditionYear::class);
+    }
+
     /**
      * Relation to the link to see the documentary
      *

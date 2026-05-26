@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Docu;
 use App\Models\DocuLink;
+use App\Models\EditionYear;
 use App\Models\Evaluation;
 use App\Models\Field;
 use App\Models\ProductionHouse;
@@ -33,6 +34,9 @@ class DatabaseSeeder extends Seeder
             'email' => 'margaux.vandererven@ulb.be',
             'password' => Hash::make('Epanadiplose'),
         ]);
+
+        EditionYear::factory()->create();
+
         $docu = Docu::factory()->create([
             'title' => 'Fire Of Love',
             'subtitles' => 'fr',
@@ -43,6 +47,20 @@ class DatabaseSeeder extends Seeder
             'target' => 'evening',
             'user_id' => $user->id,
             'year' => 2022
+        ]);
+
+        Evaluation::factory()->create([
+            'user_id' => 2,
+            'docu_id' => 1,
+            'evaluation' => '{"1":{"note":"5","comment":"les images d\'archives, destin\u00e9es \u00e0 une documentation pareille et les voir ensemble comme ca c\'est magnifique"},"2":{"note":"5","comment":"juste waw, la lave est si envoutante"},"3":{"note":"3","comment":"on ne parle pas bcp bcp de science directement"},"4":{"note":"5"},"5":{"comment":"une g\u00e9ochimiste et un g\u00e9ologue, toustes deux vulcanologues, rien de plus","note":"5"},"6":{"comment":"le film est magnifique, c\'est un sujet sous-cot\u00e9 et voir une telle oeuvre sur ce sujet c\'est g\u00e9nial","note":"5"},"7":{"comment":"pour une soir\u00e9e compl\u00e8te c\'est g\u00e9nial","note":"5"},"8":{"comment":"je le verrai parfaitement le lundi d\'inauguration, il est top (ou alors le mardi en tant que blockbuster, qui sont moins scientifiques, mais n\'importe dans tous les cas il est g\u00e9nial)","note":"5"},"9":{"comment":"sur disney+ et \u00e0 \u00e9t\u00e9 au cin\u00e9 toute l\'ann\u00e9e pass\u00e9e","note":"3"},"10":{"comment":"je change d\'\u00e9tudes.","note":"5"}}',
+            "comment" => "j'ai peur de la fin, j'ai eu raison."
+        ]);
+
+        Evaluation::factory()->create([
+            'user_id' => 1,
+            'docu_id' => 1,
+            'evaluation' => '{"1":{"note":"5","comment":"Splendide"},"2":{"note":"6","comment":"Ces images d\'archives combinées aux animations sur les cartes postales, je suis fan"},"3":{"note":"4","comment":"Un peu de vulgarisation sur la tectonique des plaques et compagnie mais pas centré la dessus"},"4":{"note":"5", "comment":"C\'est un beau volcan, c\'est une belle histoire 🎶"},"5":{"comment":"Ce sont eux, leur vie, leurs archives","note":"5"},"6":{"comment":"Même mon frère qui faisait des va et vient dans le kot m\'a demandé de mettre sur pause quand il allait aux toilettes","note":"5"},"7":{"comment":"Parfait","note":"5"},"8":{"comment":"Alors les petit.e.s potes, si il est pas pris pour le programe je quitte le FFSB","note":"6"},"9":{"comment":"Alors j\'aurais pu mettre moins pcq c\'est sur Disney+ mais j\'avais pas envie qu\'il y ait de l\'orange sur l\'évaluation
+Biaisé ? Complètement","note":"3"},"10":{"comment":"💖","note":"6"}}'
         ]);
 
         EvaluationCriterion::factory()->create([

@@ -20,7 +20,7 @@ new class extends Component {
         <p class="text-xl font-black">
             {{ $docu->title }}
         </p>
-        <div class="flex gap-3 text-sm text-zinc-400">
+        <div class="flex gap-3 text-sm text-zinc-400 mt-1">
             <span>{{ $docu->year }}</span>
             <span>|</span>
             <span>{{ to_human($docu->duration) }}</span>
@@ -45,7 +45,7 @@ new class extends Component {
     <flux:separator />
     <div class="flex flex-col gap-y-5 px-5">
         <div class="text-sm text-zinc-500 text-justify">
-            <p><b class="text-zinc-700">Résumé:</b>{{ $docu->summary }}</p>
+            <p><b class="text-zinc-700">Résumé: </b>{{ $docu->summary }}</p>
         </div>
         <div class="flex justify-around items-center">
             @foreach ($docu->fields as $field)
@@ -64,14 +64,15 @@ new class extends Component {
                 @endif
             </div>
         </div>
-        <div class="flex flex-col cursor-pointer" x-data="{ expanded : false }" @click="expanded = !expanded">
-            <div class="flex w-full h-fit items-center justify-between">
+        <div class="flex flex-col cursor-pointer" x-data="{ expanded: false }">
+            <div class="flex w-full h-fit items-center justify-between" @click="expanded = !expanded">
                 <span class="flex text-sm items-center gap-1">
                     <flux:icon.home variant="outline" class="size-4 bg-white! text-zinc-900" />Maison de production
                 </span>
                 <div class="flex items-center gap-x-2">
                     <span class="text-zinc-500 text-sm">{{ $docu->from()->count() }}</span>
-                    <flux:icon.chevron-right variant="mini" class="transition" x-bind:class="expanded ? 'rotate-90' : ''" />
+                    <flux:icon.chevron-right variant="mini" class="transition"
+                        x-bind:class="expanded ? 'rotate-90' : ''" />
                 </div>
             </div>
             <div class="bg-zinc w-[94%] self-end border-zinc-200 mt-2" x-bind:class="!expanded ? 'hidden' : 'block'">
@@ -80,14 +81,15 @@ new class extends Component {
                 @endforeach
             </div>
         </div>
-        <div class="flex flex-col cursor-pointer" x-data="{ expanded : false }" @click="expanded = !expanded">
-            <div class="flex w-full h-fit items-center justify-between">
+        <div class="flex flex-col cursor-pointer" x-data="{ expanded: false }">
+            <div class="flex w-full h-fit items-center justify-between" @click="expanded = !expanded">
                 <span class="flex text-sm items-center gap-1">
                     <flux:icon.link variant="outline" class="size-4 bg-white! text-zinc-900" />Lien de visionnage
                 </span>
                 <div class="flex items-center gap-x-2">
                     <span class="text-zinc-500 text-sm">{{ $docu->see_at()->count() }}</span>
-                    <flux:icon.chevron-right variant="mini" class="transition" x-bind:class="expanded ? 'rotate-90' : ''" />
+                    <flux:icon.chevron-right variant="mini" class="transition"
+                        x-bind:class="expanded ? 'rotate-90' : ''" />
                 </div>
             </div>
             <div class="bg-zinc w-[94%] self-end border-zinc-200 mt-2" x-bind:class="!expanded ? 'hidden' : 'block'">
@@ -95,7 +97,7 @@ new class extends Component {
                     <a class="text-zinc-500 text-sm" target="_blank"
                         href="{{ $link->url }}">{{ mb_strimwidth($link->url, 0, 45, '...') }}</a>
                     <div class="flex justify-between my-0.5">
-                        @if ($link->password !== null)
+                        @if ($link->password != null)
                             <flux:badge icon="key" class="text-xs! text-zinc-800! bg-white!">{{ $link->password }}
                             </flux:badge>
                         @endif
@@ -111,12 +113,18 @@ new class extends Component {
         </div>
     </div>
     <div class="mb-2"></div>
-    <flux:separator variant="subtle" text="Commentaire" />
-    <div class="px-5 text-sm text-zinc-500">
-        <p>{{ $docu->comment }}</p>
-    </div>
+    @if (isset($docu->comment))
+        <flux:separator variant="subtle" text="Commentaire" />
+        <div class="px-5 text-sm text-zinc-500">
+            <p>{{ $docu->comment }}</p>
+        </div>
+    @endif
     <div class="absolute w-full bg-zinc-50 bottom-0 flex justify-between px-5 py-2">
-        <span class="text-zinc-500 text-xs">Ajouté par {{ $docu->user->name }}</span>
+        <span class="text-zinc-500 text-xs">Ajouté par {{ $docu->user->name }}
+        @if(isset($docu->created_at))
         <span class="text-zinc-500 text-xs">{{ $docu->created_at->diffForHumans() }}</span>
+        @endif
+        </span>
+        <span class="text-zinc-500 text-xs">FFSB {{ $docu->edition_year->year }}</span>
     </div>
 </div>

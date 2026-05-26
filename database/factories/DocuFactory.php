@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Docu;
+use App\Models\EditionYear;
 use App\Models\Enum\DocuLang;
 use App\Models\Enum\DocuTarget;
 use App\Models\User;
@@ -28,7 +29,8 @@ class DocuFactory extends Factory
             'lang' => fake()->randomElement(DocuLang::cases()),
             'subtitles' => fake()->boolean(50) ? fake()->randomElement(DocuLang::cases()) : null,
             'target' => fake()->boolean(50) ? fake()->randomElement(DocuTarget::cases()) : null,
-            'user_id' => fake()->numberBetween(1, User::latest('id')->first()->id)
+            'user_id' => fake()->numberBetween(1, User::latest('id')->first()->id),
+            'edition_year_id' => fake()->numberBetween(1, EditionYear::latest('id')->first()->id),
             ];
     }
 }
