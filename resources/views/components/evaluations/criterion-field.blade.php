@@ -1,7 +1,7 @@
 <?php
 
 use Livewire\Component;
-use App\Models\EvaluationCriterion;
+use App\Domains\Evaluations\Evaluation;
 
 new class extends Component {
     public string $name;

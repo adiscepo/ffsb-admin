@@ -17,6 +17,15 @@ return new class extends Migration
             $table->text("description");
             $table->timestamps();
         });
+
+        Schema::create('evaluation_fields', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('evaluation_id');
+            $table->foreignId('evaluation_criterion_id');
+            $table->integer('note');
+            $table->string('comment');
+            $table->timestamps();
+        });
     }
 
     /**

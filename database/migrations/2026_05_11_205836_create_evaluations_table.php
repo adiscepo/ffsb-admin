@@ -15,10 +15,8 @@ return new class extends Migration
             $table->id();
             $user = $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $docu = $table->foreignId('docu_id')->constrained()->cascadeOnDelete();
-            $table->json('evaluation');
             $table->text('comment')->nullable();
             $table->timestamps();
-            // $table->unique([$user->id, $docu->id]);
         });
     }
 

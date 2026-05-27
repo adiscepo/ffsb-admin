@@ -1,7 +1,7 @@
 <?php
 
 use Livewire\Component;
-use App\Models\Evaluation;
+use App\Domains\Evaluations\Evaluation;
 use App\Models\Docu;
 
 new class extends Component {

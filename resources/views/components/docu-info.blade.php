@@ -93,22 +93,28 @@ new class extends Component {
                 </div>
             </div>
             <div class="bg-zinc w-[94%] self-end border-zinc-200 mt-2" x-bind:class="!expanded ? 'hidden' : 'block'">
-                @foreach ($docu->see_at as $link)
-                    <a class="text-zinc-500 text-sm" target="_blank"
-                        href="{{ $link->url }}">{{ mb_strimwidth($link->url, 0, 45, '...') }}</a>
-                    <div class="flex justify-between my-0.5">
-                        @if ($link->password != null)
-                            <flux:badge icon="key" class="text-xs! text-zinc-800! bg-white!">{{ $link->password }}
-                            </flux:badge>
-                        @endif
-                        @if ($link->deadline != null)
-                            <flux:badge icon="clock"
-                                class="text-xs! bg-white! {{ !$link->stillAvailable() ? 'text-red-400!' : '' }}">
-                                {{ $link->remainingDays() }}
-                            </flux:badge>
-                        @endif
-                    </div>
-                @endforeach
+                @if ($docu->see_at->count() > 0)
+
+                    @foreach ($docu->see_at as $link)
+                        <a class="text-zinc-500 text-sm" target="_blank"
+                            href="{{ $link->url }}">{{ mb_strimwidth($link->url, 0, 45, '...') }}</a>
+                        <div class="flex justify-between my-0.5">
+                            @if ($link->password != null)
+                                <flux:badge icon="key" class="text-xs! text-zinc-800! bg-white!">
+                                    {{ $link->password }}
+                                </flux:badge>
+                            @endif
+                            @if ($link->deadline != null)
+                                <flux:badge icon="clock"
+                                    class="text-xs! bg-white! {{ !$link->stillAvailable() ? 'text-red-400!' : '' }}">
+                                    {{ $link->remainingDays() }}
+                                </flux:badge>
+                            @endif
+                        </div>
+                    @endforeach
+                @else
+                    <p class="text-sm text-zinc-600 italic">Il n'y a pas de lien de visionnage pour ce documentaire</p>
+                @endif
             </div>
         </div>
     </div>
@@ -119,11 +125,11 @@ new class extends Component {
             <p>{{ $docu->comment }}</p>
         </div>
     @endif
-    <div class="absolute w-full bg-zinc-50 bottom-0 flex justify-between px-5 py-2">
+    <div class="absolute w-full bg-zinc-50 bottom-0 flex justify-between px-5 py-2 border-t border-zinc-200">
         <span class="text-zinc-500 text-xs">Ajouté par {{ $docu->user->name }}
-        @if(isset($docu->created_at))
-        <span class="text-zinc-500 text-xs">{{ $docu->created_at->diffForHumans() }}</span>
-        @endif
+            @if (isset($docu->created_at))
+                <span class="text-zinc-500 text-xs">{{ $docu->created_at->diffForHumans() }}</span>
+            @endif
         </span>
         <span class="text-zinc-500 text-xs">FFSB {{ $docu->edition_year->year }}</span>
     </div>

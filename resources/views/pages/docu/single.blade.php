@@ -3,28 +3,40 @@
 use Livewire\Component;
 use Livewire\Attributes\Computed;
 use App\Models\Docu;
+use App\Domains\Evaluations\Evaluation;
 use App\Models\Field;
 use App\Models\ProductionHouse;
 use App\Helpers\HumanTiming;
 
 new class extends Component {
     public Docu $docu;
-    public int $current_evaluation_author_id;
+    public ?int $current_evaluation_author_id;
+    protected bool $form_evaluation = false;
 
+    protected $listeners = [
+        'form_evaluation' => 'formEvaluation',
+    ];
 
     public function mount(int $id)
     {
         $this->docu = Docu::findOrFail($id);
-        $this->current_evaluation_author_id = Auth::user()->id;
+        $evaluations = Evaluation::where(['docu_id' => $id]);
+        if ($evaluations->count() == 0) {
+            $this->current_evaluation_author_id = null;
+        } else {
+            $this->current_evaluation_author_id = $evaluations->first()->user_id;
+            $this->form_evaluation = $this->current_evaluation_author_id == Auth::user()->id;
+        }
     }
 
-    public function changeEvaluation(int $id) {
+    public function changeEvaluation(int $id)
+    {
         $this->current_evaluation_author_id = $id;
     }
 
-    public function redirectEvaluation(int $id)
+    public function formEvaluation()
     {
-        $this->redirect('/evaluation/' . $this->docu->id . '/' . $id, navigate: true);
+        $this->form_evaluation = true;
     }
 };
 ?>
@@ -46,7 +58,11 @@ new class extends Component {
 <div class="h-full">
     <main class="grid grid-cols-[1.5fr_2fr_2fr] h-full">
         <livewire:docu-info :docu="$docu" class="border-r border-zinc-200 h-full" />
-        <livewire:docu-evaluations :docu="$docu" />
-        <livewire:evaluation-docu :docu="$docu" :author_id="$current_evaluation_author_id" />
+        <livewire:evaluations.docu-evaluations :docu="$docu" />
+        @if ($this->form_evaluation)
+            <livewire:evaluations.new-evaluation :docu="$docu" />
+        @elseif ($current_evaluation_author_id != null)
+            <livewire:evaluations.evaluation :docu="$docu" :author_id="$current_evaluation_author_id" />
+        @endif
     </main>
 </div>

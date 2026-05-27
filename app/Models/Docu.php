@@ -3,7 +3,8 @@
 namespace App\Models;
 
 use App\Models\Enum\DocuTarget;
-use App\Models\EvaluationCriterion;
+use App\Domains\Evaluations\Evaluation;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;

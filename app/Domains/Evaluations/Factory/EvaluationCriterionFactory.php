@@ -1,16 +1,20 @@
 <?php
 
-namespace Database\Factories;
+namespace App\Domains\Evaluations\Factory;
 
+use App\Domains\Evaluations\EvaluationCriterion;
 use Database\Factories\FakerBinary;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<EvaluationCriterion>
+ * @extends Factory<EvaluationCriterionFactory>
  */
 class EvaluationCriterionFactory extends Factory
 {
     use FakerBinary;
+
+    protected $model = EvaluationCriterion::class;
+
     /**
      * Define the model's default state.
      *
