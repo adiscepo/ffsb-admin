@@ -36,9 +36,14 @@ new class extends Component {
         $this->comment = $this->evaluation->comment;
     }
 
-    public function mount(Docu $docu)
+    public function mount(Docu $docu, EvaluationCreate $create)
     {
         $this->docu = $docu;
+        // If the evaluation doesn't exists for the documentary for the
+        // connected user, we create one
+        if (Evaluation::where(['user_id' => Auth::user()->id, 'docu_id' => $docu->id])->count() == 0) {
+            $create->execute(Auth::user(), $this->docu);
+        }
         $this->hydrateValues(Auth::user()->id);
     }
 

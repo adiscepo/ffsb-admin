@@ -15,14 +15,12 @@ class EvaluationEdit
 
         if (isset($data['evaluations'])) {
             foreach ($data['evaluations'] as $id => $criterion) {
-                $criterion_field = EvaluationField::where([
+                EvaluationField::updateOrCreate([
                     'evaluation_id' => $evaluation->id,
                     'evaluation_criterion_id' => $id,
-                ])->first();
-
-                $criterion_field->update([
-                    'note' => $criterion['note'],
-                    'comment' => $criterion['comment'],
+                ], [
+                    'note' => $criterion['note'] ?? 0,
+                    'comment' => $criterion['comment'] ?? '',
                 ]);
             }
         }
