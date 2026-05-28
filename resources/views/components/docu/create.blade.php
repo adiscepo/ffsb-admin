@@ -6,6 +6,7 @@ use App\Livewire\Forms\DocuForm;
 use App\Models\Enum\DocuLang;
 use App\Models\ProductionHouse;
 use App\Models\Field;
+use App\Models\EditionYear;
 use App\Models\Docu;
 use App\Models\DocuLink;
 use App\Models\Enum\DocuTarget;
@@ -52,7 +53,7 @@ new class extends Component {
     /* The pill-box elements return the id of the element 1-indexed
      * (bc it is usually used for DB data) -> need to reduce 1 to the selected
      * element to get the one in the PHP array (which is 0-indexed)
-    */
+     */
     #[On('pill-box:target')]
     public function updateTarget(array $selected)
     {
@@ -119,7 +120,7 @@ new class extends Component {
     public function save()
     {
         // $this->form->save();
-        error_log("Upload " . $this->target);
+        error_log('Upload ' . $this->target);
         $this->validate($this->rules());
         $docu = Docu::create([
             'title' => $this->title,
@@ -131,6 +132,7 @@ new class extends Component {
             'subtitles' => $this->subtitle != 'null' ? $this->subtitle : null,
             'target' => $this->target,
             'comment' => $this->comment,
+            'edition_year_id' => EditionYear::where('current', true)->orderBy('year', 'DESC')->first()->id,
         ]);
         foreach ($this->links as $id => $link) {
             DocuLink::create([

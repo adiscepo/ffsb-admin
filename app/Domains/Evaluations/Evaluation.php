@@ -53,14 +53,26 @@ class Evaluation extends Model
     }
 
 
-    public function getNoteCriterion(EvaluationCriterion $criterion)
+    public function getNote(EvaluationCriterion $criterion)
     {
         return $this->fields->firstWhere('evaluation_criterion_id', $criterion->id)?->note;
     }
 
-    public function getCommentCriterion(EvaluationCriterion $criterion)
+    public function getComment(EvaluationCriterion $criterion)
     {
         return $this->fields->firstWhere('evaluation_criterion_id', $criterion->id)?->comment;
+    }
+
+    public function getEvaluations(): array
+    {
+        $res = [];
+        foreach ($this->fields as $evaluation_field) {
+            $res[$evaluation_field->evaluation_criterion_id] = [
+                'note' => $evaluation_field->note,
+                'comment' => $evaluation_field->comment,
+            ];
+        }
+        return $res;
     }
 
     public function maxNote(): int

@@ -56,7 +56,7 @@ new class extends Component {
 </x-slot>
 
 <div class="h-full">
-    <main class="grid grid-cols-[1.5fr_2fr_2fr] h-full">
+    <main class="grid grid-cols-[1.5fr_2fr_2fr] h-full max-h-full min-h-full">
         <livewire:docu-info :docu="$docu" class="border-r border-zinc-200 h-full" />
         <livewire:evaluations.docu-evaluations :docu="$docu" />
         @if ($this->form_evaluation)

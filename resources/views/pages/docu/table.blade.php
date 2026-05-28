@@ -82,7 +82,7 @@ new class extends Component {
     <livewire:docu.create />
 </x-slot>
 <div class="space-y-4 px-10">
-    <flux:separator variant="subtle" />
+    <div class="mb-4"></div>
     <div class="flex flex-row-reverse gap-8">
         <flux:select class="w-fit" size="sm" wire:model.live='edition_year'>
             @foreach (EditionYear::orderBy('year', 'asc')->get() as $edition_year)
@@ -198,4 +198,5 @@ new class extends Component {
             @endforeach
         </flux:table.rows>
     </flux:table>
+    <div class="mb-4"></div>
 </div>

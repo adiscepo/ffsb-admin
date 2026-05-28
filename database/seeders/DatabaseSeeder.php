@@ -39,6 +39,8 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('Epanadiplose'),
         ]));
 
+        $users = $users->merge(User::factory(4)->create());
+
 
         $edition_years = collect();
         $edition_years = $edition_years->push(EditionYear::factory()->create());
@@ -48,7 +50,7 @@ class DatabaseSeeder extends Seeder
 
         $docu_fields = Field::factory(5)->create();
 
-        $docus = Docu::factory(50)->create([
+        $docus = Docu::factory(500)->create([
             'user_id' => fn() => $users->random()->id,
             'edition_year_id' => fn() => $edition_years->random()->id,
         ]);
@@ -64,13 +66,15 @@ class DatabaseSeeder extends Seeder
 
         $evaluations = collect();
         foreach ($docus as $docu) {
-            if (rand(0, 1) % 2 == 0) {
-                $evaluations = $evaluations->merge(
-                    Evaluation::factory(1)->create([
-                        'user_id' => $users->random()->id,
-                        'docu_id' => $docu->id,
-                    ])
-                );
+            foreach ($users as $user) {
+                if (rand(0, 1) % 2 == 0) {
+                    $evaluations = $evaluations->merge(
+                        Evaluation::factory(1)->create([
+                            'user_id' => $user->id,
+                            'docu_id' => $docu->id,
+                        ])
+                    );
+                }
             }
         }
 

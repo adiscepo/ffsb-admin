@@ -15,57 +15,37 @@ new class extends Component {
         'changed_eval' => 'changeEvaluation',
     ];
 
-    private function hydrateValues()
+    private function hydrateValues(int $author_id)
     {
-        if (isset($this->evaluation)) {
-            foreach (EvaluationCriterion::all() as $id => $criterion) {
-                $this->evaluations[$criterion->id]['note'] = $this->evaluation->getNoteCriterion($criterion);
-                $this->evaluations[$criterion->id]['comment'] = $this->evaluation->getCommentCriterion($criterion);
-            }
+        $this->evaluation = Evaluation::where([
+            'user_id' => $author_id,
+            'docu_id' => $this->docu->id,
+        ])
+            ->limit(1)
+            ->first();
+        if ($this->evaluation == null) {
+            return redirect()->back();
         }
-        if (isset($this->evaluation->comment)) {
-            $this->comment = $this->evaluation->comment;
-        } else {
-            $this->comment = '';
-        }
+        $this->evaluations = $this->evaluation->getEvaluations();
+        $this->comment = $this->evaluation->comment;
     }
 
     public function mount(Docu $docu, int $author_id)
     {
         $this->docu = $docu;
-        $this->evaluation = Evaluation::where([
-            'user_id' => $author_id,
-            'docu_id' => $this->docu->id,
-        ])
-            ->limit(1)
-            ->first();
-        $this->hydrateValues();
-        if ($this->evaluation == null) {
-            return redirect()->back();
-        }
+        $this->hydrateValues($author_id);
     }
 
     public function changeEvaluation(int $author_id)
     {
-        $this->evaluation = Evaluation::where([
-            'user_id' => $author_id,
-            'docu_id' => $this->docu->id,
-        ])
-            ->limit(1)
-            ->first();
-        if ($this->evaluation == null) {
-            $this->evaluation = Evaluation::create([
-                'user_id' => Auth::user()->id,
-                'docu_id' => $this->docu->id,
-                'evaluation' => '{}',
-            ]);
-        }
-        $this->edit_mode = $author_id == Auth::user()->id;
-        $this->hydrateValues();
+        $this->hydrateValues($author_id);
     }
 
     public function render()
     {
+        // If the id of the connected user is the one of the requested
+        // evaluation, we emit "form_evaluation" which will ask the page
+        // component docu to render the form for the evaluation
         if ($this->evaluation->user_id == Auth::user()->id) {
             $this->dispatch('form_evaluation');
         }
@@ -97,18 +77,18 @@ new class extends Component {
                             @endif
                         </div>
                         @php
-                            $note = $evaluation->getNoteCriterion($criterion);
+                            $note = $evaluation->getNote($criterion);
                             if ($note == null) {
                                 $note = 0;
                             }
                         @endphp
-                        <input
-                            class="w-10 h-10 md:w-15 md:h-15 border dark:border-zinc-600 text-center md:font-medium md:text-xl rounded"
+                        <input class="w-10 h-10 md:w-12 md:h-12 text-center md:font-medium md:text-xl"
                             data-note-evaluation="{{ $note }}" value="{{ $note }}" readonly />
-                        <p class="text-xs text-zinc-600">{{ $evaluation->getCommentCriterion($criterion) }}</p>
+                        <p class="text-sm text-zinc-600">{{ $evaluation->getComment($criterion) }}</p>
                     </div>
                 @endforeach
-                <p class="col-span-full text-sm text-zinc-700 dark:text-zinc-300">{{ $this->comment }}</p>
+                <div class="mb-2"></div>
+                <p class="col-span-full text-sm text-center text-zinc-600 dark:text-zinc-300">{{ $this->comment }}</p>
             </div>
         </div>
     @endif

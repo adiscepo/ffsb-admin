@@ -3,6 +3,8 @@
 use Livewire\Component;
 use App\Models\Docu;
 use App\Domains\Evaluations\Evaluation;
+use App\Domains\Evaluations\Actions\EvaluationCreate;
+use App\Domains\Evaluations\Actions\EvaluationEdit;
 use App\Domains\Evaluations\EvaluationCriterion;
 use App\Domains\Evaluations\EvaluationField;
 use App\View\Components\DocuEvaluationBoxNote;
@@ -19,30 +21,7 @@ new class extends Component {
         'changed_eval' => 'changeEvaluation',
     ];
 
-    private function hydrateValues()
-    {
-        foreach (EvaluationCriterion::all() as $id => $criterion) {
-            $this->evaluations[$criterion->id]['note'] = $this->evaluation->getNoteCriterion($criterion);
-            $this->evaluations[$criterion->id]['comment'] = $this->evaluation->getCommentCriterion($criterion);
-        }
-        if (isset($this->evaluation->comment)) {
-            $this->comment = $this->evaluation->comment;
-        } else {
-            $this->comment = '';
-        }
-    }
-
-    public function mount(Docu $docu)
-    {
-        $this->docu = $docu;
-        $this->evaluation = Evaluation::firstOrCreate([
-            'user_id' => Auth::user()->id,
-            'docu_id' => $this->docu->id,
-        ]);
-        $this->hydrateValues();
-    }
-
-    public function changeEvaluation(int $author_id)
+    private function hydrateValues(int $author_id)
     {
         $this->evaluation = Evaluation::where([
             'user_id' => $author_id,
@@ -50,38 +29,36 @@ new class extends Component {
         ])
             ->limit(1)
             ->first();
-        $this->edit_mode = $author_id == Auth::user()->id;
-        $this->hydrateValues();
+        if ($this->evaluation == null) {
+            return redirect()->back();
+        }
+        $this->evaluations = $this->evaluation->getEvaluations();
+        $this->comment = $this->evaluation->comment;
     }
 
-    public function save()
+    public function mount(Docu $docu)
     {
-        $evaluation = Evaluation::updateOrCreate(
-            [
-                'docu_id' => $this->docu->id,
-                'user_id' => Auth::user()->id,
-            ],
-            [
-                'comment' => $this->comment,
-            ],
-        );
-        foreach (EvaluationCriterion::all() as $criterion) {
-            $note = $this->evaluations[$criterion->id]['note'] ?? 0;
-            $comment = $this->evaluations[$criterion->id]['comment'] ?? '';
-            error_log($note . ' ' . $comment);
-            error_log($evaluation->id . '<->' . $criterion->id);
-            EvaluationField::updateOrCreate(
-                [
-                    'evaluation_id' => $evaluation->id,
-                    'evaluation_criterion_id' => $criterion->id,
-                ],
-                [
-                    'note' => $note,
-                    'comment' => $comment,
-                ],
-            );
+        $this->docu = $docu;
+        $this->hydrateValues(Auth::user()->id);
+    }
+
+    public function changeEvaluation(int $author_id)
+    {
+        $this->hydrateValues($author_id);
+    }
+
+    public function save(EvaluationCreate $create, EvaluationEdit $update)
+    {
+        $data = [
+            'evaluations' => $this->evaluations,
+            'comment' => $this->comment,
+        ];
+        if (!isset($this->evaluation)) {
+            $create->execute(Auth::user(), $this->docu, $data);
+        } else {
+            $update->execute($this->evaluation, $data);
         }
-        Flux::toast(variant: 'success', heading: 'Evaluation sauvée', position: 'top end');
+        Flux::toast(variant: 'success', text: 'Evaluation sauvée', position: 'top end');
         $this->changeEvaluation(Auth::user()->id);
         $this->dispatch('eval_updated');
     }
@@ -105,20 +82,14 @@ new class extends Component {
         <form wire:submit.prevent='save' class="flex flex-col gap-2">
             @foreach (EvaluationCriterion::all() as $criterion)
                 <div class="grid grid-cols-[1fr_0.2fr_1fr] gap-3 items-center">
-                    <div class="flex items-center gap-x-1">
-                        <p class="text-sm text-zinc-800">{{ $criterion->name }}</p>
+                    <div class="flex flex-col gap-x-1">
+                        <p class="text-sm text-zinc-900 font-medium">{{ $criterion->name }}</p>
                         @if ($criterion->description != null)
-                            <flux:tooltip toggleable>
-                                <flux:button icon="information-circle" icon:variant="outline" size="xs"
-                                    variant="ghost" />
-                                <flux:tooltip.content>
-                                    <p class="text-[8pt] text-white">{{ $criterion->description }}</p>
-                                </flux:tooltip.content>
-                            </flux:tooltip>
+                            <p class="text-xs italic text-zinc-500">{{ $criterion->description }}</p>
                         @endif
                     </div>
                     @php
-                        $note = $evaluation->getNoteCriterion($criterion);
+                        $note = $evaluation->getNote($criterion);
                         if ($note == null) {
                             $note = 0;
                         }
@@ -126,10 +97,9 @@ new class extends Component {
                     <input x-data="{ note: @js($note) }" x-model="note" x-bind:value="note"
                         wire:model='evaluations.{{ $criterion->id }}.note'
                         @keyup.prevent="note = note[0]; note = (parseInt(note) >= 0 && parseInt(note) <= 6) ? note : '' "
-                        x-bind:data-note-evaluation="note"
-                        class="w-10 h-10 md:w-15 md:h-15 border dark:border-zinc-600 text-center md:font-medium md:text-xl rounded">
-                    <textarea id="" cols="0" rows="0" wire:model='evaluations.{{ $criterion->id }}.comment'
-                        class="w-full h-full p-2 rounded border resize-none dark:border-zinc-600 text-xs focus:outline-none col-span-2 md:col-span-1">{{ $evaluation->getCommentCriterion($criterion) }}</textarea>
+                        x-bind:data-note-evaluation="note" class="w-12 h-12 text-center md:font-medium md:text-xl">
+                    <textarea wire:model='evaluations.{{ $criterion->id }}.comment'
+                        class="w-full h-full p-2 text-sm rounded border resize-none dark:border-zinc-600 focus:outline-none col-span-2 md:col-span-1"></textarea>
                 </div>
             @endforeach
             <textarea name="" id="" cols="0" rows="2"

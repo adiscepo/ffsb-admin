@@ -1,18 +1,31 @@
 <?php
 
-use App\Domains\Evaluations\Evaluation;
-use App\Models\Docu;
-use App\Models\User;
+namespace App\Domains\Evaluations\Actions;
 
-class EvaluationCreate
+use App\Domains\Evaluations\Evaluation;
+use App\Domains\Evaluations\EvaluationField;
+
+class EvaluationEdit
 {
-    public function execute(User $user, Docu $docu, array $data): Evaluation
+    public function execute(Evaluation $evaluation, array $data): Evaluation
     {
-        $evaluation = Evaluation::update([
-            'user_id' => $user->id,
-            'docu_id' => $docu->id,
+        $evaluation->update([
             'comment' => $data['comment'],
         ]);
+
+        if (isset($data['evaluations'])) {
+            foreach ($data['evaluations'] as $id => $criterion) {
+                $criterion_field = EvaluationField::where([
+                    'evaluation_id' => $evaluation->id,
+                    'evaluation_criterion_id' => $id,
+                ])->first();
+
+                $criterion_field->update([
+                    'note' => $criterion['note'],
+                    'comment' => $criterion['comment'],
+                ]);
+            }
+        }
 
         return $evaluation;
     }

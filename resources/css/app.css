@@ -89,6 +89,8 @@ select:focus[data-flux-control] {
 [data-note-evaluation="6"] {
     background-color: var(--color-violet-400);
     color: var(--color-violet-800);
+    /* background-color: #A78BFA;
+    color: #6D28D9; */
 }
 /* \[:where(&)\]:size-4 {
     @apply size-4;

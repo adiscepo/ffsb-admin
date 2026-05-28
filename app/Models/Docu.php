@@ -15,9 +15,10 @@ class Docu extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'summary', 'duration', 'year', 'user_id', 'lang', 'subtitles', 'target', 'comment'];
+    protected $fillable = ['title', 'summary', 'duration', 'year', 'user_id', 'lang', 'subtitles', 'target', 'comment', 'edition_year_id'];
 
-    public function user(): BelongsTo {
+    public function user(): BelongsTo
+    {
         return $this->belongsTo(User::class);
     }
 
@@ -26,7 +27,8 @@ class Docu extends Model
      *
      * @return BelongsToMany
      */
-    public function from(): BelongsToMany {
+    public function from(): BelongsToMany
+    {
         return $this->belongsToMany(
             ProductionHouse::class, # The pivot table of the relation
             // Don't need of the following arguments, they are found
@@ -37,7 +39,8 @@ class Docu extends Model
         );
     }
 
-    public function edition_year(): BelongsTo {
+    public function edition_year(): BelongsTo
+    {
         return $this->belongsTo(EditionYear::class);
     }
 
@@ -46,23 +49,28 @@ class Docu extends Model
      *
      * @return HasMany
      */
-    public function see_at(): HasMany {
+    public function see_at(): HasMany
+    {
         return $this->hasMany(DocuLink::class);
     }
 
-    public function fields(): BelongsToMany {
+    public function fields(): BelongsToMany
+    {
         return $this->belongsToMany(Field::class);
     }
 
-    public function tags(): BelongsToMany {
+    public function tags(): BelongsToMany
+    {
         return $this->belongsToMany(Tag::class);
     }
 
-    public function evaluations(): HasMany {
+    public function evaluations(): HasMany
+    {
         return $this->hasMany(Evaluation::class);
     }
 
-    public function target() {
+    public function target()
+    {
         if ($this->target) {
             return DocuTarget::from($this->target)->label();
         }
@@ -73,19 +81,21 @@ class Docu extends Model
      *
      * @return integer
      */
-    public function averageNoteEvaluation(): int {
+    public function averageNoteEvaluation(): int
+    {
         $note = 0;
         if ($this->evaluations()->count() > 0) {
             foreach ($this->evaluations as $evaluation) {
                 $note += $evaluation->note();
             }
-            return $note/$this->evaluations->count();
+            return $note / $this->evaluations->count();
         }
         return $note;
     }
 
-    public function maxNote(): int {
+    public function maxNote(): int
+    {
         // 5 is the maximum notation for a criterion in a evaluation.
         return EvaluationCriterion::count('id') * 5;
-    } 
+    }
 }

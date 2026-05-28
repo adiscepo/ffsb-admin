@@ -15,10 +15,10 @@ new class extends Component {
 
 <div class="border-r border-zinc-200 py-5">
     <div class="px-5">
-        <h2 class="text-lg text-zinc-700">Evaluations</h2>
+        <h2 class="text-lg text-zinc-700">Evaluations pour {{ $docu->title }}</h2>
         <div class="mb-4"></div>
         @if ($docu->evaluations->count() > 0)
-            <div class="grid grid-cols-2 gap-5">
+            <div class="grid grid-cols-1 xl:grid-cols-2 gap-5">
                 @foreach ($docu->evaluations as $evaluation)
                     <livewire:evaluations.docu-evaluation-box :evaluation="$evaluation" />
                 @endforeach
