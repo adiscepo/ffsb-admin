@@ -52,7 +52,6 @@ class Evaluation extends Model
         return $res;
     }
 
-
     public function getNote(EvaluationCriterion $criterion)
     {
         return $this->fields->firstWhere('evaluation_criterion_id', $criterion->id)?->note;

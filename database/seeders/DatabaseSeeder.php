@@ -50,7 +50,7 @@ class DatabaseSeeder extends Seeder
 
         $docu_fields = Field::factory(5)->create();
 
-        $docus = Docu::factory(500)->create([
+        $docus = Docu::factory(150)->create([
             'user_id' => fn() => $users->random()->id,
             'edition_year_id' => fn() => $edition_years->random()->id,
         ]);

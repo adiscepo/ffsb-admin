@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Enum\DocuTarget;
 use App\Domains\Evaluations\Evaluation;
+use App\Domains\Evaluations\EvaluationCriterion;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -76,6 +77,23 @@ class Docu extends Model
         }
     }
 
+    public function seenBy(int $user_id): bool
+    {
+        return $this->evaluations()->where('user_id', $user_id)->count() > 0;
+    }
+
+    public function noteFrom(int $user_id): ?int
+    {
+        if ($this->seenBy($user_id)) {
+            return $this->evaluations()->where('user_id', $user_id)->first()->note();
+        }
+        return null;
+    }
+
+    public function numberEvaluations(): int
+    {
+        return $this->evaluations()->count();
+    }
     /**
      * Return the average note for all the evaluation on the docu
      *

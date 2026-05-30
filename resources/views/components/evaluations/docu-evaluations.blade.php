@@ -5,20 +5,29 @@ use App\Models\Docu;
 
 new class extends Component {
     public Docu $docu;
+    protected $listeners = ['changeDocu'];
 
     public function mount(Docu $docu)
+    {
+        $this->changeDocu($docu);
+    }
+
+    public function changeDocu(Docu $docu)
     {
         $this->docu = $docu;
     }
 };
 ?>
 
-<div class="border-r border-zinc-200 py-5">
+<div {{ $attributes->class(['relative border-r border-zinc-200 py-5']) }}>
+    <x-loading-message>
+        <span class="text-sm italic text-zinc-500">Chargement des évaluations</span>
+    </x-loading-message>
     <div class="px-5">
         <h2 class="text-lg text-zinc-700">Evaluations pour {{ $docu->title }}</h2>
         <div class="mb-4"></div>
         @if ($docu->evaluations->count() > 0)
-            <div class="grid grid-cols-1 xl:grid-cols-2 gap-5">
+            <div class="grid grid-cols-1 gap-5 xl:grid-cols-2">
                 @foreach ($docu->evaluations as $evaluation)
                     <livewire:evaluations.docu-evaluation-box :evaluation="$evaluation" />
                 @endforeach

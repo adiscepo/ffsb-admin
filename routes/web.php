@@ -12,6 +12,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::livewire('docu/{id}', 'pages::docu.single')->name('docu');
     Route::livewire('evaluation/{id}/{user_id}', 'pages::evaluation.single')->name('eval-create');
     Route::livewire('evaluations', 'pages::evaluation.evaluations')->name('evaluations');
+    Route::livewire('evaluations/{year}', 'pages::evaluation.evaluations')->name('evaluations');
 });
 
-require __DIR__.'/settings.php';
+require __DIR__ . '/settings.php';

@@ -7,35 +7,52 @@ use App\Models\Enum\DocuTarget;
 
 new class extends Component {
     public Docu $docu;
+
+    protected $listeners = ['changeDocu'];
+
     public function mount(Docu $docu)
+    {
+        $this->changeDocu($docu);
+    }
+
+    public function changeDocu(Docu $docu)
     {
         $this->docu = $docu;
     }
 };
 ?>
 
-<div {{ $attributes->class(['flex flex-col gap-5 relative']) }}>
+@props([
+    'rounded' => false, // Round the docu box, needed as a props because the
+    // status bar at the bottom (absolute position) need
+    // to be rounded only in the bottom as well
+])
+
+<div {{ $attributes->class(['relative flex flex-col gap-5 relative @if ($rounded) rounded-lg @endif']) }}>
+    <x-loading-message>
+        <span class="text-sm italic text-zinc-500">Chargement du documentaire</span>
+    </x-loading-message>
     <div class="flex flex-col items-center justify-center px-5 py-3">
         <div class="mb-4"></div>
         <p class="text-xl font-black">
             {{ $docu->title }}
         </p>
-        <div class="flex gap-3 text-sm text-zinc-400 mt-1">
+        <div class="flex gap-3 mt-1 text-sm text-zinc-400">
             <span>{{ $docu->year }}</span>
             <span>|</span>
             <span>{{ to_human($docu->duration) }}</span>
         </div>
         <div class="mb-6"></div>
-        <div class="flex w-full items-center justify-between">
-            <span class="flex text-sm items-center gap-1">
+        <div class="flex items-center justify-between w-full">
+            <span class="flex items-center gap-1 text-sm">
                 <flux:icon.language variant="outline" class="size-4 bg-white! text-zinc-900" />Audio
             </span>
             <img class="h-4" src="/images/flags/{{ $docu->lang }}.png" />
         </div>
         <div class="mb-2"></div>
         @if (isset($docu->subtitles))
-            <div class="flex w-full h-fit items-center justify-between">
-                <span class="flex text-sm items-center gap-1">
+            <div class="flex items-center justify-between w-full h-fit">
+                <span class="flex items-center gap-1 text-sm">
                     <flux:icon.chat-bubble-left variant="outline" class="size-4 bg-white! text-zinc-900" />Sous-titres
                 </span>
                 <img class="h-4" src="/images/flags/{{ $docu->subtitles }}.png" />
@@ -43,34 +60,34 @@ new class extends Component {
         @endif
     </div>
     <flux:separator />
-    <div class="flex flex-col gap-y-5 px-5">
-        <div class="text-sm text-zinc-500 text-justify">
+    <div class="flex flex-col px-5 gap-y-5">
+        <div class="text-sm text-justify text-zinc-500">
             <p><b class="text-zinc-700">Résumé: </b>{{ $docu->summary }}</p>
         </div>
-        <div class="flex justify-around items-center">
+        <div class="flex items-center justify-around">
             @foreach ($docu->fields as $field)
                 <flux:badge color="{{ $field->color }}">{{ $field->field }}</flux:badge>
             @endforeach
         </div>
         <div>
-            <div class="flex w-full h-fit items-center justify-between">
-                <span class="flex text-sm items-center gap-1">
+            <div class="flex items-center justify-between w-full h-fit">
+                <span class="flex items-center gap-1 text-sm">
                     <flux:icon.user-group variant="outline" class="size-4 bg-white! text-zinc-900" />Public cible
                 </span>
                 @if (isset($docu->target))
-                    <span class="text-zinc-500 text-sm">{{ DocuTarget::from($docu->target)->label() }}</span>
+                    <span class="text-sm text-zinc-500">{{ DocuTarget::from($docu->target)->label() }}</span>
                 @else
-                    <span class="text-zinc-500 text-sm italic">Non renseigné</span>
+                    <span class="text-sm italic text-zinc-500">Non renseigné</span>
                 @endif
             </div>
         </div>
         <div class="flex flex-col cursor-pointer" x-data="{ expanded: false }">
-            <div class="flex w-full h-fit items-center justify-between" @click="expanded = !expanded">
-                <span class="flex text-sm items-center gap-1">
+            <div class="flex items-center justify-between w-full h-fit" @click="expanded = !expanded">
+                <span class="flex items-center gap-1 text-sm">
                     <flux:icon.home variant="outline" class="size-4 bg-white! text-zinc-900" />Maison de production
                 </span>
                 <div class="flex items-center gap-x-2">
-                    <span class="text-zinc-500 text-sm">{{ $docu->from()->count() }}</span>
+                    <span class="text-sm text-zinc-500">{{ $docu->from()->count() }}</span>
                     <flux:icon.chevron-right variant="mini" class="transition"
                         x-bind:class="expanded ? 'rotate-90' : ''" />
                 </div>
@@ -82,12 +99,12 @@ new class extends Component {
             </div>
         </div>
         <div class="flex flex-col cursor-pointer" x-data="{ expanded: false }">
-            <div class="flex w-full h-fit items-center justify-between" @click="expanded = !expanded">
-                <span class="flex text-sm items-center gap-1">
+            <div class="flex items-center justify-between w-full h-fit" @click="expanded = !expanded">
+                <span class="flex items-center gap-1 text-sm">
                     <flux:icon.link variant="outline" class="size-4 bg-white! text-zinc-900" />Lien de visionnage
                 </span>
                 <div class="flex items-center gap-x-2">
-                    <span class="text-zinc-500 text-sm">{{ $docu->see_at()->count() }}</span>
+                    <span class="text-sm text-zinc-500">{{ $docu->see_at()->count() }}</span>
                     <flux:icon.chevron-right variant="mini" class="transition"
                         x-bind:class="expanded ? 'rotate-90' : ''" />
                 </div>
@@ -96,7 +113,7 @@ new class extends Component {
                 @if ($docu->see_at->count() > 0)
 
                     @foreach ($docu->see_at as $link)
-                        <a class="text-zinc-500 text-sm" target="_blank"
+                        <a class="text-sm text-zinc-500" target="_blank"
                             href="{{ $link->url }}">{{ mb_strimwidth($link->url, 0, 45, '...') }}</a>
                         <div class="flex justify-between my-0.5">
                             @if ($link->password != null)
@@ -113,7 +130,7 @@ new class extends Component {
                         </div>
                     @endforeach
                 @else
-                    <p class="text-sm text-zinc-600 italic">Il n'y a pas de lien de visionnage pour ce documentaire</p>
+                    <p class="text-sm italic text-zinc-600">Il n'y a pas de lien de visionnage pour ce documentaire</p>
                 @endif
             </div>
         </div>
@@ -125,12 +142,14 @@ new class extends Component {
             <p>{{ $docu->comment }}</p>
         </div>
     @endif
-    <div class="absolute w-full bg-zinc-50 bottom-0 flex justify-between px-5 py-2 border-t border-zinc-200">
-        <span class="text-zinc-500 text-xs">Ajouté par {{ $docu->user->name }}
+    <div class="mb-2"></div>
+    <div
+        class="absolute w-full bg-zinc-50 bottom-0 flex justify-between px-5 py-2 border-t border-zinc-200 @if ($rounded) rounded-b-lg @endif">
+        <span class="text-xs text-zinc-500">Ajouté par {{ $docu->user->name }}
             @if (isset($docu->created_at))
-                <span class="text-zinc-500 text-xs">{{ $docu->created_at->diffForHumans() }}</span>
+                <span class="text-xs text-zinc-500">{{ $docu->created_at->diffForHumans() }}</span>
             @endif
         </span>
-        <span class="text-zinc-500 text-xs">FFSB {{ $docu->edition_year->year }}</span>
+        <span class="text-xs text-zinc-500">FFSB {{ $docu->edition_year->year }}</span>
     </div>
 </div>

@@ -3,7 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Database\Factories\UserFactory;
+
+use App\Domains\Evaluations\Evaluation;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -42,22 +43,25 @@ class User extends Authenticatable
         return Str::of($this->name)
             ->explode(' ')
             ->take(2)
-            ->map(fn ($word) => Str::substr($word, 0, 1))
+            ->map(fn($word) => Str::substr($word, 0, 1))
             ->implode('');
     }
 
-    public function getProfilePicture(): ?string {
+    public function getProfilePicture(): ?string
+    {
         if ($this->profile_picture) {
             return Storage::url($this->profile_picture);
         }
         return null;
     }
 
-    public function docus(): HasMany {
+    public function docus(): HasMany
+    {
         return $this->hasMany(Docu::class, "found_by");
     }
 
-    public function evaluations(): HasMany {
+    public function evaluations(): HasMany
+    {
         return $this->hasMany(Evaluation::class, "user_id");
     }
 }

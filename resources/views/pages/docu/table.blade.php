@@ -63,7 +63,7 @@ new class extends Component {
 <x-slot name="header">
     <header class="flex items-center justify-between w-full p-5 border-b border-zinc-200 max-h-15">
         <nav>
-            <div class="flex gap-3 items-center text-sm">
+            <div class="flex items-center gap-3 text-sm">
                 <span class="text-zinc-500">Documentaires</span>
                 {{-- <flux:subheading class="text-zinc-600 dark:text-zinc-400">
                     Il y a actuellement <span class="font-bold">{{ $this->docus->total() }}</span> documentaires encodés
@@ -81,7 +81,7 @@ new class extends Component {
     </header>
     <livewire:docu.create />
 </x-slot>
-<div class="space-y-4 px-10">
+<div class="px-10 space-y-4">
     <div class="mb-4"></div>
     <div class="flex flex-row-reverse gap-8">
         <flux:select class="w-fit" size="sm" wire:model.live='edition_year'>
@@ -113,7 +113,7 @@ new class extends Component {
         <flux:table.rows>
             @foreach ($this->docus() as $docu)
                 <flux:table.row wire:click="redirectDocu({{ $docu->id }})" :key="$docu->id"
-                    class="hover:bg-zinc-50  dark:hover:bg-zinc-900 cursor-pointer">
+                    class="cursor-pointer hover:bg-zinc-50 dark:hover:bg-zinc-900">
                     <flux:table.cell class="">
                         {{-- <flux:avatar size="xs" src="{{ $docu->customer_avatar }}" /> --}}
                         {{ $docu->year }}
@@ -145,7 +145,7 @@ new class extends Component {
                         {{ $docu->name }}
                     </flux:table.cell>
 
-                    <flux:table.cell class="flex gap-3 items-baseline">
+                    <flux:table.cell class="flex items-baseline gap-3">
                         @if ($docu->see_at)
                             @foreach ($docu->see_at as $link)
                                 <div class="flex items-center gap-0.5">
@@ -184,7 +184,8 @@ new class extends Component {
                     <flux:table.cell>
                         {{-- <flux:button variant="ghost" size="sm" icon="ellipsis-horizontal" inset="top bottom">
                         </flux:button> --}}
-                        <flux:text>{{ $docu->from->implode('name', ', ') }}</flux:text>
+                        <flux:text class="overflow-hidden w-25 text-ellipsis whitespace-nowrap">
+                            {{ $docu->from->implode('name', ', ') }}</flux:text>
                     </flux:table.cell>
                     <flux:table.cell>
                         <flux:avatar.group>
