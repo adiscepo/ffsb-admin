@@ -1,0 +1,38 @@
+services:
+  ffsb_admin:
+    build:
+      context: .
+      dockerfile: ./devops/Dockerfile
+    ports:
+      - "8026:80"
+      # - 5173:5173
+    volumes:
+      - ./:/var/www/html
+    # networks:
+    #   - ffsb_admin-network
+    # links:
+    #   - "ffsb_admin-mysql:database"
+    tty: true
+    container_name: ffsb-admin
+  ffsb_admin-mysql:
+    image: mysql:8
+# #    entrypoint: docker-entrypoint.sh --sql-mode='STRICT_TRANS_TABLES,STRICT_ALL_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,TRADITIONAL,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION'
+#     ports:
+#       - 3306:3306
+#     networks:
+#       - ffsb_admin-network
+#     environment:
+#       - MYSQL_ROOT_PASSWORD=123456
+#       - MYSQL_USER=ffsbxlbeoh185
+#       - MYSQL_PASSWORD=LspdCdSd2016
+#       - MYSQL_DATABASE=ffsb
+#     container_name: ffsb_admin-mysql
+#     volumes:
+#       - .:/opt/
+#       - dbdata:/var/lib/mysql
+
+# networks:
+#   ffsb_admin-network:
+#     name: ffsb_admin-network
+# volumes:
+#   dbdata:
