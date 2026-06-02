@@ -95,6 +95,14 @@
 
                 <flux:menu.separator />
 
+                <flux:menu.radio.group>
+                    <flux:menu.item :href="route('support.bugs.report')" icon="bug-ant" wire:navigate>
+                        {{ __('Signaler un bug') }}
+                    </flux:menu.item>
+                </flux:menu.radio.group>
+
+                <flux:menu.separator />
+
                 <form method="POST" action="{{ route('logout') }}" class="w-full">
                     @csrf
                     <flux:menu.item as="button" type="submit" icon="arrow-right-start-on-rectangle"

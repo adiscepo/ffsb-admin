@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Domains\Bugs\Bug;
 use App\Domains\Evaluations\Evaluation;
 use App\Domains\Evaluations\EvaluationCriterion;
 use App\Domains\Evaluations\EvaluationField;
@@ -10,6 +11,7 @@ use App\Models\DocuLink;
 use App\Models\EditionYear;
 use App\Models\Field;
 use App\Models\ProductionHouse;
+use App\Models\Status;
 use App\Models\Tag;
 use App\Models\User;
 
@@ -49,10 +51,10 @@ class DatabaseSeeder extends Seeder
         $production_houses = ProductionHouse::factory(25)->create();
 
         $docu_fields = Field::factory(5)->create();
-        $docu_tag_remove = Tag::factory()->create(['name' => 'Supprimé', 'color' => 'red']);
+        $docu_tag_remove = Tag::factory()->create(['name' => 'Supprimé', 'color' => 'red', 'model' => Docu::class]);
         $docu_tags = collect();
-        $docu_tags->push(Tag::factory()->create(['name' => 'Sélection Jury', 'color' => 'yellow']));
-        $docu_tags->push(Tag::factory()->create(['name' => 'Bonus', 'color' => 'lime']));
+        $docu_tags->push(Tag::factory()->create(['name' => 'Sélection Jury', 'color' => 'yellow', 'model' => Docu::class]));
+        $docu_tags->push(Tag::factory()->create(['name' => 'Bonus', 'color' => 'lime', 'model' => Docu::class]));
 
         $docus = Docu::factory(150)->create([
             'user_id' => fn() => $users->random()->id,
@@ -158,6 +160,34 @@ class DatabaseSeeder extends Seeder
                     'evaluation_criterion_id' => $criterion->id,
                     'evaluation_id' => $evaluation->id,
                 ]);
+            }
+        }
+
+        // Support - bugs
+
+        $bug_tags = collect();
+        $bug_tags->push(Tag::factory()->create(['name' => 'Affichage', 'color' => 'blue', 'model' => Bug::class]));
+        $bug_tags->push(Tag::factory()->create(['name' => 'Serveur', 'color' => 'green', 'model' => Bug::class]));
+        $bug_tags->push(Tag::factory()->create(['name' => 'Logique', 'color' => 'green', 'model' => Bug::class]));
+
+        $bug_statuses = collect();
+        $bug_statuses->push(Status::factory()->create(['name' => 'Résolu', 'color' => 'green', 'model' => Bug::class]));
+        $bug_statuses->push(Status::factory()->create(['name' => 'Ouvert', 'color' => 'zinc', 'model' => Bug::class]));
+        $bug_statuses->push(Status::factory()->create(['name' => 'Clôturé', 'color' => 'red', 'model' => Bug::class]));
+        $bug_statuses->push(Status::factory()->create(['name' => 'Fermé', 'color' => 'red', 'model' => Bug::class]));
+
+        $bugs = Bug::factory(10)->create([
+            'user_id' => fn() => $users->random()->id,
+            'assigned_to' => fn() => random_int(0, 4) == 0 ? 1 : null,
+        ]);
+
+        foreach ($bugs as $bug) {
+            $bug->statuses()->attach($bug_statuses->random());
+            if (random_int(0, 5) == 0) {
+                $bug->tags()->attach($bug_tags->random());
+            }
+            if (random_int(0, 10) == 0) {
+                $bug->tags()->attach($bug_tags->random());
             }
         }
     }

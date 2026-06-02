@@ -100,7 +100,7 @@ new class extends Component {
         <flux:select class="w-fit" size="sm" wire:model.live='tag'>
             <flux:select.option disabled>Tag</flux:select.option>
             <flux:select.option value="">Tous</flux:select.option>
-            @foreach (DB::table('tags')->join('taggables', 'taggable_type', '=', Docu::class)->groupBy('name')->select('name')->get() as $tag)
+            @foreach (Tag::for(Docu::class) as $tag)
                 <flux:select.option value="{{ $tag->name }}">{{ $tag->name }}
                 </flux:select.option>
             @endforeach

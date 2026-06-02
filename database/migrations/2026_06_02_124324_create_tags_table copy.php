@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('color');
+            // Specify to which model the tag can be used (to all if null)
+            $table->string('model')->nullable();
         });
 
         Schema::create('taggables', function (Blueprint $table) {

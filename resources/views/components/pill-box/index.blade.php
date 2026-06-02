@@ -26,6 +26,11 @@ new class extends Component {
     }
 
     /** array $data: liste des éléménts à afficher dans le menu dropdown
+     *               La liste doit être composée d'éléments de la forme
+     *                 [
+     *                    'id' => x,
+     *                     $data_key => 'value',
+     *                 ]
      *  string $key: la clé dans le dicitionnaire des données à afficher dans
      *               la liste déroulante
      *  string $name: (optionnel) permet d'activer un listener de mise à jour
@@ -45,7 +50,6 @@ new class extends Component {
 
     public function updateDatas(array $datas)
     {
-        error_log('Data received');
         $this->datas = $datas;
     }
 
