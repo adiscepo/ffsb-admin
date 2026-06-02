@@ -5,6 +5,7 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\Attributes\Computed;
 use App\Models\Docu;
+use App\Models\Tag;
 use App\Models\EditionYear;
 use App\Models\Field;
 use App\Models\ProductionHouse;
@@ -14,6 +15,7 @@ new class extends Component {
     use WithPagination;
     public string $search = '';
     public string $edition_year;
+    public string $tag = '';
     public bool $not_evaluated = false;
 
     // Permet d'avoir une URL dédiée à la recherche effectuée (on peut alors
@@ -41,6 +43,11 @@ new class extends Component {
                 $query = $query->orWhereAttachedTo($prod_house, 'from');
             }
             return $query->whereRelation('edition_year', 'year', $this->edition_year)->orderBy('id', 'DESC')->paginate(50);
+        }
+
+        if (!empty($this->tag)) {
+            $query = Docu::whereAttachedTo(Tag::where('name', $this->tag)->get());
+            return $query->paginate(50);
         }
 
         if ($this->not_evaluated) {
@@ -90,8 +97,16 @@ new class extends Component {
                 </flux:select.option>
             @endforeach
         </flux:select>
-        <flux:field class="flex items-center whitespace-nowrap" variant="inline">
-            <flux:label>Pas évalués</flux:label>
+        <flux:select class="w-fit" size="sm" wire:model.live='tag'>
+            <flux:select.option disabled>Tag</flux:select.option>
+            <flux:select.option value="">Tous</flux:select.option>
+            @foreach (DB::table('tags')->join('taggables', 'taggable_type', '=', Docu::class)->groupBy('name')->select('name')->get() as $tag)
+                <flux:select.option value="{{ $tag->name }}">{{ $tag->name }}
+                </flux:select.option>
+            @endforeach
+        </flux:select>
+        <flux:field class="flex items-center mr-5" variant="inline">
+            <flux:label class="whitespace-nowrap">Pas évalués</flux:label>
             <flux:checkbox wire:model.live="not_evaluated" />
         </flux:field>
         <flux:input wire:model.live='search' type="text" placeholder="Recherche" size="sm" />
