@@ -49,6 +49,10 @@ class DatabaseSeeder extends Seeder
         $production_houses = ProductionHouse::factory(25)->create();
 
         $docu_fields = Field::factory(5)->create();
+        $docu_tag_remove = Tag::factory()->create(['name' => 'Supprimé', 'color' => 'red']);
+        $docu_tags = collect();
+        $docu_tags->push(Tag::factory()->create(['name' => 'Sélection Jury', 'color' => 'yellow']));
+        $docu_tags->push(Tag::factory()->create(['name' => 'Bonus', 'color' => 'lime']));
 
         $docus = Docu::factory(150)->create([
             'user_id' => fn() => $users->random()->id,
@@ -57,11 +61,17 @@ class DatabaseSeeder extends Seeder
 
         foreach ($docus as $docu) {
             $docu->from()->attach(
-                $production_houses->random(rand(1, 3))->pluck('id')
+                $production_houses->random(rand(1, 2))->pluck('id')
             );
             $docu->fields()->attach(
-                $docu_fields->random(rand(1, 3))->pluck('id')
+                $docu_fields->random(rand(1, 2))->pluck('id')
             );
+            if (random_int(0, 50) == 0) {
+                $docu->tags()->attach($docu_tag_remove);
+            }
+            if (random_int(0, 100) == 0) {
+                $docu->tags()->attach($docu_tags->random());
+            }
         }
 
         $evaluations = collect();
@@ -123,7 +133,7 @@ class DatabaseSeeder extends Seeder
         ]));
         $evaluation_criterions->push(EvaluationCriterion::factory()->create([
             'name' => 'Capacité à susciter l\'intérêt',
-            'description' => 'C\'est parfait pour comprendre suffisement bien le propos ou je me suis endormi deux fois devant et c\'est toujours pas fini',
+            'description' => 'Ca m\'a scotché ou J\'ai mis en x2 histoire de l\'avoir vite fini et de l\'ajouter dans la liste des docus")',
         ]));
         $evaluation_criterions->push(EvaluationCriterion::factory()->create([
             'name' => 'Durée',
@@ -150,35 +160,5 @@ class DatabaseSeeder extends Seeder
                 ]);
             }
         }
-
-
-        // // $production_houses = ProductionHouse::factory()->count(10)->create();
-        // $docu_tags = Tag::factory()->count(3)->create();
-
-        // $docu->fields()->attach($docu_fields->find(2));
-
-        // // $evaluations = Evaluation::factory()->recycle($users)->recycle($docus)->has(EvaluationField::factory(count($evaluation_criterions))->recycle($evaluation_criterions), 'fields')->create();
-
-        // $evaluation_fields = [];
-        // foreach ($evaluation_criterions as $id => $criterion) {
-        //     $evaluation_fields[] = EvaluationField::factory()->for($criterion, 'criterion')->create();
-        // }
-
-        // $docus = Docu::factory()->count(50)
-        //     ->has(Evaluation::factory()->count(1)->recycle($users)->has($evaluation_fields))
-        //     ->has(ProductionHouse::factory()->count(rand(1, 3)), 'from')
-        //     ->has(DocuLink::factory()->count(rand(1, 2)), 'see_at')
-        //     ->create();
-
-        // // Evaluation::factory()->count(10)->for($user)->for($docus->random())->create();
-
-        // // use ($var) is needed to include $var to the closure's environment
-        // // $docus->each(function (Docu $docu) use ($docu_fields, $docu_tags) {
-        // //     $docu->fields()
-        // //         ->attach($docu_fields->random(random_int(1, 2)));
-        // //     if (fake()->boolean()) {
-        // //         $docu->tags()->attach($docu_tags->random(random_int(0, 2)));
-        // //     }
-        // // });
     }
 }

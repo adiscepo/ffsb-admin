@@ -18,8 +18,26 @@ class TagFactory extends Factory
     public function definition(): array
     {
         return [
-            'tag' => fake()->unique()->randomElement(['bonus', 'removed', 'jury']),
-            'color' => fake()->hexColor(),
+            'name' => fake()->unique()->randomElement(['bonus', 'removed', 'jury', 'front-end', 'back-end', 'logic', 'appearance']),
+            'color' => fake()->unique()->randomElement([
+                'red',
+                'orange',
+                'amber',
+                'yellow',
+                'lime',
+                'green',
+                'emerald',
+                'teal',
+                'cyan',
+                'sky',
+                'blue',
+                'indigo',
+                'violet',
+                'purple',
+                'fuchsia',
+                'pink',
+                'rose',
+            ]),
         ];
     }
 }

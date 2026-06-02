@@ -16,7 +16,7 @@ use Livewire\WithFileUploads;
 
 /**
  * Dispatch the event 'file-upload' when the file has been saved
- *  
+ *
  */
 new class extends Component {
     use WithFileUploads;
@@ -32,7 +32,8 @@ new class extends Component {
     public ?int $file_size; // File size
     public string $folder_storage;
 
-    public function __construct(string $folder_storage = "") {
+    public function __construct(string $folder_storage = '')
+    {
         $this->folder_storage = $folder_storage;
     }
 
@@ -104,12 +105,14 @@ new class extends Component {
 @endphp
 
 
-<div for="{{ $this->uuid }}" wire:model='filename' value="{{ $filename }}" {{ $attributes->only('class')->merge(['class' => $classes]) }} x-data="dropzone({
-    _this: @this,
-    uuid: @js($uuid),
-    max_size: @js($this->max_size)
-})"
-    x-on:dragleave.prevent="onDragleave($event)" x-on:dragover.prevent="onDragover($event)" x-on:dragenter.prevent="onDragenter($event)" x-on:drop.prevent="onDrop">
+<label for="{{ $this->uuid }}" wire:model='filename' value="{{ $filename }}"
+    {{ $attributes->only('class')->merge(['class' => $classes]) }} x-data="dropzone({
+        _this: @this,
+        uuid: @js($uuid),
+        max_size: @js($this->max_size)
+    })"
+    x-on:dragleave.prevent="onDragleave($event)" x-on:dragover.prevent="onDragover($event)"
+    x-on:dragenter.prevent="onDragenter($event)" x-on:drop.prevent="onDrop">
     <input type="file" x-data="uploadClick({
         _this: @this,
         uuid: @js($uuid),
@@ -118,7 +121,7 @@ new class extends Component {
     @if ($filename)
         <div class="flex gap-2">
             <flux:avatar wire:model='filename' {{-- class="border border-transparent rounded-lg box-border overflow-hidden" --}}
-                src="{{ Storage::temporaryUrl($this->folder_storage. '/' . $filename, now()) }}" />
+                src="{{ Storage::temporaryUrl($this->folder_storage . '/' . $filename, now()) }}" />
             <div>
                 <p class="text-sm text-zinc-600 dark:text-zinc-200">{{ $this->client_filename }}</p>
                 <p wire:model='filename' class="text-xs text-zinc-600 dark:text-zinc-200">{{ $this->getSize() }}
@@ -136,7 +139,8 @@ new class extends Component {
                     <p class="text-xs text-zinc-800 dark:text-zinc-200">Tu peux lâcher !</p>
                 </div>
                 <div class="not-group-data-dragging:visible group-data-dragging:hidden">
-                    <p class="text-xs text-zinc-800 dark:text-zinc-200">Glissez ou cliquez pour ajouter votre fichier</p>
+                    <p class="text-xs text-zinc-800 dark:text-zinc-200">Glissez ou cliquez pour ajouter votre fichier
+                    </p>
                     <p class="text-zinc-400 text-xs text-center" wire:loaded>{{ $this->getFormats() }} de max
                         {{ $this->max_size / 1000000 }} MB</p>
                 </div>
@@ -146,7 +150,7 @@ new class extends Component {
     <div class="group-data-loading:visible invisible">
         <flux:icon.loading />
     </div>
-</div>
+</label>
 @script
     <script>
         Alpine.data('dropzone', ({

@@ -43,20 +43,6 @@ return new class extends Migration
             $table->foreignId('docu_id')->constrained()->cascadeOnDelete();
             $table->foreignId('field_id')->constrained()->cascadeOnDelete();
         });
-
-        // The tags of the documentary (selected, removed, bonus, jury, etc.)
-        // Use a pivot table
-        Schema::create('tags', function (Blueprint $table) {
-            $table->id();
-            $table->string('tag')->unique();
-            $table->string('color');
-            $table->timestamps();
-        });
-
-        Schema::create('docu_tag', function (Blueprint $table) {
-            $table->foreignId('docu_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('tag_id')->constrained()->cascadeOnDelete();
-        });
     }
 
     /**

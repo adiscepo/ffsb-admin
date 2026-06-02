@@ -118,9 +118,17 @@ new class extends Component {
                         {{-- <flux:avatar size="xs" src="{{ $docu->customer_avatar }}" /> --}}
                         {{ $docu->year }}
                     </flux:table.cell>
-                    <flux:table.cell>
+                    <flux:table.cell class="flex gap-x-2 items-center">
                         {{-- <flux:avatar size="xs" src="{{ $docu->customer_avatar }}" /> --}}
                         {{ $docu->title }}
+                        <div class="">
+                            @if ($docu->tags->count() > 0)
+                                @foreach ($docu->tags as $tag)
+                                    <flux:badge size="sm" color="{{ $tag->color }}">{{ $tag->name }}
+                                    </flux:badge>
+                                @endforeach
+                            @endif
+                        </div>
                     </flux:table.cell>
 
                     <flux:table.cell>

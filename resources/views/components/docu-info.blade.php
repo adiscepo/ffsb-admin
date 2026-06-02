@@ -32,9 +32,16 @@ new class extends Component {
     <x-loading-message>
         <span class="text-sm italic text-zinc-500">Chargement du documentaire</span>
     </x-loading-message>
+    <div class="absolute p-2 right-0">
+        @if ($docu->tags->count() > 0)
+            @foreach ($docu->tags as $tag)
+                <flux:badge color="{{ $tag->color }}">{{ $tag->name }}</flux:badge>
+            @endforeach
+        @endif
+    </div>
     <div class="flex flex-col items-center justify-center px-5 py-3">
-        <div class="mb-4"></div>
-        <p class="text-xl font-black">
+        <div class="mb-7"></div>
+        <p class="text-xl font-black text-center">
             {{ $docu->title }}
         </p>
         <div class="flex gap-3 mt-1 text-sm text-zinc-400">
