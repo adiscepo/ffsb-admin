@@ -96,7 +96,7 @@ new class extends Component {
 
 @php
     $classes =
-        'flex items-center justify-center p-2 bg-zinc-50 w-full justify-center border-dashed border border-zinc-200 rounded-lg [:where(&)] data-dragging:bg-zinc-100 data-dragging:shadow-inner group active:bg-zinc-100 active:shadow-inner dark:bg-zinc-600 dark:border-zinc-500 z-10';
+        'flex items-center justify-center p-2 bg-zinc-50 w-full justify-center border-dashed border border-zinc-200 rounded-lg [:where(&)] data-dragging:bg-zinc-100 data-dragging:shadow-inner group active:bg-zinc-100 active:shadow-inner dark:active:bg-zinc-700 dark:bg-zinc-600 dark:border-zinc-500 z-10';
 
     $class_btn = match ($size) {
         'sm' => 'flex items-center justify-center gap-4 px-3 group-data-loading:invisible',

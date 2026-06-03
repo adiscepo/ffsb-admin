@@ -23,8 +23,9 @@ return new class extends Component {
     </header>
 </x-slot>
 
-<div class="w-fit mx-auto space-y-3">
-    <h2 class="text-lg text-zinc-700">Signaler un bug</h2>
+<form wire:submit="save" class="w-fit py-15 mx-auto space-y-3 flex flex-col">
+    <h2 class="text-lg text-zinc-700 dark:text-zinc-200">Signaler un bug</h2>
+    <div class="mb-8"></div>
     <div class="flex gap-x-2">
         <flux:input label="Titre" placeholder="Erreur d'ajout de docus" />
         <flux:field>
@@ -33,5 +34,26 @@ return new class extends Component {
             <livewire:pill-box :datas="Tag::for(Bug::class)->toArray()" />
         </flux:field>
     </div>
-</div>
-</div>
+    <flux:textarea rows="13" class="text-zinc-500! dark:text-zinc-400!">
+        Décrire clairement le problème
+
+        Etapes pour reproduire
+        1. Aller sur lien
+        2. Cliquer sur bouton
+        3. L'erreur s'affiche
+
+        Comportement attendu
+        (Que devrait-il se produire)
+
+        Environement:
+        - Chrome
+        - Théme clair
+    </flux:textarea>
+    <flux:field>
+        <flux:label>Captures d'écran</flux:label>
+        <livewire:file-upload class="w-100!" />
+    </flux:field>
+    <flux:button type='submit' icon="bug-ant" class="self-end">
+        Signaler
+    </flux:button>
+</form>
