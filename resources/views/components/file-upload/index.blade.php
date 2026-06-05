@@ -22,7 +22,7 @@ new class extends Component {
     use WithFileUploads;
 
     protected int $max_size = 5000000; // In bytes
-    protected array $formats = ['png', 'jpg', 'gif'];
+    protected array $formats = ['png', 'jpg', 'jpeg', 'gif'];
     public $upload;
     #[Locked]
     public string $uuid;
@@ -149,7 +149,7 @@ new class extends Component {
                         <p class="text-xs text-zinc-800 dark:text-zinc-200">Tu peux lâcher !</p>
                     </div>
                     <div class="not-group-data-dragging:visible group-data-dragging:hidden">
-                        <p class="text-xs text-zinc-800 dark:text-zinc-200">
+                        <p class="text-xs text-center text-zinc-800 dark:text-zinc-200">
                             @if ($this->multiple)
                                 Glissez ou cliquez pour ajouter vos fichiers
                             @else
