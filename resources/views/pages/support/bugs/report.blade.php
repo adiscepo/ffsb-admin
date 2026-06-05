@@ -7,12 +7,15 @@ use App\Domains\Bugs\Bug;
 return new class extends Component {
     public function mount() {}
 
-    public function save() {}
+    public function save()
+    {
+        Flux::toast(variant: 'success', text: 'Le bug a bien été reporté, merci !');
+    }
 };
 ?>
 
 <x-slot name="header">
-    <header class="flex items-center justify-between w-full p-5 border-b border-zinc-200 max-h-15">
+    <header class="flex items-center justify-between w-full p-5 border-b border-zinc-200 dark:border-zinc-700 max-h-15">
         <nav>
             <div class="flex items-center gap-3 text-sm">
                 <span class="text-zinc-500">Support</span>
@@ -23,7 +26,7 @@ return new class extends Component {
     </header>
 </x-slot>
 
-<form wire:submit="save" class="w-fit py-15 mx-auto space-y-3 flex flex-col">
+<form wire:submit="save" class="w-fit py-15 mx-auto space-y-5 flex flex-col">
     <h2 class="text-lg text-zinc-700 dark:text-zinc-200">Signaler un bug</h2>
     <div class="mb-8"></div>
     <div class="flex gap-x-2">
@@ -51,7 +54,7 @@ return new class extends Component {
     </flux:textarea>
     <flux:field>
         <flux:label>Captures d'écran</flux:label>
-        <livewire:file-upload class="w-100!" />
+        <livewire:file-upload :multiple="true" />
     </flux:field>
     <flux:button type='submit' icon="bug-ant" class="self-end">
         Signaler

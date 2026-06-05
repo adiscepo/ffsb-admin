@@ -27,20 +27,30 @@ new class extends Component {
     #[Locked]
     public string $uuid;
     public ?string $error; // Error message
+
+    // Single file case
     public ?string $client_filename; // Name of the file submitted
     public ?string $filename; // Filename stored
+
+    // Multiple file case
+    public ?array $client_filenames; // Name of the file submitted
+    public ?array $filenames; // Filename stored
+
     public ?int $file_size; // File size
     public string $folder_storage;
+
+    protected bool $multiple = false;
 
     public function __construct(string $folder_storage = '')
     {
         $this->folder_storage = $folder_storage;
     }
 
-    public function mount(array $formats = ['png', 'jpg', 'gif']): void
+    public function mount(array $formats = ['png', 'jpg', 'gif'], bool $multiple = false): void
     {
         $this->uuid = Str::uuid();
         $this->formats = $formats;
+        $this->multiple = $multiple;
     }
 
     public function getFormats(): string
@@ -50,6 +60,7 @@ new class extends Component {
 
     public function save()
     {
+        dd($this->upload);
         $extension = pathinfo($this->upload->getFilename(), PATHINFO_EXTENSION);
         if (in_array(strtolower($extension), $this->formats)) {
             $this->client_filename = $this->upload->getClientOriginalName();
@@ -96,7 +107,7 @@ new class extends Component {
 
 @php
     $classes =
-        'flex items-center justify-center p-2 bg-zinc-50 w-full justify-center border-dashed border border-zinc-200 rounded-lg [:where(&)] data-dragging:bg-zinc-100 data-dragging:shadow-inner group active:bg-zinc-100 active:shadow-inner dark:active:bg-zinc-700 dark:bg-zinc-600 dark:border-zinc-500 z-10';
+        'relative flex items-center justify-center p-2 bg-zinc-50 [:where(&)]:w-full [:where(&)]:h-full justify-center border-dashed border border-zinc-200 rounded-lg [:where(&)] data-dragging:bg-zinc-100 data-dragging:shadow-inner group active:bg-zinc-100 active:shadow-inner dark:active:bg-zinc-700 dark:bg-zinc-600 dark:border-zinc-500 z-10';
 
     $class_btn = match ($size) {
         'sm' => 'flex items-center justify-center gap-4 px-3 group-data-loading:invisible',
@@ -105,58 +116,85 @@ new class extends Component {
 @endphp
 
 
-<label for="{{ $this->uuid }}" wire:model='filename' value="{{ $filename }}"
-    {{ $attributes->only('class')->merge(['class' => $classes]) }} x-data="dropzone({
-        _this: @this,
-        uuid: @js($uuid),
-        max_size: @js($this->max_size)
-    })"
-    x-on:dragleave.prevent="onDragleave($event)" x-on:dragover.prevent="onDragover($event)"
-    x-on:dragenter.prevent="onDragenter($event)" x-on:drop.prevent="onDrop">
-    <input type="file" x-data="uploadClick({
-        _this: @this,
-        uuid: @js($uuid),
-        max_size: @js($this->max_size)
-    })" x-on:input.prevent="onInput" class="sr-only" id="{{ $this->uuid }}" />
-    @if ($filename)
-        <div class="flex gap-2">
-            <flux:avatar wire:model='filename' {{-- class="border border-transparent rounded-lg box-border overflow-hidden" --}}
-                src="{{ Storage::temporaryUrl($this->folder_storage . '/' . $filename, now()) }}" />
-            <div>
-                <p class="text-sm text-zinc-600 dark:text-zinc-200">{{ $this->client_filename }}</p>
-                <p wire:model='filename' class="text-xs text-zinc-600 dark:text-zinc-200">{{ $this->getSize() }}
-                </p>
-            </div>
-        </div>
-    @else
-        <div class="{{ $class_btn }}">
-            @if ($error)
-                <flux:icon.exclamation-triangle class="text-red-500 dark:text-red-300"></flux:icon.exclamation-triangle>
-                <p wire:model="error" class="text-sm text-red-600 dark:text-red-300">{{ $error }}</p>
-            @else
-                <flux:icon.cloud-arrow-up class="text-[#9f9fa9] group-data-dragging:text-black" variant="solid" />
-                <div class="not-group-data-dragging:hidden group-data-dragging:visible">
-                    <p class="text-xs text-zinc-800 dark:text-zinc-200">Tu peux lâcher !</p>
-                </div>
-                <div class="not-group-data-dragging:visible group-data-dragging:hidden">
-                    <p class="text-xs text-zinc-800 dark:text-zinc-200">Glissez ou cliquez pour ajouter votre fichier
-                    </p>
-                    <p class="text-zinc-400 text-xs text-center" wire:loaded>{{ $this->getFormats() }} de max
-                        {{ $this->max_size / 1000000 }} MB</p>
+<div
+    {{ $attributes->only('class')->merge(['class' => 'w-full flex flex-col gap-y-1 data-dragging:bg-zinc-100 data-dragging:shadow-inner ']) }}>
+    <label for="{{ $this->uuid }}"
+        @if ($this->multiple) wire:model='filenames' @else wire:model='filename' value="{{ $filename }}" @endif
+        class='{{ $classes }}' x-data="dropzone({
+            _this: @this,
+            uuid: @js($uuid),
+            max_size: @js($this->max_size),
+            multiple: @js($this->multiple),
+        })" x-on:dragleave.prevent="onDragleave($event)"
+        x-on:dragover.prevent="onDragover($event)" x-on:dragenter.prevent="onDragenter($event)" x-on:drop.prevent="onDrop">
+        <input type="file" @if ($this->multiple) multiple @endif x-data="uploadClick({
+            _this: @this,
+            uuid: @js($uuid),
+            max_size: @js($this->max_size)
+        })"
+            x-on:input.prevent="onInput" class="sr-only" id="{{ $this->uuid }}" />
+        @if ($filename)
+            @if (!$this->multiple)
+                <div class="flex gap-2">
+                    <flux:avatar wire:model='filename' {{-- class="border border-transparent rounded-lg box-border overflow-hidden" --}}
+                        src="{{ Storage::temporaryUrl($this->folder_storage . '/' . $filename, now()) }}" />
+                    <div>
+                        <p class="text-sm text-zinc-600 dark:text-zinc-200">{{ $this->client_filename }}</p>
+                        <p wire:model='filename' class="text-xs text-zinc-600 dark:text-zinc-200">{{ $this->getSize() }}
+                        </p>
+                    </div>
                 </div>
             @endif
+        @else
+            <div class="{{ $class_btn }}">
+                @if ($error)
+                    <flux:icon.exclamation-triangle
+                        class="text-red-500 dark:text-red-300"></flux:icon.exclamation-triangle>
+                    <p wire:model="error" class="text-sm text-red-600 dark:text-red-300">{{ $error }}</p>
+                @else
+                    <flux:icon.cloud-arrow-up class="text-[#9f9fa9] group-data-dragging:text-black" variant="solid" />
+                    <div class="not-group-data-dragging:hidden group-data-dragging:visible">
+                        <p class="text-xs text-zinc-800 dark:text-zinc-200">Tu peux lâcher !</p>
+                    </div>
+                    <div class="not-group-data-dragging:visible group-data-dragging:hidden">
+                        <p class="text-xs text-zinc-800 dark:text-zinc-200">
+                            @if ($this->multiple)
+                                Glissez ou cliquez pour ajouter vos fichiers
+                            @else
+                                Glissez ou cliquez pour ajouter votre fichier
+                            @endif
+                        </p>
+                        <p class="text-zinc-400 text-xs text-center" wire:loaded>{{ $this->getFormats() }} de max
+                            {{ $this->max_size / 1000000 }} MB</p>
+                    </div>
+                @endif
+            </div>
+        @endif
+        <div class="group-data-loading:visible invisible">
+            <flux:icon.loading />
         </div>
+    </label>
+    @if ($this->multiple && isset($this->filenames))
+        @foreach ($this->filenames as $filename)
+            <div
+                class="relative flex items-center gap-x-2 w-full text-xs text-zinc-600 dark:text-zinc-200  bg-zinc-50 dark:bg-zinc-600 border-zinc-200 dark:border-zinc-500 border rounded-lg p-2">
+                <flux:icon.document variant="solid" class="text-violet-300" />
+                <p>File 1</p>
+                <button wire:click='removeFile()'
+                    class="absolute p-0.5 bg-zinc-50 dark:bg-zinc-600 border border-zinc-200 rounded-full top-[-5pt] right-[-5pt] z-10 cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-700">
+                    <flux:icon.x-mark variant="micro" class="size-3" />
+                </button>
+            </div>
+        @endforeach
     @endif
-    <div class="group-data-loading:visible invisible">
-        <flux:icon.loading />
-    </div>
-</label>
+</div>
 @script
     <script>
         Alpine.data('dropzone', ({
             _this,
             uuid,
-            max_size
+            max_size,
+            multiple,
         }) => {
 
             return ({
@@ -168,9 +206,20 @@ new class extends Component {
                     this.isDropped = true
                     // this.isDragging = false
 
-                    const file = e.dataTransfer.files[0]
-                    if (file.size <= max_size) {
-                        const args = ['upload', file, () => {
+                    if (multiple) {
+
+                        for (let i = 0; i < e.dataTransfer.files.length; i++) {
+                            const file = e.dataTransfer.files[i];
+                            console.log(file)
+                            if (file.size > max_size) {
+                                $wire.setError('La taille du fichier ' + file.name +
+                                    ' est trop grande (max: ' +
+                                    max_size /
+                                    1000000 + ' MB)')
+                                return;
+                            }
+                        }
+                        const args = ['upload', e.dataTransfer.files, () => {
                             // Upload completed
                             this.$el.removeAttribute('data-loading');
                             $wire.save()
@@ -185,11 +234,30 @@ new class extends Component {
                         // Upload file
                         _this.upload(...args)
                     } else {
-                        this.isDropped = true
-                        // this.isDragging = false
-                        this.$el.removeAttribute('data-dragging');
-                        $wire.setError("La taille du fichier est trop grande (max: " + max_size / 1000000 +
-                            "MB)");
+                        const file = e.dataTransfer.files
+                        if (file.size <= max_size) {
+                            const args = ['upload', file, () => {
+                                // Upload completed
+                                this.$el.removeAttribute('data-loading');
+                                $wire.save()
+                            }, (error) => {
+                                // An error occurred while uploading
+                                $wire.setError("Une erreur est survenue");
+                            }, () => {
+                                // Uploading is in progress
+                                this.$el.setAttribute('data-loading', '');
+                            }];
+
+                            // Upload file
+                            _this.upload(...args)
+                        } else {
+                            this.isDropped = true
+                            // this.isDragging = false
+                            this.$el.removeAttribute('data-dragging');
+                            $wire.setError("La taille du fichier est trop grande (max: " + max_size /
+                                1000000 +
+                                "MB)");
+                        }
                     }
                     // To refresh the image (need to wait that the file is
                     // uploaded)
@@ -222,7 +290,7 @@ new class extends Component {
         }) => {
             return ({
                 onInput(e) {
-                    const file = e.target.files[0]
+                    const file = e.target.files
                     if (file.size <= max_size) {
                         const args = ['upload', file, () => {
                             // Upload completed
