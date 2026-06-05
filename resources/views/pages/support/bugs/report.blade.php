@@ -26,7 +26,7 @@ return new class extends Component {
     </header>
 </x-slot>
 
-<form wire:submit="save" class="w-fit py-15 mx-auto space-y-5 flex flex-col">
+<form wire:submit="save" class="w-fit py-15 mx-auto space-y-5 flex flex-col max-md:px-3">
     <h2 class="text-lg text-zinc-700 dark:text-zinc-200">Signaler un bug</h2>
     <div class="mb-8"></div>
     <div class="flex gap-x-2">

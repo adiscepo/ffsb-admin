@@ -27,15 +27,9 @@ new class extends Component {
     #[Locked]
     public string $uuid;
     public ?string $error; // Error message
-
-    // Single file case
     public ?string $client_filename; // Name of the file submitted
     public ?string $filename; // Filename stored
-
-    // Multiple file case
-    public ?array $client_filenames; // Name of the file submitted
-    public ?array $filenames; // Filename stored
-
+    // public ?array $filenames; // Filename stored
     public ?int $file_size; // File size
     public string $folder_storage;
 
@@ -60,7 +54,6 @@ new class extends Component {
 
     public function save()
     {
-        dd($this->upload);
         $extension = pathinfo($this->upload->getFilename(), PATHINFO_EXTENSION);
         if (in_array(strtolower($extension), $this->formats)) {
             $this->client_filename = $this->upload->getClientOriginalName();
@@ -116,8 +109,7 @@ new class extends Component {
 @endphp
 
 
-<div
-    {{ $attributes->only('class')->merge(['class' => 'w-full flex flex-col gap-y-1 data-dragging:bg-zinc-100 data-dragging:shadow-inner ']) }}>
+<div {{ $attributes->only('class')->merge(['class' => 'w-full flex flex-col gap-y-1']) }}>
     <label for="{{ $this->uuid }}"
         @if ($this->multiple) wire:model='filenames' @else wire:model='filename' value="{{ $filename }}" @endif
         class='{{ $classes }}' x-data="dropzone({
@@ -174,7 +166,7 @@ new class extends Component {
             <flux:icon.loading />
         </div>
     </label>
-    @if ($this->multiple && isset($this->filenames))
+    {{-- @if ($this->multiple)
         @foreach ($this->filenames as $filename)
             <div
                 class="relative flex items-center gap-x-2 w-full text-xs text-zinc-600 dark:text-zinc-200  bg-zinc-50 dark:bg-zinc-600 border-zinc-200 dark:border-zinc-500 border rounded-lg p-2">
@@ -186,7 +178,7 @@ new class extends Component {
                 </button>
             </div>
         @endforeach
-    @endif
+    @endif --}}
 </div>
 @script
     <script>
@@ -206,20 +198,10 @@ new class extends Component {
                     this.isDropped = true
                     // this.isDragging = false
 
-                    if (multiple) {
-
-                        for (let i = 0; i < e.dataTransfer.files.length; i++) {
-                            const file = e.dataTransfer.files[i];
-                            console.log(file)
-                            if (file.size > max_size) {
-                                $wire.setError('La taille du fichier ' + file.name +
-                                    ' est trop grande (max: ' +
-                                    max_size /
-                                    1000000 + ' MB)')
-                                return;
-                            }
-                        }
-                        const args = ['upload', e.dataTransfer.files, () => {
+                    const file = e.dataTransfer.files[0]
+                    console.log(file)
+                    if (file.size <= max_size) {
+                        const args = ['upload', file, () => {
                             // Upload completed
                             this.$el.removeAttribute('data-loading');
                             $wire.save()
@@ -234,30 +216,11 @@ new class extends Component {
                         // Upload file
                         _this.upload(...args)
                     } else {
-                        const file = e.dataTransfer.files
-                        if (file.size <= max_size) {
-                            const args = ['upload', file, () => {
-                                // Upload completed
-                                this.$el.removeAttribute('data-loading');
-                                $wire.save()
-                            }, (error) => {
-                                // An error occurred while uploading
-                                $wire.setError("Une erreur est survenue");
-                            }, () => {
-                                // Uploading is in progress
-                                this.$el.setAttribute('data-loading', '');
-                            }];
-
-                            // Upload file
-                            _this.upload(...args)
-                        } else {
-                            this.isDropped = true
-                            // this.isDragging = false
-                            this.$el.removeAttribute('data-dragging');
-                            $wire.setError("La taille du fichier est trop grande (max: " + max_size /
-                                1000000 +
-                                "MB)");
-                        }
+                        this.isDropped = true
+                        // this.isDragging = false
+                        this.$el.removeAttribute('data-dragging');
+                        $wire.setError("La taille du fichier est trop grande (max: " + max_size / 1000000 +
+                            "MB)");
                     }
                     // To refresh the image (need to wait that the file is
                     // uploaded)
@@ -290,7 +253,9 @@ new class extends Component {
         }) => {
             return ({
                 onInput(e) {
-                    const file = e.target.files
+                    const file = e.target.files[0]
+                    console.log(e)
+                    console.log(file)
                     if (file.size <= max_size) {
                         const args = ['upload', file, () => {
                             // Upload completed
