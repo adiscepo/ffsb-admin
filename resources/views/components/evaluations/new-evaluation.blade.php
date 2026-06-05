@@ -86,23 +86,25 @@ new class extends Component {
         <div class="mb-4"></div>
         <form wire:submit.prevent='save' class="flex flex-col gap-2">
             @foreach (EvaluationCriterion::all() as $criterion)
-                <div class="grid grid-cols-[1fr_0.2fr_1fr] gap-3 items-center">
-                    <div class="flex flex-col gap-x-1">
-                        <p class="text-sm text-zinc-900 font-medium">{{ $criterion->name }}</p>
-                        @if ($criterion->description != null)
-                            <p class="text-xs italic text-zinc-500">{{ $criterion->description }}</p>
-                        @endif
+                <div class="grid lg:grid-cols-[1fr_1fr] gap-3 items-center">
+                    <div class="flex justify-between items-center gap-x-1 w-full">
+                        <div class="flex flex-col gap-x-1">
+                            <p class="text-sm text-zinc-900 font-medium">{{ $criterion->name }}</p>
+                            <p class="text-xs italic text-zinc-500">
+                                {{ $criterion?->description }}
+                            </p>
+                        </div>
+                        @php
+                            $note = $evaluation->getNote($criterion);
+                            if ($note == null) {
+                                $note = 0;
+                            }
+                        @endphp
+                        <input x-data="{ note: @js($note) }" x-model="note" x-bind:value="note"
+                            wire:model='evaluations.{{ $criterion->id }}.note'
+                            @keyup.prevent="note = note[0]; note = (parseInt(note) >= 0 && parseInt(note) <= 6) ? note : '' "
+                            x-bind:data-note-evaluation="note" class="w-12 h-12 text-center md:font-medium md:text-xl">
                     </div>
-                    @php
-                        $note = $evaluation->getNote($criterion);
-                        if ($note == null) {
-                            $note = 0;
-                        }
-                    @endphp
-                    <input x-data="{ note: @js($note) }" x-model="note" x-bind:value="note"
-                        wire:model='evaluations.{{ $criterion->id }}.note'
-                        @keyup.prevent="note = note[0]; note = (parseInt(note) >= 0 && parseInt(note) <= 6) ? note : '' "
-                        x-bind:data-note-evaluation="note" class="w-12 h-12 text-center md:font-medium md:text-xl">
                     <textarea wire:model='evaluations.{{ $criterion->id }}.comment'
                         class="w-full h-full p-2 text-sm rounded border resize-none dark:border-zinc-600 focus:outline-none col-span-2 md:col-span-1"></textarea>
                 </div>

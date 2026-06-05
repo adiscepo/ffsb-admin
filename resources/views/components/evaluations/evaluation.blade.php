@@ -63,7 +63,7 @@ new class extends Component {
             <div class="mb-4"></div>
             <div class="flex flex-col gap-2">
                 @foreach (EvaluationCriterion::all() as $criterion)
-                    <div class="grid grid-cols-[1fr_0.2fr_1fr] gap-3 items-center">
+                    <div class="grid grid-cols-[1fr_0.2fr] lg:grid-cols-[1fr_0.2fr_1fr] gap-3 items-center">
                         <div class="flex items-center gap-x-1">
                             <p class="text-sm text-zinc-800">{{ $criterion->name }}</p>
                             @if ($criterion->description != null)

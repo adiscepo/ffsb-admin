@@ -37,7 +37,6 @@ new class extends Component {
             </div>
         @else
             <div class="flex flex-col items-center justify-center gap-3">
-
                 <p class="text-sm italic text-zinc-500">
                     Il n'y aucune évaluation pour ce documentaire pour l'instant.
                 </p>
