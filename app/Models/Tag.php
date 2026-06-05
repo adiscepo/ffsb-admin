@@ -31,6 +31,6 @@ class Tag extends Model
      */
     public static function for($model): Collection
     {
-        return Tag::where('model', $model)->orWhere('model', null)->groupBy('name')->select(['id', 'name'])->get();
+        return Tag::where('model', $model)->orWhere('model', null)?->groupBy('name')->select(['id', 'name'])->get();
     }
 }
