@@ -84,7 +84,8 @@ new class extends Component {
                         @endphp
                         <input class="w-10 h-10 md:w-12 md:h-12 text-center md:font-medium md:text-xl"
                             data-note-evaluation="{{ $note }}" value="{{ $note }}" readonly />
-                        <p class="text-sm text-zinc-600">{{ $evaluation->getComment($criterion) }}</p>
+                        <p class="text-sm text-zinc-600 col-span-full lg:col-span-1">
+                            {{ $evaluation->getComment($criterion) }}</p>
                     </div>
                 @endforeach
                 <div class="mb-2"></div>

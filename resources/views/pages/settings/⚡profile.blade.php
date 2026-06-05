@@ -20,8 +20,9 @@ new #[Title('Profile settings')] class extends Component {
         'file-uploaded' => 'handleFileUpload',
     ];
 
-    public function handleFileUpload($data) {
-        $this->profile_picture = $this->storage_folder . "/" . $data;
+    public function handleFileUpload($data)
+    {
+        $this->profile_picture = $this->storage_folder . '/' . $data;
     }
 
     /**
@@ -77,7 +78,7 @@ new #[Title('Profile settings')] class extends Component {
     #[Computed]
     public function hasUnverifiedEmail(): bool
     {
-        return Auth::user() instanceof MustVerifyEmail && ! Auth::user()->hasVerifiedEmail();
+        return Auth::user() instanceof MustVerifyEmail && !Auth::user()->hasVerifiedEmail();
     }
 
     #[Computed]
@@ -98,11 +99,8 @@ new #[Title('Profile settings')] class extends Component {
     <x-pages::settings.layout :heading="__('Profil')" :subheading="__('Mettre à jour votre nom ou email')">
         <form wire:submit="updateProfileInformation" class="my-6 w-full space-y-6">
             <div class="flex gap-3">
-                <flux:avatar
-                    size="xl"
-                    :initials="auth()->user()->initials()" 
-                    :src="auth()->user()->getProfilePicture()"
-                />
+                <flux:avatar size="xl" :initials="auth()->user()->initials()"
+                    :src="auth()->user()->getProfilePicture()" />
                 <livewire:file-upload size="sm" :folder_storage="$this->storage_folder" />
             </div>
             <flux:input wire:model="name" :label="__('Nom')" type="text" required autofocus autocomplete="name" />
@@ -115,7 +113,8 @@ new #[Title('Profile settings')] class extends Component {
                         <flux:text class="mt-4">
                             {{ __('Votre email n\'est pas vérifié.') }}
 
-                            <flux:link class="text-sm cursor-pointer" wire:click.prevent="resendVerificationNotification">
+                            <flux:link class="text-sm cursor-pointer"
+                                wire:click.prevent="resendVerificationNotification">
                                 {{ __('Cliquez ici pour renvoyer un mail de confirmation.') }}
                             </flux:link>
                         </flux:text>

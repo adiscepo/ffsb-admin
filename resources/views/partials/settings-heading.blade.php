@@ -1,5 +1,10 @@
-<div class="relative mb-6 w-full">
-    <flux:heading size="xl" level="1">{{ __('Paramètres') }}</flux:heading>
-    <flux:subheading size="lg" class="mb-6">{{ __('Gérer votre profil') }}</flux:subheading>
-    <flux:separator variant="subtle" />
-</div>
+<x-slot name="header">
+    <header class="flex items-center justify-between w-full p-5 border-b border-zinc-200 max-h-15">
+        <nav>
+            <div class="flex items-center gap-3 text-sm">
+                <span class="text-zinc-500">Paramètres</span>
+                <span class="text-zinc-500">/</span>
+                <span class="font-bold">Profil</span>
+            </div>
+        </nav>
+</x-slot>
