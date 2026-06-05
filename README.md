@@ -1,0 +1,17 @@
+# FFSB Admin
+
+The website for the internal management of the FFSB. This is an improvement of the 2024 version that use more modern, secure and beautiful features.
+
+Built on top of Laravel, Livewire, Flux (the free version) and TailwindCSS. The system incorporate also some self-made components (the Flux's ones behind a paywall mainly).
+
+## Features
+
+- Add documentaries
+- Add evaluations
+- Sort all the evaluations
+- Report bugs (**in progress**)
+- Upload profile pictures
+
+## Deployment
+
+The website is currently [available here](https://ffsb-admin.zandies.be). Each push on the `main` branch deploy the code on the server (hosted on a raspberry pi) through a Github Action.
