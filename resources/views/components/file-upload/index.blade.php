@@ -40,7 +40,7 @@ new class extends Component {
         $this->folder_storage = $folder_storage;
     }
 
-    public function mount(array $formats = ['png', 'jpg', 'gif'], bool $multiple = false): void
+    public function mount(array $formats = ['png', 'jpg', 'jpeg', 'gif'], bool $multiple = false): void
     {
         $this->uuid = Str::uuid();
         $this->formats = $formats;
