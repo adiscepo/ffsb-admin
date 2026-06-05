@@ -24,6 +24,7 @@ jobs:
             cd /var/www/${{ secrets.DEPLOY_SERVER_DIR }} &&
             git reset --hard HEAD && git clean -df &&
             git pull origin main &&
+            cp .env.production .env
             composer install --no-interaction --prefer-dist --no-dev --optimize-autoloader &&
             npm ci &&
             npm run build &&
