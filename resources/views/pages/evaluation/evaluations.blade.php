@@ -173,7 +173,8 @@ new class extends Component {
     <livewire:docu.create />
 </x-slot>
 
-<div class="p-5 grid xl:grid-cols-[2fr_1fr] grid-rows-3 gap-5 h-full">
+{{-- <div class="p-5 grid xl:grid-cols-[2fr_1fr] grid-rows-3 gap-5 h-full"> --}}
+<div class="p-5">
     <div class="row-span-full">
         <div class="flex flex-row-reverse items-center gap-8 peer">
             <flux:select class="w-fit" size="sm" wire:model.live='edition_year_id'>
