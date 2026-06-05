@@ -86,8 +86,8 @@ new class extends Component {
         <div class="mb-4"></div>
         <form wire:submit.prevent='save' class="flex flex-col gap-2">
             @foreach (EvaluationCriterion::all() as $criterion)
-                <div class="grid lg:grid-cols-[1fr_1fr] gap-3 items-center">
-                    <div class="flex justify-between items-center gap-x-1 w-full">
+                <div class="grid grid-cols-1 lg:grid-cols-[1fr_1fr] gap-3 items-center">
+                    <div class="flex justify-between items-center gap-x-1">
                         <div class="flex flex-col gap-x-1">
                             <p class="text-sm text-zinc-900 font-medium">{{ $criterion->name }}</p>
                             <p class="text-xs italic text-zinc-500">
