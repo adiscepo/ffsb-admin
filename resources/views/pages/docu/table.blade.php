@@ -90,25 +90,27 @@ new class extends Component {
 </x-slot>
 <div class="px-10 space-y-4">
     <div class="mb-4"></div>
-    <div class="flex flex-row-reverse gap-8">
-        <flux:select class="w-fit" size="sm" wire:model.live='edition_year'>
-            @foreach (EditionYear::orderBy('year', 'asc')->get() as $edition_year)
-                <flux:select.option value="{{ $edition_year->year }}">FFSB {{ $edition_year->year }}
-                </flux:select.option>
-            @endforeach
-        </flux:select>
-        <flux:select class="w-fit" size="sm" wire:model.live='tag'>
-            <flux:select.option disabled>Tag</flux:select.option>
-            <flux:select.option value="">Tous</flux:select.option>
-            @foreach (Tag::for(Docu::class) as $tag)
-                <flux:select.option value="{{ $tag->name }}">{{ $tag->name }}
-                </flux:select.option>
-            @endforeach
-        </flux:select>
-        <flux:field class="flex items-center mr-5" variant="inline">
-            <flux:label class="whitespace-nowrap">Pas évalués</flux:label>
-            <flux:checkbox wire:model.live="not_evaluated" />
-        </flux:field>
+    <div class="flex flex-row-reverse flex-wrap-reverse lg:flex-nowrap gap-x-8 gap-y-3">
+        <div class="flex flex-wrap lg:flex-nowrap flex-row-reverse gap-1.5">
+            <flux:select class="w-fit" size="sm" wire:model.live='edition_year'>
+                @foreach (EditionYear::orderBy('year', 'asc')->get() as $edition_year)
+                    <flux:select.option value="{{ $edition_year->year }}">FFSB {{ $edition_year->year }}
+                    </flux:select.option>
+                @endforeach
+            </flux:select>
+            <flux:select class="w-fit" size="sm" wire:model.live='tag'>
+                <flux:select.option disabled>Tag</flux:select.option>
+                <flux:select.option value="">Tous</flux:select.option>
+                @foreach (Tag::for(Docu::class) as $tag)
+                    <flux:select.option value="{{ $tag->name }}">{{ $tag->name }}
+                    </flux:select.option>
+                @endforeach
+            </flux:select>
+            <flux:field class="flex items-center mr-5" variant="inline">
+                <flux:label class="whitespace-nowrap">Pas évalués</flux:label>
+                <flux:checkbox wire:model.live="not_evaluated" />
+            </flux:field>
+        </div>
         <flux:input wire:model.live='search' type="text" placeholder="Recherche" size="sm" />
     </div>
     <flux:table :paginate="$this->docus()">
