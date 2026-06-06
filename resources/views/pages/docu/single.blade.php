@@ -55,14 +55,12 @@ new class extends Component {
     </header>
 </x-slot>
 
-<div class="h-full">
-    <main class="flex flex-col gap-y-4 lg:grid lg:grid-cols-[1.5fr_2fr_2fr] h-full max-h-full min-h-full">
-        <livewire:docu-info :docu="$docu" class="border-r border-zinc-200 h-full" />
-        <livewire:evaluations.docu-evaluations :docu="$docu" />
-        @if ($this->form_evaluation)
-            <livewire:evaluations.new-evaluation :docu="$docu" />
-        @elseif ($current_evaluation_author_id != null)
-            <livewire:evaluations.evaluation :docu="$docu" :author_id="$current_evaluation_author_id" />
-        @endif
-    </main>
-</div>
+<main class="flex flex-col gap-y-4 lg:grid lg:grid-cols-[1.5fr_2fr_2fr] min-h-full">
+    <livewire:docu-info :docu="$docu" class="border-r border-zinc-200 h-full" />
+    <livewire:evaluations.docu-evaluations :docu="$docu" />
+    @if ($this->form_evaluation)
+        <livewire:evaluations.new-evaluation :docu="$docu" />
+    @elseif ($current_evaluation_author_id != null)
+        <livewire:evaluations.evaluation :docu="$docu" :author_id="$current_evaluation_author_id" />
+    @endif
+</main>

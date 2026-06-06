@@ -15,7 +15,6 @@ trait PasswordValidationRules
     protected function passwordRules(): array
     {
         return ['required', 'string', 'confirmed'];
-        // return ['required', 'string', Password::default(), 'confirmed'];
     }
 
     /**
