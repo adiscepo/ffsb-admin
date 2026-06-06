@@ -143,6 +143,7 @@ new class extends Component {
             $this->selected_docu = $this->docus_sorted[$id];
             $this->dispatch('changeDocu', $this->selected_docu)->to('docu-info');
             $this->dispatch('changeDocu', $this->selected_docu)->to('evaluations.docu-evaluations');
+            $this->dispatch('selected-evaluation');
         }
     }
 
@@ -174,7 +175,7 @@ new class extends Component {
 </x-slot>
 
 {{-- <div class="p-5 grid xl:grid-cols-[2fr_1fr] grid-rows-3 gap-5 h-full"> --}}
-<div class="p-5">
+<div class="p-5 lg:grid lg:grid-cols-[2fr_1fr] lg:gap-5">
     <div class="row-span-full">
         <div class="flex flex-row-reverse items-center gap-8 peer">
             <flux:select class="w-fit" size="sm" wire:model.live='edition_year_id'>
@@ -242,7 +243,7 @@ new class extends Component {
             </flux:table>
         </div>
     </div>
-    <div class="flex flex-col gap-y-5">
+    <div id="docu-informations" class="flex flex-col gap-y-5">
         @if (isset($selected_docu))
             <livewire:docu-info class="border" :rounded="true" :docu="$this->selected_docu" />
             <livewire:evaluations.docu-evaluations class="py-5 border" :rounded="true" :docu="$this->selected_docu" />
@@ -256,3 +257,12 @@ new class extends Component {
         <livewire:evaluations.ladderboard />
     </div>
 </div>
+
+<script>
+    Livewire.on('selected-evaluation', () => {
+        document.getElementById('docu-informations').scrollIntoView({
+            behavior: "smooth",
+            inline: "nearest"
+        });
+    });
+</script>
