@@ -40,7 +40,6 @@ new class extends Component {
     #[On('pill-box:production_houses')]
     public function updateProductionHouse(array $selected)
     {
-        error_log('Update production houses');
         $this->production_houses = $selected;
     }
 

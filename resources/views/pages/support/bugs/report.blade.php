@@ -3,12 +3,50 @@
 use Livewire\Component;
 use App\Models\Tag;
 use App\Domains\Bugs\Bug;
+use App\Domains\Bugs\Actions\CreateBug;
 
 return new class extends Component {
+    public string $title = '';
+    public string $description = "Décrire clairement le problème\n\nEtapes pour reproduire\n1. Aller sur lien\n2. Cliquer sur bouton\n3. L'erreur s'affiche\n\nComportement attendu\n(Que devrait-il se produire)\n\nEnvironement:\n- Chrome\n- Théme clair";
+    public array $tags;
+    public ?string $file = null;
+    public string $storage_folder = 'bugs';
+
     public function mount() {}
 
-    public function save()
+    public function rules()
     {
+        return [
+            'title' => 'string|required',
+            'description' => 'string|required',
+        ];
+    }
+
+    protected $listeners = [
+        'pill-box:tags' => 'updateTags',
+        'file-uploaded' => 'handleFileUpload',
+    ];
+
+    public function handleFileUpload($data)
+    {
+        $this->file = $this->storage_folder . '/' . $data;
+    }
+    public function updateTags(array $selected)
+    {
+        $this->tags = $selected;
+    }
+
+    public function save(CreateBug $create)
+    {
+        $this->validate($this->rules());
+        $datas = [
+            'title' => $this->title,
+            'description' => $this->description,
+            'tags' => $this->tags,
+            'files_upload' => json_encode([$this->file]),
+        ];
+        $create->execute(Auth::user(), $datas);
+        $this->redirect('/dashboard', navigate: true);
         Flux::toast(variant: 'success', text: 'Le bug a bien été reporté, merci !');
     }
 };
@@ -30,31 +68,17 @@ return new class extends Component {
     <h2 class="text-lg text-zinc-700 dark:text-zinc-200">Signaler un bug</h2>
     <div class="mb-8"></div>
     <div class="flex gap-x-2">
-        <flux:input label="Titre" placeholder="Erreur d'ajout de docus" />
+        <flux:input label="Titre" wire:model='title' placeholder="Erreur d'ajout de docus" />
         <flux:field>
             <flux:label>Type</flux:label>
             {{-- {{ dd(Tag::for(Bug::class)->toArray()) }} --}}
-            <livewire:pill-box :datas="Tag::for(Bug::class)->toArray()" />
+            <livewire:pill-box name="tags" :datas="Tag::for(Bug::class)->toArray()" />
         </flux:field>
     </div>
-    <flux:textarea rows="13" class="text-zinc-500! dark:text-zinc-400!">
-        Décrire clairement le problème
-
-        Etapes pour reproduire
-        1. Aller sur lien
-        2. Cliquer sur bouton
-        3. L'erreur s'affiche
-
-        Comportement attendu
-        (Que devrait-il se produire)
-
-        Environement:
-        - Chrome
-        - Théme clair
-    </flux:textarea>
+    <flux:textarea rows="13" wire:model='description' class="text-zinc-500! dark:text-zinc-400!"></flux:textarea>
     <flux:field>
-        <flux:label>Captures d'écran</flux:label>
-        <livewire:file-upload :multiple="true" />
+        <flux:label>Capture d'écran</flux:label>
+        <livewire:file-upload :folder_storage="$this->storage_folder" :multiple="false" />
     </flux:field>
     <flux:button type='submit' icon="bug-ant" class="self-end">
         Signaler

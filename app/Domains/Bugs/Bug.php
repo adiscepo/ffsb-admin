@@ -5,21 +5,33 @@ namespace App\Domains\Bugs;
 use App\Domains\Bugs\Factory\BugFactory;
 use App\Models\Status;
 use App\Models\Tag;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 class Bug extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'description', 'author_id', 'files', 'status', 'assigned_to'];
+    protected $fillable = ['title', 'description', 'user_id', 'files_upload', 'assigned_to'];
 
     protected $casts = ['files_upload' => 'array'];
 
     public function tags(): MorphToMany
     {
         return $this->morphToMany(Tag::class, 'taggable');
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function assignation(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'assigned_to');
     }
 
     public function statuses(): MorphToMany

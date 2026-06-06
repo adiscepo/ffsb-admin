@@ -57,9 +57,9 @@ new class extends Component {
         $extension = pathinfo($this->upload->getFilename(), PATHINFO_EXTENSION);
         if (in_array(strtolower($extension), $this->formats)) {
             $this->client_filename = $this->upload->getClientOriginalName();
-            $this->filename = Auth::user()->id . '.' . $extension;
+            $this->filename = Str::uuid() . '.' . $extension;
             $this->file_size = $this->upload->getSize();
-            $this->upload->storeAs($this->folder_storage, Auth::user()->id . '.' . $extension, 'public');
+            $this->upload->storeAs($this->folder_storage, $this->filename, 'public');
             $this->dispatch('file-uploaded', $this->filename);
         } else {
             $this->error = 'Extension incorrecte (' . strtolower($this->getFormats()) . ')';
