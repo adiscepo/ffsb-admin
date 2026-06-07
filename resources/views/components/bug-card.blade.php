@@ -10,11 +10,16 @@ new class extends Component {
     {
         $this->bug = $bug;
     }
+
+    public function selectBug(int $id)
+    {
+        $this->redirect('/support/bug/' . $id, navigate: true);
+    }
 };
 ?>
 
-<div
-    {{ $attributes->only('class')->merge(['class' => 'relative flex flex-col gap-y-2 rounded px-4 py-3 border border-zinc-200 dark:border-zinc-700 h-fit']) }}>
+<div {{ $attributes->only('class')->merge(['class' => 'relative flex flex-col gap-y-2 rounded px-4 py-3 border border-zinc-200 dark:border-zinc-700 h-fit']) }}
+    wire:click='selectBug({{ $bug->id }})'>
     <div class="flex flex-col gap-y-2">
         <div class="flex justify-between gap-2">
             <div>
