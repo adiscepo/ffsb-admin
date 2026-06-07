@@ -67,14 +67,22 @@ new class extends Component {
 };
 ?>
 
-<x-slot name="header">
+@component('partials.heading', ['route' => 'Documentaires'])
+    <livewire:docu.create />
+    <flux:modal.trigger name="create-docu">
+        <flux:button size="sm" variant="primary" color="violet" class="cursor-pointer hidden! md:block!">
+            Ajouter un documentaire
+        </flux:button>
+        <flux:button size="sm" variant="primary" color="violet" class="cursor-pointer md:hidden" icon="document-plus">
+        </flux:button>
+    </flux:modal.trigger>
+@endcomponent
+
+{{-- <x-slot name="header">
     <header class="flex items-center justify-between w-full p-5 border-b border-zinc-200 max-h-15">
         <nav>
             <div class="flex items-center gap-3 text-sm">
                 <span class="text-zinc-500">Documentaires</span>
-                {{-- <flux:subheading class="text-zinc-600 dark:text-zinc-400">
-                    Il y a actuellement <span class="font-bold">{{ $this->docus->total() }}</span> documentaires encodés
-                </flux:subheading> --}}
             </div>
         </nav>
         <flux:modal.trigger name="create-docu">
@@ -87,7 +95,8 @@ new class extends Component {
         </flux:modal.trigger>
     </header>
     <livewire:docu.create />
-</x-slot>
+</x-slot> --}}
+
 <div class="px-10 space-y-4">
     <div class="mb-4"></div>
     <div class="flex flex-row-reverse flex-wrap-reverse lg:flex-nowrap gap-x-8 gap-y-3">

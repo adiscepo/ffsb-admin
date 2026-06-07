@@ -171,8 +171,12 @@ new class extends Component {
             </div>
         </nav>
     </header>
-    <livewire:docu.create />
 </x-slot>
+
+@include('partials.heading', [
+    'route' => 'Evaluations/' . $edition_year . '/' . $evaluations->count(),
+    'bold' => 1,
+])
 
 {{-- <div class="p-5 grid xl:grid-cols-[2fr_1fr] grid-rows-3 gap-5 h-full"> --}}
 <div class="p-5 lg:grid lg:grid-cols-[2fr_1fr] lg:gap-5">
