@@ -15,7 +15,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::livewire('evaluations/{year}', 'pages::evaluation.evaluations')->name('evaluation');
     // Bugs
     Route::livewire('support/bugs/report', 'pages::support.bugs.report')->name('support.bugs.report');
-    Route::livewire('support/bugs/list', 'pages::support.bugs.list')->name('support.bugs.list');
+    Route::livewire('support/bugs', 'pages::support.bugs.list')->name('support.bugs.list');
 });
 
 require __DIR__ . '/settings.php';

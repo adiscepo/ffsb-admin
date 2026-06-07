@@ -44,7 +44,8 @@ class Bug extends Model
      */
     public function getUploadedFiles()
     {
-        return json_decode($this->attributes['files_upload'], true);
+        // return json_decode($this->attributes['files_upload'], true);
+        return $this->files_upload;
     }
 
     /**

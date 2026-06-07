@@ -43,10 +43,10 @@ return new class extends Component {
             'title' => $this->title,
             'description' => $this->description,
             'tags' => $this->tags,
-            'files_upload' => json_encode([$this->file]),
+            'files_upload' => [$this->file],
         ];
         $create->execute(Auth::user(), $datas);
-        $this->redirect('/dashboard', navigate: true);
+        $this->redirect('/support/bugs', navigate: true);
         Flux::toast(variant: 'success', text: 'Le bug a bien été reporté, merci !');
     }
 };
