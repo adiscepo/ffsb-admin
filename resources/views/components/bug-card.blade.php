@@ -35,13 +35,14 @@ new class extends Component {
             @endforeach
         </div>
         <p class="text-xs text-zinc-500">
-            {!! $bug->description !!}
+            {{ $bug->description }}
         </p>
     </div>
     <div class="grid grid-cols-2 h-25">
         <div class="flex flex-col justify-between">
             <div>
                 @foreach ($bug->tags as $tag)
+                    {{-- <span class="text-xs">{{ $tag }}</span> --}}
                     <flux:badge size="sm" color="{{ $tag->color }}">{{ $tag->name }}</flux:badge>
                 @endforeach
             </div>

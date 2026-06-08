@@ -13,6 +13,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::livewire('evaluation/{id}/{user_id}', 'pages::evaluation.single')->name('eval-create');
     Route::livewire('evaluations', 'pages::evaluation.evaluations')->name('evaluations');
     Route::livewire('evaluations/{year}', 'pages::evaluation.evaluations')->name('evaluation');
+
     // Bugs
     Route::livewire('support/bugs/report', 'pages::support.bugs.report')->name('support.bugs.report');
     Route::livewire('support/bugs', 'pages::support.bugs.list')->name('support.bugs.list');

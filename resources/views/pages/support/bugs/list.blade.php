@@ -2,15 +2,18 @@
 
 use Livewire\Component;
 use App\Models\Tag;
+use App\Models\Status;
 use App\Domains\Bugs\Bug;
 
 return new class extends Component {
     public $bugs;
     public string $tag = '';
+    public bool $open = true;
 
     public function mount()
     {
-        $this->bugs = Bug::all();
+        $this->bugs = Bug::whereAttachedTo(Status::where('name', 'Ouvert')->get())->get();
+        // $this->bugs = Bug::all();
     }
 
     public function updatedTag()
@@ -30,15 +33,17 @@ return new class extends Component {
 <div class="p-5">
     <h2 class="text-lg text-zinc-700 dark:text-zinc-200">Liste des bugs</h2>
     <div class="mb-2"></div>
-    <flux:select class="w-fit" size="sm" wire:model.live='tag'>
-        <flux:select.option disabled>Tag</flux:select.option>
-        <flux:select.option value="">Tous</flux:select.option>
-        @foreach (Tag::for(Bug::class) as $tag)
-            <flux:select.option value="{{ $tag->name }}">{{ $tag->name }}
-            </flux:select.option>
-        @endforeach
-    </flux:select>
-    <div class="mb-2"></div>
+    <div class="flex items-center gap-x-5">
+        <flux:select class="w-fit" size="sm" wire:model.live='tag'>
+            <flux:select.option disabled>Tag</flux:select.option>
+            <flux:select.option value="">Tous</flux:select.option>
+            @foreach (Tag::for(Bug::class) as $tag)
+                <flux:select.option value="{{ $tag->name }}">{{ $tag->name }}
+                </flux:select.option>
+            @endforeach
+        </flux:select>
+        <flux:checkbox wire:model='open' label="Ouverts" />
+    </div>
     <div class="mb-2"></div>
     @if ($bugs->count() == 0)
         <p class="text-zinc-500 dark:text-zinc-400">Il n'y a aucun bugs. Youhou ! 🐛</p>

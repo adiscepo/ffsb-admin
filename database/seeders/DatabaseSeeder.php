@@ -173,8 +173,8 @@ class DatabaseSeeder extends Seeder
         $bug_tags->push(Tag::factory()->create(['name' => 'Amélioration', 'color' => 'yellow', 'model' => Bug::class]));
 
         $bug_statuses = collect();
-        $bug_statuses->push(Status::factory()->create(['name' => 'Résolu', 'color' => 'green', 'model' => Bug::class]));
         $bug_statuses->push(Status::factory()->create(['name' => 'Ouvert', 'color' => 'zinc', 'model' => Bug::class]));
+        $bug_statuses->push(Status::factory()->create(['name' => 'Résolu', 'color' => 'green', 'model' => Bug::class]));
         $bug_statuses->push(Status::factory()->create(['name' => 'Clôturé', 'color' => 'red', 'model' => Bug::class]));
         $bug_statuses->push(Status::factory()->create(['name' => 'Fermé', 'color' => 'red', 'model' => Bug::class]));
 
