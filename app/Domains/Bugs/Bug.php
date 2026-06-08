@@ -15,7 +15,7 @@ class Bug extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'description', 'user_id', 'files_upload', 'assigned_to'];
+    protected $fillable = ['title', 'description', 'user_id', 'files_upload', 'assigned_to', 'open'];
 
     protected $casts = ['files_upload' => 'array'];
 
@@ -34,10 +34,10 @@ class Bug extends Model
         return $this->belongsTo(User::class, 'assigned_to');
     }
 
-    public function statuses(): MorphToMany
-    {
-        return $this->morphToMany(Status::class, 'statusable');
-    }
+    // public function statuses(): MorphToMany
+    // {
+    //     return $this->morphToMany(Status::class, 'statusable');
+    // }
 
     /**
      *  Accessor to uploaded files

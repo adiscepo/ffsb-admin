@@ -19,6 +19,7 @@ class CreateBug
                 'title' => $data['title'],
                 'description' => $data['description'],
                 'files_upload' => $data['files_upload'],
+                'open' => true
             ]);
 
             if (isset($data['tags'])) {
@@ -29,13 +30,16 @@ class CreateBug
                     }
                 }
             }
+            // Previous version, with status for 'open', 'resolved', etc.
+            // But it was too explicit, a simple boolean open/closed is enough
+            // (what was I thinking ? Recreating git ?)
 
-            // Attach status 'Ouvert' to the bug
-            $status_open = Status::where([
-                'name' => 'Ouvert',
-                'model' => Bug::class,
-            ])->get();
-            $bug->statuses()->attach($status_open);
+            // // Attach status 'Ouvert' to the bug
+            // $status_open = Status::where([
+            //     'name' => 'Ouvert',
+            //     'model' => Bug::class,
+            // ])->get();
+            // $bug->statuses()->attach($status_open);
         });
     }
 }

@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreignIdFor(User::class, 'user_id');
             $table->json('files_upload')->nullable();
             $table->foreignIdFor(User::class, 'assigned_to')->nullable();
+            $table->boolean('open');
             $table->timestamps();
         });
     }

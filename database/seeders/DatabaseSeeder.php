@@ -172,11 +172,11 @@ class DatabaseSeeder extends Seeder
         $bug_tags->push(Tag::factory()->create(['name' => 'Urgent', 'color' => 'red', 'model' => Bug::class]));
         $bug_tags->push(Tag::factory()->create(['name' => 'Amélioration', 'color' => 'yellow', 'model' => Bug::class]));
 
-        $bug_statuses = collect();
-        $bug_statuses->push(Status::factory()->create(['name' => 'Ouvert', 'color' => 'zinc', 'model' => Bug::class]));
-        $bug_statuses->push(Status::factory()->create(['name' => 'Résolu', 'color' => 'green', 'model' => Bug::class]));
-        $bug_statuses->push(Status::factory()->create(['name' => 'Clôturé', 'color' => 'red', 'model' => Bug::class]));
-        $bug_statuses->push(Status::factory()->create(['name' => 'Fermé', 'color' => 'red', 'model' => Bug::class]));
+        // $bug_statuses = collect();
+        // $bug_statuses->push(Status::factory()->create(['name' => 'Ouvert', 'color' => 'zinc', 'model' => Bug::class]));
+        // $bug_statuses->push(Status::factory()->create(['name' => 'Résolu', 'color' => 'green', 'model' => Bug::class]));
+        // $bug_statuses->push(Status::factory()->create(['name' => 'Clôturé', 'color' => 'red', 'model' => Bug::class]));
+        // $bug_statuses->push(Status::factory()->create(['name' => 'Fermé', 'color' => 'red', 'model' => Bug::class]));
 
         $bugs = Bug::factory(10)->create([
             'user_id' => fn() => $users->random()->id,
@@ -184,7 +184,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         foreach ($bugs as $bug) {
-            $bug->statuses()->attach($bug_statuses->random());
+            // $bug->statuses()->attach($bug_statuses->random());
             if (random_int(0, 5) == 0) {
                 $bug->tags()->attach($bug_tags->random());
             }

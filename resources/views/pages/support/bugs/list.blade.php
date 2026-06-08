@@ -12,8 +12,7 @@ return new class extends Component {
 
     public function mount()
     {
-        $this->bugs = Bug::whereAttachedTo(Status::where('name', 'Ouvert')->get())->get();
-        // $this->bugs = Bug::all();
+        $this->updatedOpen();
     }
 
     public function updatedTag()
@@ -24,6 +23,17 @@ return new class extends Component {
         } else {
             $this->bugs = Bug::all();
         }
+    }
+
+    public function updatedOpen()
+    {
+        $this->bugs = Bug::where('open', $this->open)->get();
+    }
+
+    public function setOpen(bool $open)
+    {
+        $this->open = $open;
+        $this->updatedOpen();
     }
 };
 ?>
@@ -42,17 +52,36 @@ return new class extends Component {
                 </flux:select.option>
             @endforeach
         </flux:select>
-        <flux:checkbox wire:model='open' label="Ouverts" />
+        <flux:checkbox wire:model.live='open' label="Ouverts" />
     </div>
     <div class="mb-2"></div>
-    @if ($bugs->count() == 0)
-        <p class="text-zinc-500 dark:text-zinc-400">Il n'y a aucun bugs. Youhou ! 🐛</p>
-    @else
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div>
+        <div
+            class="flex items-center gap-x-4 p-3 rounded-t-lg border border-zinc-300 dark:border-zinc-600 bg-zinc-100 dark:bg-zinc-600 w-full">
+            <span
+                class="text-sm text-zinc-600 dark:text-zinc-300 cursor-pointer @if ($open) font-bold @endif"
+                wire:click='setOpen(true)'>Ouverts
+                <flux:badge>
+                    {{ Bug::where('open', true)->count() }}
+                </flux:badge>
+            </span>
+            <span
+                class="text-sm text-zinc-600 dark:text-zinc-300 cursor-pointer  @if (!$open) font-bold @endif"
+                wire:click='setOpen(false)'>Fermés
+                <flux:badge>
+                    {{ Bug::where('open', false)->count() }}</flux:badge>
+            </span>
+        </div>
+        @if ($bugs->count() == 0)
+            <div
+                class="flex items-center justify-center relative flex flex-col gap-y-2 p-2 border border-zinc-300 border-t-0 rounded-b-lg border h-fit">
+                <p class="text-zinc-500 dark:text-zinc-400">Il n'y a aucun bugs. Youhou ! 🐛</p>
+            </div>
+        @else
             @foreach ($this->bugs as $id => $bug)
                 {{-- The ":key" parameter is needed because the result seems to be cached by the view otherwise and the components aren't re-rendered correctly --}}
-                <livewire:bug-card :bug="$bug" :key="$bug->id" class="hover:border-zinc-300 cursor-pointer" />
+                <livewire:bug-card :bug="$bug" :key="$bug->id" class="cursor-pointer" />
             @endforeach
-        </div>
-    @endif
+        @endif
+    </div>
 </div>

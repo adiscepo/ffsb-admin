@@ -18,45 +18,22 @@ new class extends Component {
 };
 ?>
 
-<div {{ $attributes->only('class')->merge(['class' => 'relative flex flex-col gap-y-2 rounded px-4 py-3 border border-zinc-200 dark:border-zinc-700 h-fit']) }}
+<div {{ $attributes->only('class')->merge(['class' => 'relative flex items-baseline gap-x-3 p-2 border border-zinc-300 dark:border-zinc-600 border-t-0 border h-fit hover:bg-zinc-100 dark:hover:bg-zinc-700']) }}
     wire:click='selectBug({{ $bug->id }})'>
-    <div class="flex flex-col gap-y-2">
-        <div class="flex justify-between gap-2">
-            <div>
-                <span class="font-bold text-zinc-800 dark:text-zinc-200">
-                    #{{ $bug->id }}
-                </span>
-                <span class="text-zinc-700 dark:text-zinc-300">
-                    {{ $bug->title }}
-                </span>
-            </div>
-            @foreach ($bug->statuses as $status)
-                <flux:badge size="sm" color="{{ $status->color }}">{{ $status->name }}</flux:badge>
-            @endforeach
+    <div
+        class="flex items-center justify-center w-5 h-5 rounded-full @if ($bug->open) bg-zinc-200 dark:bg-zinc-500 @else bg-green-200 dark:bg-green-500 @endif">
+        <div
+            class="w-2 h-2 @if ($bug->open) bg-zinc-400 @else bg-green-400 dark:bg-green-300 @endif rounded-full">
         </div>
-        <p class="text-xs text-zinc-500">
-            {{ $bug->description }}
-        </p>
     </div>
-    <div class="grid grid-cols-2 h-25">
-        <div class="flex flex-col justify-between">
-            <div>
-                @foreach ($bug->tags as $tag)
-                    {{-- <span class="text-xs">{{ $tag }}</span> --}}
-                    <flux:badge size="sm" color="{{ $tag->color }}">{{ $tag->name }}</flux:badge>
-                @endforeach
-            </div>
-            <p class="text-xs">Reporté par {{ $bug->user->name }}</p>
-            @if ($bug->assigned_to)
-                <p class="text-xs">Assigné à {{ $bug->assigned_to->name }}</p>
-            @endif
+    <div class="flex flex-col">
+        <span class="font-bold text-zinc-600 dark:text-zinc-300">{{ $bug->title }}</span>
+        <div class="flex items-center gap-x-2">
+            @foreach ($bug->tags as $tag)
+                <flux:badge size="sm" color="{{ $tag->color }}">{{ $tag->name }}</flux:badge>
+            @endforeach
+            <p class="text-zinc-500 dark:text-zinc-400 text-xs">#{{ $bug->id }} • Ajouté par <span
+                    class="text-zinc-800 dark:text-zinc-300">{{ $bug->user->name }}</span></p>
         </div>
-        @php
-            $files = $bug->getUploadedFiles();
-        @endphp
-        @if ($files !== null)
-            <div class="flex flex-col gap-1 bg-cover" style="background-image: url({{ Storage::url($files[0]) }})">
-            </div>
-        @endif
     </div>
 </div>

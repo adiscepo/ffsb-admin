@@ -26,6 +26,7 @@ class BugFactory extends Factory
             'description' => fake()->text(250),
             // 'files_upload' => json_encode([fake()->file()]),
             'user_id' => fake()->numberBetween(1, User::latest('id')->first()->id),
+            'open' => fake()->boolean(60),
         ];
     }
 }
