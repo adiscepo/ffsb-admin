@@ -4,6 +4,8 @@
     <header class="flex items-center justify-between w-full p-5 border-b border-zinc-200 dark:border-zinc-700 max-h-15">
         <nav>
             <div class="flex items-center gap-3 text-sm">
+                <a href="{{ URL::previous() }}" wire:navigate class="text-zinc-500"><flux:icon.chevron-left
+                        variant="micro" /></a>
                 @php
                     $splitted_route = explode($separator, $route);
                 @endphp
