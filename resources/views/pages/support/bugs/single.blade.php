@@ -28,6 +28,7 @@ new class extends Component {
     public function removeAssignation(RemoveAssignationBug $remove)
     {
         $remove->execute($this->bug);
+        $this->assignation = 1;
     }
 };
 ?>
@@ -58,12 +59,11 @@ new class extends Component {
                     @endforeach
                 @endif
             </x-message>
-            @foreach ($bug->events as $event)
-                <x-message :user="$event->author">
-                    {{ $event->type }}
-                    {{ var_dump($event->payload) }}
-                </x-message>
-            @endforeach
+            <ol class="ml-20" data-timeline="" {{ $attributes }}>
+                @foreach ($bug->events as $event)
+                    <x-timeline-event :event="$event" />
+                @endforeach
+            </ol>
         </div>
         <div class="space-y-5">
             <div class="flex gap-x-2">
@@ -72,7 +72,7 @@ new class extends Component {
                 @endforeach
             </div>
             <h2 class="text-zinc-500 font-medium">Assignation</h2>
-            @if ($bug->assignation != null)
+            @if ($bug->assignation != null and isset($bug->assignation))
                 <div class="flex items-center justify-between text-zinc-600 dark:text-zinc-400">
                     <div class="flex gap-x-3">
                         <span class="flex items-center gap-x-2">

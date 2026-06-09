@@ -1,7 +1,7 @@
 [data-timeline] {
     display: flex;
     flex-direction: column;
-    gap: 1.7rem;
+    gap: 1rem;
     border-left: 1px solid theme(--color-zinc-200);
     padding-left: 27px;
 }
