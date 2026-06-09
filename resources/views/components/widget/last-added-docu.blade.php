@@ -35,8 +35,8 @@ new class extends Component {
             <div class="flex justify-between items-baseline">
                 <div class="flex items-center gap-x-2 text-sm">
                     <span class="text-zinc-500 dark:text-zinc-400">Ajouté par</span>
-                    <flux:avatar tooltip="{{ $docu->user->name }}" size="xs" :initials="$docu->user->initials()"
-                        :src="$docu->user->getProfilePicture()" />
+                    <flux:avatar circle tooltip="{{ $docu->user->name }}" size="xs"
+                        :initials="$docu->user->initials()" :src="$docu->user->getProfilePicture()" />
                 </div>
                 <a href="/docu/{{ $docu->id }}" wire:navigate
                     class="flex gap-x-0.5 items-center text-xs text-zinc-500 dark:text-zinc-400 underline">Voir le

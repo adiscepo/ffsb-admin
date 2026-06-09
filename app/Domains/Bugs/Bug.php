@@ -3,6 +3,7 @@
 namespace App\Domains\Bugs;
 
 use App\Domains\Bugs\Factory\BugFactory;
+use App\Domains\Events\Event;
 use App\Models\Status;
 use App\Models\Tag;
 use App\Models\User;
@@ -32,6 +33,11 @@ class Bug extends Model
     public function assignation(): BelongsTo
     {
         return $this->belongsTo(User::class, 'assigned_to');
+    }
+
+    public function events(): MorphToMany
+    {
+        return $this->morphToMany(Event::class, 'eventable');
     }
 
     // public function statuses(): MorphToMany

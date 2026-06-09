@@ -4,6 +4,7 @@ namespace App\Domains\Bugs\Actions;
 
 use App\Models\User;
 use App\Domains\Bugs\Bug;
+use App\Domains\Events\Event;
 use App\Models\Tag;
 use App\Models\Status;
 use Illuminate\Support\Facades\DB;
@@ -30,6 +31,14 @@ class CreateBug
                     }
                 }
             }
+
+            $event_create = Event::create([
+                'author_id' => $user->id,
+                'type' =>  'create',
+            ]);
+
+            $bug->events()->attach($event_create);
+
             // Previous version, with status for 'open', 'resolved', etc.
             // But it was too explicit, a simple boolean open/closed is enough
             // (what was I thinking ? Recreating git ?)

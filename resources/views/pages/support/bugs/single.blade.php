@@ -2,9 +2,13 @@
 
 use Livewire\Component;
 use App\Domains\Bugs\Bug;
+use App\Models\User;
+use App\Domains\Bugs\Actions\AssignBugToUser;
+use App\Domains\Bugs\Actions\RemoveAssignationBug;
 
 new class extends Component {
     public ?Bug $bug;
+    public ?int $assignation = 1;
 
     public function mount(int $id)
     {
@@ -12,6 +16,18 @@ new class extends Component {
         if ($this->bug == null) {
             return $this->redirect('/support/bugs');
         }
+    }
+
+    public function assignTo(AssignBugToUser $assign)
+    {
+        if (isset($this->assignation)) {
+            $assign->execute(User::find($this->assignation), $this->bug);
+        }
+    }
+
+    public function removeAssignation(RemoveAssignationBug $remove)
+    {
+        $remove->execute($this->bug);
     }
 };
 ?>
@@ -30,26 +46,24 @@ new class extends Component {
     <flux:separator />
     <div class="grid grid-cols-[3fr_1fr] gap-x-6">
         <div class="flex flex-col gap-y-4">
-            <div class="flex gap-x-3 items-start">
-                <flux:avatar :src="$bug->user->getProfilePicture()" :initials="$bug->user->initials()" />
-                <div class="w-full">
-                    <div
-                        class="flex items-center gap-x-4 p-3 rounded-t-lg border border-zinc-300 dark:border-zinc-600 bg-zinc-100 dark:bg-zinc-600 w-full">
-                        <p class="text-sm text-zinc-500 dark:text-zinc-400">Ouvert par <span
-                                class="text-zinc-800 dark:text-zinc-300 font-medium">{{ $bug->user->name }}</span>
-                            • {{ $bug->created_at->diffForHumans() }}
-                        </p>
-                    </div>
-                    <div class="border border-t-0 border-zinc-300 dark:border-zinc-600 p-3 rounded-b-lg">
-                        <p class="text-zinc-800 dark:text-zinc-200 py-2">{!! nl2br($bug->description) !!}</p>
-                        @if ($bug->files_upload != null)
-                            @foreach ($bug->files_upload as $file)
-                                <img class="w-1/2" src="{{ Storage::url($file) }}" />
-                            @endforeach
-                        @endif
-                    </div>
-                </div>
-            </div>
+            <x-message :user="$bug->user">
+                <x-slot:header>
+                    Ouvert par <span class="text-zinc-800 dark:text-zinc-300 font-medium">{{ $bug->user->name }}</span>
+                    • {{ $bug->created_at->diffForHumans() }}
+                </x-slot>
+                <p class="text-zinc-800 dark:text-zinc-200 py-2">{!! nl2br($bug->description) !!}</p>
+                @if ($bug->files_upload != null)
+                    @foreach ($bug->files_upload as $file)
+                        <img class="w-1/2" src="{{ Storage::url($file) }}" />
+                    @endforeach
+                @endif
+            </x-message>
+            @foreach ($bug->events as $event)
+                <x-message :user="$event->author">
+                    {{ $event->type }}
+                    {{ var_dump($event->payload) }}
+                </x-message>
+            @endforeach
         </div>
         <div class="space-y-5">
             <div class="flex gap-x-2">
@@ -57,7 +71,29 @@ new class extends Component {
                     <flux:badge color="{{ $tag->color }}">{{ $tag->name }}</flux:badge>
                 @endforeach
             </div>
-            <h2 class="text-zinc-500 font-medium">Actions</h2>
+            <h2 class="text-zinc-500 font-medium">Assignation</h2>
+            @if ($bug->assignation != null)
+                <div class="flex items-center justify-between text-zinc-600 dark:text-zinc-400">
+                    <div class="flex gap-x-3">
+                        <span class="flex items-center gap-x-2">
+                            <flux:avatar size="sm" circle src="{{ $bug->assignation->getProfilePicture() }}"
+                                initials="{{ $bug->assignation->initials() }}" />
+                            {{ $bug->assignation->name }}
+                        </span>
+                    </div>
+                    <flux:icon.trash wire:click='removeAssignation()' class="cursor-pointer text-red-300"
+                        variant="micro" />
+                </div>
+            @else
+                <div class="flex gap-x-2">
+                    <flux:select wire:model='assignation'>
+                        @foreach (User::all() as $user)
+                            <flux:select.option value="{{ $user->id }}">{{ $user->name }}</flux:select.option>
+                        @endforeach
+                    </flux:select>
+                    <flux:button wire:click='assignTo'>Assigner</flux:button>
+                </div>
+            @endif
         </div>
     </div>
 </main>
