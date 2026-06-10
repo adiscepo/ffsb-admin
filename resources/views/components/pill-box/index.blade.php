@@ -39,13 +39,14 @@ new class extends Component {
      *             c'est dû au fait que les éléménts dans la base de données
      *             commencent à l'id 1
      */
-    public function mount(array $datas, string $data_key = 'name', string $name = '', string $event_name = '', bool $one_result = false)
+    public function mount(array $datas, string $data_key = 'name', string $name = '', string $event_name = '', bool $one_result = false, array $selected = [])
     {
         $this->name = $name;
         $this->event_name = $event_name;
         $this->datas = $datas;
         $this->key = $data_key;
         $this->one_result = $one_result;
+        $this->selected = $selected;
     }
 
     public function updateDatas(array $datas)
@@ -92,6 +93,7 @@ new class extends Component {
         if (index !== -1) {
             this.selected.splice(index, 1);
         }
+        $wire.dispatch('pill-box:' + this.name, { selected: this.selected })
     },
     addSelected(id) {
         if (this.severalElements() || (!this.severalElements() && this.selected.length == 0)) {
@@ -100,6 +102,7 @@ new class extends Component {
                 this.selected.push(id)
             }
         }
+        $wire.dispatch('pill-box:' + this.name, { selected: this.selected })
     },
     toggleSelected(id) {
         if (this.selected.includes(id)) {

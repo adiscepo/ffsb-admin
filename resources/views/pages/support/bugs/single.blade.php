@@ -3,20 +3,28 @@
 use Livewire\Component;
 use App\Domains\Bugs\Bug;
 use App\Models\User;
+use App\Models\Tag;
 use App\Domains\Bugs\Actions\AssignBugToUser;
 use App\Domains\Bugs\Actions\RemoveAssignationBug;
 use App\Domains\Bugs\Actions\CommentBug;
 use App\Domains\Bugs\Actions\CloseBug;
+use App\Domains\Bugs\Actions\ToggleTagBug;
 
 new class extends Component {
     public ?Bug $bug;
     public ?int $assignation = 1;
     public array $actions;
     public string $comment;
+    public array $tags;
+
+    protected $listeners = [
+        'pill-box:tags' => 'updateTags',
+    ];
 
     public function mount(int $id)
     {
         $this->bug = Bug::find($id);
+        $this->tags = $this->bug->tags->pluck('id')->toArray();
         if ($this->bug == null) {
             return $this->redirect('/support/bugs');
         }
@@ -47,6 +55,23 @@ new class extends Component {
                 $close->execute(Auth::user(), $this->bug);
             }
         }
+    }
+
+    public function changeTags(ToggleTagBug $add)
+    {
+        if ($this->bug->open) {
+            $datas = collect();
+            foreach ($this->tags as $id => $tag_id) {
+                $datas->push(Tag::find($tag_id));
+            }
+            $add->execute($this->bug, $datas);
+            $this->bug = Bug::find($this->bug->id);
+        }
+    }
+
+    public function updateTags(array $selected)
+    {
+        $this->tags = $selected;
     }
 };
 ?>
@@ -110,10 +135,19 @@ new class extends Component {
             </div>
         </div>
         <div class="space-y-5">
-            <div class="flex gap-x-2">
-                @foreach ($bug->tags as $tag)
-                    <flux:badge color="{{ $tag->color }}">{{ $tag->name }}</flux:badge>
-                @endforeach
+            <div class="flex flex-col gap-2">
+                <h2 class="text-zinc-500 font-medium">Tags</h2>
+                <div class="flex gap-2 flex-wrap">
+                    @foreach ($bug->tags as $tag)
+                        <flux:badge color="{{ $tag->color }}">{{ $tag->name }}</flux:badge>
+                    @endforeach
+                </div>
+                @if ($bug->open)
+                    <div class="flex gap-x-2 items-end">
+                        <livewire:pill-box name="tags" :datas="Tag::for(Bug::class)->toArray()" :selected="$tags" />
+                        <flux:button icon="plus" wire:click='changeTags' />
+                    </div>
+                @endif
             </div>
             <h2 class="text-zinc-500 font-medium">Assignation</h2>
             @if ($bug->assignation != null and isset($bug->assignation))
@@ -125,20 +159,24 @@ new class extends Component {
                             {{ $bug->assignation->name }}
                         </span>
                     </div>
-                    <flux:icon.trash wire:click='removeAssignation'
-                        class="cursor-pointer text-zinc-300 dark:text-zinc-700 hover:text-zinc-400 dark:hover:text-zinc-600 size-4"
-                        variant="outline" />
+                    @if ($bug->open)
+                        <flux:icon.trash wire:click='removeAssignation'
+                            class="cursor-pointer text-zinc-300 dark:text-zinc-700 hover:text-zinc-400 dark:hover:text-zinc-600 size-4"
+                            variant="outline" />
+                    @endif
                 </div>
             @else
-                <div class="flex gap-x-2">
-                    <flux:select wire:model='assignation'>
-                        @foreach (User::all() as $user)
-                            <flux:select.option value="{{ $user->id }}">{{ $user->name }}
-                            </flux:select.option>
-                        @endforeach
-                    </flux:select>
-                    <flux:button wire:click='assignTo'>Assigner</flux:button>
-                </div>
+                @if ($bug->open)
+                    <div class="flex gap-x-2">
+                        <flux:select wire:model='assignation'>
+                            @foreach (User::all() as $user)
+                                <flux:select.option value="{{ $user->id }}">{{ $user->name }}
+                                </flux:select.option>
+                            @endforeach
+                        </flux:select>
+                        <flux:button wire:click='assignTo'>Assigner</flux:button>
+                    </div>
+                @endif
             @endif
         </div>
     </div>

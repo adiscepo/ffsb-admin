@@ -47,6 +47,16 @@ class TimelineEvent extends Component
                     case Bug::class:
                         return view('components.timeline.events.close-bug');
                 }
+            case 'add_tag':
+                switch ($this->event->pivot->eventable_type) {
+                    case Bug::class:
+                        return view('components.timeline.events.add-tag');
+                }
+            case 'remove_tag':
+                switch ($this->event->pivot->eventable_type) {
+                    case Bug::class:
+                        return view('components.timeline.events.remove-tag');
+                }
 
             default:
                 return view('components.timeline-item');
