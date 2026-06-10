@@ -16,7 +16,7 @@ class AssignBugToUser
         $bug->events()->attach(Event::create([
             'author_id' => Auth::user()->id,
             'type' => 'assignation',
-            'payload' => ['assigned_to' => $user->id],
+            'payload' => ['user' => $user->id],
         ]));
     }
 }
