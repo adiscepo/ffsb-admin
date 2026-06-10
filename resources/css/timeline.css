@@ -10,10 +10,12 @@
     gap: 5px;
     position: relative;
     color: theme(--color-zinc-500);
+    display: flex;
+    align-items: center;
 }
 
 [data-timeline-item] [data-timeline-icon] {
     position: absolute;
     left: -43px;
-    box-shadow: 0 0 0 5px white;
+    /* box-shadow: 0 0 0 5px white; */
 }

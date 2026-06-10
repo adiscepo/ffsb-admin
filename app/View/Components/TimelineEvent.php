@@ -2,8 +2,10 @@
 
 namespace App\View\Components;
 
+use App\Domains\Bugs\Bug;
 use Closure;
 use App\Domains\Events\Event;
+use App\Models\Docu;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
@@ -30,8 +32,24 @@ class TimelineEvent extends Component
             case 'remove_assignation':
                 return view('components.timeline.events.deassignation-bug');
 
+            case 'create':
+                switch ($this->event->pivot->eventable_type) {
+                    case Bug::class:
+                        return view('components.timeline.events.create-bug');
+                    case Docu::class:
+                        return view('components.timeline.events.create-docu');
+                }
+            case 'comment':
+                return view('components.timeline.events.comment');
+
+            case 'close':
+                switch ($this->event->pivot->eventable_type) {
+                    case Bug::class:
+                        return view('components.timeline.events.close-bug');
+                }
+
             default:
-                return view('components.timeline-event');
+                return view('components.timeline-item');
         }
     }
 }

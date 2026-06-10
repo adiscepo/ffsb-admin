@@ -1,6 +1,6 @@
 @props(['user'])
 
-<div class="flex gap-x-3 items-start">
+<div {{ $attributes->only('class')->merge(['class' => 'flex gap-x-3 items-start']) }}>
     <flux:avatar :src="$user->getProfilePicture()" :initials="$user->initials()" />
     <div class="w-full">
         @if (isset($header))

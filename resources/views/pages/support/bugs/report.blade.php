@@ -54,7 +54,7 @@ return new class extends Component {
 
 @include('partials.heading', ['route' => 'Support/Signaler un bug'])
 
-<form wire:submit="save" class="w-fit py-15 mx-auto space-y-5 flex flex-col max-md:px-3">
+<form wire:submit.prevent="save" class="w-fit py-15 mx-auto space-y-5 flex flex-col max-md:px-3">
     <h2 class="text-lg text-zinc-700 dark:text-zinc-200">Signaler un bug</h2>
     <div class="mb-8"></div>
     <div class="flex gap-x-2">
@@ -70,7 +70,7 @@ return new class extends Component {
         <flux:label>Capture d'écran</flux:label>
         <livewire:file-upload :folder_storage="$this->storage_folder" :multiple="false" />
     </flux:field>
-    <flux:button type='submit' icon="bug-ant" class="self-end">
+    <flux:button wire:click='save()' icon="bug-ant" class="self-end">
         Signaler
     </flux:button>
 </form>
