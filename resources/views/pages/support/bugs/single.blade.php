@@ -57,21 +57,16 @@ new class extends Component {
         }
     }
 
-    public function changeTags(ToggleTagBug $add)
+    public function updateTags(array $selected, ToggleTagBug $toggle)
     {
         if ($this->bug->open) {
             $datas = collect();
-            foreach ($this->tags as $id => $tag_id) {
+            foreach ($selected as $id => $tag_id) {
                 $datas->push(Tag::find($tag_id));
             }
-            $add->execute($this->bug, $datas);
+            $toggle->execute($this->bug, $datas);
             $this->bug = Bug::find($this->bug->id);
         }
-    }
-
-    public function updateTags(array $selected)
-    {
-        $this->tags = $selected;
     }
 };
 ?>
@@ -145,7 +140,6 @@ new class extends Component {
                 @if ($bug->open)
                     <div class="flex gap-x-2 items-end">
                         <livewire:pill-box name="tags" :datas="Tag::for(Bug::class)->toArray()" :selected="$tags" />
-                        <flux:button icon="plus" wire:click='changeTags' />
                     </div>
                 @endif
             </div>
