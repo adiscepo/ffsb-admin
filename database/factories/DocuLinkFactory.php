@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\DocuLink;
+use App\Domains\Docus\DocuLink;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**

@@ -2,10 +2,9 @@
 
 namespace App\Livewire\Forms;
 
-use App\Models\Docu;
-use App\Models\Enum\DocuLang;
+use App\Domains\Docus\Docu;
+use App\Domains\Docus\Enum\DocuLang;
 use Illuminate\Support\Facades\Auth;
-use Livewire\Attributes\Validate;
 use Livewire\Form;
 
 class DocuForm extends Form
@@ -15,10 +14,11 @@ class DocuForm extends Form
     public int $duration = 0;
     public int $year = 0;
     public DocuLang $lang = DocuLang::FR;
-    public ?DocuLang $subtitles = null; 
+    public ?DocuLang $subtitles = null;
     public ?string $comments = null;
 
-    protected function rules() {
+    protected function rules()
+    {
         return [
             'title' => 'required|string|min:3|max:255',
             'year' => 'required|integer',
@@ -27,7 +27,8 @@ class DocuForm extends Form
         ];
     }
 
-    public function store() {
+    public function store()
+    {
         $this->validate();
         $user = Auth::user();
         $docu = Docu::create([

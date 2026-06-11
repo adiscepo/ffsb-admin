@@ -7,8 +7,8 @@ use App\Models\Enum\DocuLang;
 use App\Models\ProductionHouse;
 use App\Models\Field;
 use App\Models\EditionYear;
-use App\Models\Docu;
-use App\Models\DocuLink;
+use App\Domains\Docus\Docu;
+use App\Domains\Docus\DocuLink;
 use App\Models\Enum\DocuTarget;
 
 new class extends Component {

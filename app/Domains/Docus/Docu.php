@@ -1,11 +1,17 @@
 <?php
 
-namespace App\Models;
+namespace App\Domains\Docus;
 
-use App\Models\Enum\DocuTarget;
 use App\Domains\Evaluations\Evaluation;
 use App\Domains\Evaluations\EvaluationCriterion;
+use App\Domains\Docus\DocuLink;
+use App\Domains\Docus\Field;
+use App\Domains\Docus\Enum\DocuTarget;
 
+use App\Models\User;
+use App\Models\ProductionHouse;
+use App\Models\EditionYear;
+use App\Models\Tag;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;

@@ -5,7 +5,7 @@ namespace App\Domains\Events;
 use App\Domains\Bugs\Bug;
 use App\Domains\Evaluations\Evaluation;
 use App\Domains\Events\Factory\EventFactory;
-use App\Models\Docu;
+use App\Domains\Docus\Docu;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

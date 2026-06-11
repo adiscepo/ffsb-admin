@@ -4,7 +4,7 @@ namespace App\Domains\Evaluations\Actions;
 
 use App\Domains\Evaluations\Evaluation;
 use App\Domains\Evaluations\EvaluationField;
-use App\Models\Docu;
+use App\Domains\Docus\Docu;
 use App\Models\User;
 
 class EvaluationCreate

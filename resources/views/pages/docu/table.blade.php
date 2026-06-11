@@ -4,7 +4,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\Attributes\Computed;
-use App\Models\Docu;
+use App\Domains\Docus\Docu;
 use App\Models\Tag;
 use App\Models\EditionYear;
 use App\Models\Field;

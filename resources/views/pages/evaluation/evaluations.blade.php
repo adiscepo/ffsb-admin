@@ -3,7 +3,7 @@
 use Livewire\Component;
 use App\Domains\Evaluations\Evaluation;
 use Illuminate\Database\Eloquent\Builder;
-use App\Models\Docu;
+use App\Domains\Docus\Docu;
 use App\Models\EditionYear;
 use Facades\App\Domains\Edition\Edition;
 use function App\Helpers\HumanTiming\to_human;

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Domains\Docus;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -14,22 +14,26 @@ class DocuLink extends Model
     protected $fillable = ['url', 'password', 'deadline', 'docu_id'];
 
     protected $casts = ['deadline' => 'immutable_datetime'];
-    public function password() : ?string {
-        return $this->password ? $this->password : null; 
+    public function password(): ?string
+    {
+        return $this->password ? $this->password : null;
     }
 
-    public function for(): BelongsTo {
+    public function for(): BelongsTo
+    {
         return $this->belongsTo(Docu::class);
     }
 
-    public function stillAvailable(): bool {
+    public function stillAvailable(): bool
+    {
         if ($this->deadline) {
             return $this->deadline > now();
         }
         return true;
     }
 
-    public function remainingDays(): string {
+    public function remainingDays(): string
+    {
         $remaining = now()->locale('fr')->sub($this->deadline)->longAbsoluteDiffForHumans();
         if ($this->stillAvailable()) {
             return 'Dispo encore ' . $remaining;

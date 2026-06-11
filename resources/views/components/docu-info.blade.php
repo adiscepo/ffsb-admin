@@ -1,7 +1,7 @@
 <?php
 
 use Livewire\Component;
-use App\Models\Docu;
+use App\Domains\Docus\Docu;
 use function App\Helpers\HumanTiming\to_human;
 use App\Models\Enum\DocuTarget;
 

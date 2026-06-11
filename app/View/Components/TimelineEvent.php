@@ -5,7 +5,7 @@ namespace App\View\Components;
 use App\Domains\Bugs\Bug;
 use Closure;
 use App\Domains\Events\Event;
-use App\Models\Docu;
+use App\Domains\Docus\Docu;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 

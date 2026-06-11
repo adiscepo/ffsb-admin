@@ -50,6 +50,7 @@ new class extends Component {
         if ($this->bug->open) {
             if (isset($this->comment) && $this->comment != '') {
                 $comment->execute(Auth::user(), $this->bug, $this->comment);
+                $this->comment = '';
             }
             if (in_array('close', $this->actions)) {
                 $close->execute(Auth::user(), $this->bug);
@@ -90,7 +91,7 @@ new class extends Component {
                     Ouvert par <span class="text-zinc-800 dark:text-zinc-300 font-medium">{{ $bug->user->name }}</span>
                     • {{ $bug->created_at->diffForHumans() }}
                 </x-slot>
-                <p class="text-zinc-800 dark:text-zinc-200 py-2">{!! nl2br($bug->description) !!}</p>
+                <p class="text-zinc-800 dark:text-zinc-200 py-2" wire:model='$description'>{!! nl2br($bug->description) !!}</p>
                 @if ($bug->files_upload != null)
                     @foreach ($bug->files_upload as $file)
                         <img class="w-1/2" src="{{ Storage::url($file) }}" />

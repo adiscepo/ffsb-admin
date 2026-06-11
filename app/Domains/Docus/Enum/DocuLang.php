@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Enum;
+namespace App\Domains\Docus\Enum;
 
 enum DocuLang: string
 {

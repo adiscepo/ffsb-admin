@@ -3,7 +3,7 @@
 namespace App\Domains\Evaluations;
 
 use App\Models\User;
-use App\Models\Docu;
+use App\Domains\Docus\Docu;
 use App\Domains\Evaluations\EvaluationCriterion;
 use App\Domains\Evaluations\Factory\EvaluationFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

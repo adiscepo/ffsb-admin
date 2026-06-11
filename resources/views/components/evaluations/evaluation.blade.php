@@ -1,7 +1,7 @@
 <?php
 
 use Livewire\Component;
-use App\Models\Docu;
+use App\Domains\Docus\Docu;
 use App\Domains\Evaluations\Evaluation;
 use App\Domains\Evaluations\EvaluationCriterion;
 use App\View\Components\DocuEvaluationBoxNote;

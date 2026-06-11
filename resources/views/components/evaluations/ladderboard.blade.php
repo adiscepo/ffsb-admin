@@ -2,7 +2,7 @@
 
 use Livewire\Component;
 use App\Models\User;
-use App\Models\Docu;
+use App\Domains\Docus\Docu;
 
 new class extends Component {
     public array $ladderboard;

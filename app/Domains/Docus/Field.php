@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Domains\Docus;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -12,7 +12,8 @@ class Field extends Model
 
     protected $fillable = ['field', 'color'];
 
-    public function docus(): BelongsToMany {
+    public function docus(): BelongsToMany
+    {
         return $this->belongsToMany(Docu::class);
     }
 }
