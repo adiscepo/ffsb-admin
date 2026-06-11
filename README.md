@@ -19,3 +19,8 @@ The website is currently [available here](https://ffsb-admin.zandies.be). Each p
 ## Report issue
 
 If you find an issue in the code or in the application, you can use the Github's issues or the [dedicated page](https://ffsb-admin.zandies.be/support/bugs/report) in the website.
+
+
+## Contribution
+
+If you want to contribute, create a fork and then suggest PR.
