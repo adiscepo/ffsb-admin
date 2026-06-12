@@ -3,13 +3,14 @@
 use Livewire\Component;
 use Livewire\Attributes\On;
 use App\Livewire\Forms\DocuForm;
-use App\Models\Enum\DocuLang;
 use App\Models\ProductionHouse;
-use App\Models\Field;
 use App\Models\EditionYear;
 use App\Domains\Docus\Docu;
 use App\Domains\Docus\DocuLink;
-use App\Models\Enum\DocuTarget;
+use App\Domains\Docus\Enum\DocuTarget;
+use App\Domains\Docus\Enum\DocuLang;
+use App\Domains\Docus\Field;
+use App\Domains\Docus\Actions\CreateDocu;
 
 new class extends Component {
     public DocuForm $form;
@@ -116,12 +117,10 @@ new class extends Component {
         ];
     }
 
-    public function save()
+    public function save(CreateDocu $create)
     {
-        // $this->form->save();
-        error_log('Upload ' . $this->target);
         $this->validate($this->rules());
-        $docu = Docu::create([
+        $create->execute(Auth::user(), [
             'title' => $this->title,
             'summary' => $this->synopsis,
             'duration' => $this->duration,
@@ -132,21 +131,11 @@ new class extends Component {
             'target' => $this->target,
             'comment' => $this->comment,
             'edition_year_id' => EditionYear::where('current', true)->orderBy('year', 'DESC')->first()->id,
+            'links' => $this->links,
+            'production_houses' => $this->production_houses,
+            'fields' => $this->fields,
         ]);
-        foreach ($this->links as $id => $link) {
-            DocuLink::create([
-                'url' => $link['url'],
-                'password' => $link['password'],
-                'deadline' => !empty($link['deadline']) ? $link['deadline'] : null,
-                'docu_id' => $docu->id,
-            ]);
-        }
-        foreach ($this->production_houses as $id => $production_house) {
-            $docu->from()->attach($production_house);
-        }
-        foreach ($this->fields as $id => $field) {
-            $docu->fields()->attach($field);
-        }
+
         Flux::modal('create-docu')->close();
         $this->redirectRoute('docus', navigate: true);
     }

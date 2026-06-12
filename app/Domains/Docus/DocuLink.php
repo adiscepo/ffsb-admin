@@ -2,6 +2,7 @@
 
 namespace App\Domains\Docus;
 
+use App\Domains\Docus\Factory\DocuLinkFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -39,5 +40,10 @@ class DocuLink extends Model
             return 'Dispo encore ' . $remaining;
         }
         return 'Plus dispo depuis ' . $remaining;
+    }
+
+    protected static function newFactory(): DocuLinkFactory
+    {
+        return DocuLinkFactory::new();
     }
 }

@@ -4,6 +4,7 @@ namespace App\Domains\Bugs;
 
 use App\Domains\Bugs\Factory\BugFactory;
 use App\Domains\Events\Event;
+use App\Domains\Events\Traits\Eventable;
 use App\Models\Status;
 use App\Models\Tag;
 use App\Models\User;
@@ -15,6 +16,7 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
 class Bug extends Model
 {
     use HasFactory;
+    use Eventable;
 
     protected $fillable = ['title', 'description', 'user_id', 'files_upload', 'assigned_to', 'open'];
 
@@ -35,10 +37,10 @@ class Bug extends Model
         return $this->belongsTo(User::class, 'assigned_to');
     }
 
-    public function events(): MorphToMany
-    {
-        return $this->morphToMany(Event::class, 'eventable');
-    }
+    // public function events(): MorphToMany
+    // {
+    //     return $this->morphToMany(Event::class, 'eventable');
+    // }
 
     // public function statuses(): MorphToMany
     // {

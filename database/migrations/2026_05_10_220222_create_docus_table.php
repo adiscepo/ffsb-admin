@@ -1,7 +1,7 @@
 <?php
 
-use App\Models\Enum\DocuTarget;
-use App\Models\Enum\DocuLang;
+use App\Domains\Docu\Enum\DocuTarget;
+use App\Domains\Docus\Enum\DocuLang;
 use App\Models\User;
 use App\Models\EditionYear;
 use Illuminate\Database\Migrations\Migration;

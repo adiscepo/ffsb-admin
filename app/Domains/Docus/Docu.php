@@ -4,14 +4,17 @@ namespace App\Domains\Docus;
 
 use App\Domains\Evaluations\Evaluation;
 use App\Domains\Evaluations\EvaluationCriterion;
+
 use App\Domains\Docus\DocuLink;
 use App\Domains\Docus\Field;
 use App\Domains\Docus\Enum\DocuTarget;
-
+use App\Domains\Docus\Factory\DocuFactory;
+use App\Domains\Events\Traits\Eventable;
 use App\Models\User;
 use App\Models\ProductionHouse;
 use App\Models\EditionYear;
 use App\Models\Tag;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -22,6 +25,7 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
 class Docu extends Model
 {
     use HasFactory;
+    use Eventable;
 
     protected $fillable = ['title', 'summary', 'duration', 'year', 'user_id', 'lang', 'subtitles', 'target', 'comment', 'edition_year_id'];
 
@@ -122,5 +126,10 @@ class Docu extends Model
     {
         // 5 is the maximum notation for a criterion in a evaluation.
         return EvaluationCriterion::count('id') * 5;
+    }
+
+    protected static function newFactory(): DocuFactory
+    {
+        return DocuFactory::new();
     }
 }

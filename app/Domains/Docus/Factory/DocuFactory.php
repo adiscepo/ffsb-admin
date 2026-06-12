@@ -1,11 +1,11 @@
 <?php
 
-namespace Database\Factories;
+namespace App\Domains\Docus\Factory;
 
 use App\Domains\Docus\Docu;
 use App\Models\EditionYear;
-use App\Models\Enum\DocuLang;
-use App\Models\Enum\DocuTarget;
+use App\Domains\Docus\Enum\DocuLang;
+use App\Domains\Docus\Enum\DocuTarget;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class DocuFactory extends Factory
 {
+    protected $model = Docu::class;
     /**
      * Define the model's default state.
      *

@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Factories;
+namespace App\Domains\Docus\Factory;
 
 use App\Domains\Docus\DocuLink;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class DocuLinkFactory extends Factory
 {
+    protected $model = DocuLink::class;
     /**
      * Define the model's default state.
      *
