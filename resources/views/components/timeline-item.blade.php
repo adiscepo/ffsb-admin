@@ -13,15 +13,13 @@
             <flux:icon :icon="$icon" variant="micro" class="size-4 text-{{ $color }}-500" />
         @endif
     </div>
-    <div class="flex gap-1 items-center">
+    <div class="flex flex-wrap gap-1 md:items-center">
         @if (isset($header))
             {{ $header }}
         @elseif (isset($author))
             <span class="font-medium text-zinc-800 dark:text-zinc-200"> {{ $author }}</span>
         @endif
-        <div>
-            {{ $slot }}
-        </div>
+        {{ $slot }}
         @if ($time)
             <span class="font-extralight text-xs text-zinc-400"> {{ $time }}</span>
         @endif

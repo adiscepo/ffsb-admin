@@ -74,7 +74,7 @@ new class extends Component {
 
 @include('partials.heading', ['route' => 'Support/Bugs/#' . $bug->id])
 
-<main class="mx-auto w-9/12 py-5 space-y-4">
+<main class="mx-auto max-sm:p-5 md:w-9/12 py-5 space-y-4">
     <h1 class="font-medium text-2xl">{{ $bug->title }} <span
             class="text-zinc-500 font-light">#{{ $bug->id }}</span>
     </h1>
@@ -84,7 +84,7 @@ new class extends Component {
         <flux:badge variant="solid" color="green">Fermé</flux:badge>
     @endif
     <flux:separator />
-    <div class="grid grid-cols-[3fr_1fr] gap-x-6">
+    <div class="grid md:grid-cols-[3fr_1fr] gap-y-5 md:gap-x-6">
         <div class="flex flex-col gap-y-4">
             <x-message :user="$bug->user">
                 <x-slot:header>
