@@ -47,6 +47,7 @@ new class extends Component {
         $this->key = $data_key;
         $this->one_result = $one_result;
         $this->selected = $selected;
+        // Workaround to prevent list of null element to be considered as filled
         if ($this->selected == [null]) {
             $this->selected = [];
         }
@@ -83,7 +84,9 @@ new class extends Component {
     items: $wire.entangle('datas'),
     getShowed() {
         if (this.query == '') this.updateElements()
-        return this.showed;
+        return this.showed.sort(function(a, b) {
+            return a - b;
+        });;
     },
     getItem(id) {
         return this.items.find(i => i.id === id);
@@ -108,12 +111,14 @@ new class extends Component {
         $wire.dispatch('pill-box:' + this.name, { selected: this.selected })
     },
     toggleSelected(id) {
-        if (this.selected.includes(id)) {
-            this.removeSelected(id)
-        } else {
-            this.addSelected(id)
+        if (id != null) {
+            if (this.selected.includes(id)) {
+                this.removeSelected(id)
+            } else {
+                this.addSelected(id)
+            }
+            $wire.dispatch('pill-box:' + this.name, { selected: this.selected })
         }
-        $wire.dispatch('pill-box:' + this.name, { selected: this.selected })
     },
     getHigh() {
         return this.highlighted_id
@@ -159,7 +164,7 @@ new class extends Component {
             dropdown_current.scrollIntoView({ behavior: 'smooth', block: 'center' })
         }
     }
-}" class="relative" @click="open = true" @click.outside="open = false" @keyup.tab="open = false">
+}" class="relative" @click="open = true" @click.outside="open = false">
     <div class="flex flex-wrap gap-x-1">
         <template x-for="id_selected in selected" :key="id_selected">
             <flux:badge size="small" color="violet" class="text-xs mb-2">
@@ -169,8 +174,9 @@ new class extends Component {
         </template>
     </div>
     <input class="{{ $classes }}" x-model='query' x-bind:class="open ? 'rounded-b-none border-b-0' : ''"
-        x-on:input="open = true; updateElements()" x-on:keyup.up="decrementHighlight()"
-        x-on:keyup.down="incrementHighlight()" x-on:keyup.enter="toggleSelected(highlighted_id)" />
+        x-on:focus="open = true" x-on:keydown.tab="open = false" x-on:input="open = true; updateElements()"
+        x-on:keyup.up="decrementHighlight()" x-on:keyup.down="incrementHighlight()"
+        x-on:keyup.enter="toggleSelected(highlighted_id)" />
     <div class="w-full z-20 flex flex-col text-sm items-stretch rounded-lg shadow-lg bg-white max-h-50 overflow-y-scroll rounded-t-none border-t-0 absolute border dark:bg-zinc-700 dark:border-zinc-800"
         x-show="open" x-id="['element']" id="dropdown-element">
         <template x-for="item_id in getShowed()" :key="name + '-' + item_id">

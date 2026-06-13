@@ -41,7 +41,7 @@ new class extends Component {
 };
 ?>
 <x-slot name="header">
-    <header class="flex justify-between w-full p-5 border-b border-zinc-200">
+    <header class="flex justify-between items-center gap-x-2 w-full p-5 border-b border-zinc-200">
         <nav>
             <div class="flex gap-3 items-center text-sm">
                 <a href="/docus" wire:navigate class="flex items-center gap-3">
@@ -55,7 +55,7 @@ new class extends Component {
         <livewire:docu.edit :docu="$docu" />
         <flux:modal.trigger name="create-docu">
             <flux:button size="sm" variant="primary" color="violet" class="cursor-pointer hidden! md:block!">
-                Editer le documentaire
+                Editer
             </flux:button>
             <flux:button size="sm" variant="primary" color="violet" class="cursor-pointer md:hidden"
                 icon="pencil">
@@ -64,8 +64,8 @@ new class extends Component {
     </header>
 </x-slot>
 
-<main class="flex flex-col gap-y-4 lg:grid lg:grid-cols-[1fr_1.5fr_2fr]">
-    <livewire:docu-info :docu="$docu" class="border-r border-zinc-200 h-full" />
+<main class="flex flex-col gap-y-4 lg:grid lg:grid-cols-[1fr_1.5fr_2fr] grow">
+    <livewire:docu-info :rounded="false" :docu="$docu" class="border-r border-zinc-200 h-full" />
     <livewire:evaluations.docu-evaluations :docu="$docu" />
     @if ($this->form_evaluation)
         <livewire:evaluations.new-evaluation :docu="$docu" />

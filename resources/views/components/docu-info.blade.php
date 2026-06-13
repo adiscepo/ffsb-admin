@@ -23,12 +23,13 @@ new class extends Component {
 ?>
 
 @props([
-    'rounded' => false, // Round the docu box, needed as a props because the
+    // Round the docu box, needed as a props because the
     // status bar at the bottom (absolute position) need
     // to be rounded only in the bottom as well
+    'rounded' => false,
 ])
 
-<div {{ $attributes->class(['relative flex flex-col gap-5 relative @if ($rounded) rounded-lg @endif']) }}>
+<div {{ $attributes->class(['relative flex flex-col gap-5 ' . $rounded ?? 'rounded-lg']) }}>
     <x-loading-message>
         <span class="text-sm italic text-zinc-500">Chargement du documentaire</span>
     </x-loading-message>
