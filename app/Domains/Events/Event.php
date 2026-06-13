@@ -40,11 +40,6 @@ class Event extends Model
         return $this->morphedByMany(Bug::class, 'eventable');
     }
 
-    // public static function for($model): Collection
-    // {
-    //     return Event::where('model', $model)->orWhere('model', null)?->groupBy('name')->select(['id', 'name'])->get();
-    // }
-
     /**
      * Set the factory (because use a non-common path)
      *

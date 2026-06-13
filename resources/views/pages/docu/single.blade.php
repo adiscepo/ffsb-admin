@@ -52,6 +52,15 @@ new class extends Component {
                 <span class="font-bold">{{ $docu->title }}</span>
             </div>
         </nav>
+        <livewire:docu.edit :docu="$docu" />
+        <flux:modal.trigger name="create-docu">
+            <flux:button size="sm" variant="primary" color="violet" class="cursor-pointer hidden! md:block!">
+                Editer le documentaire
+            </flux:button>
+            <flux:button size="sm" variant="primary" color="violet" class="cursor-pointer md:hidden"
+                icon="pencil">
+            </flux:button>
+        </flux:modal.trigger>
     </header>
 </x-slot>
 

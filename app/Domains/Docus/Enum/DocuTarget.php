@@ -32,4 +32,17 @@ enum DocuTarget: string
         }
         return $res;
     }
+
+    static function id(string $label): int
+    {
+        foreach (DocuTarget::cases() as $id => $case) {
+            if ($case->value == $label) return $id + 1;
+        }
+        return 0;
+    }
+
+    static function fromId(int $id): DocuTarget
+    {
+        return DocuTarget::cases()[$id - 1];
+    }
 }

@@ -1,6 +1,6 @@
 <?php
 
-use App\Domains\Docu\Enum\DocuTarget;
+use App\Domains\Docus\Enum\DocuTarget;
 use App\Domains\Docus\Enum\DocuLang;
 use App\Models\User;
 use App\Models\EditionYear;

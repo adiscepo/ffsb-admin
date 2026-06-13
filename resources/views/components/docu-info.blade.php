@@ -3,7 +3,7 @@
 use Livewire\Component;
 use App\Domains\Docus\Docu;
 use function App\Helpers\HumanTiming\to_human;
-use App\Domains\Docu\Enum\DocuTarget;
+use App\Domains\Docus\Enum\DocuTarget;
 
 new class extends Component {
     public Docu $docu;

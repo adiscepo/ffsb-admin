@@ -47,6 +47,9 @@ new class extends Component {
         $this->key = $data_key;
         $this->one_result = $one_result;
         $this->selected = $selected;
+        if ($this->selected == [null]) {
+            $this->selected = [];
+        }
     }
 
     public function updateDatas(array $datas)
