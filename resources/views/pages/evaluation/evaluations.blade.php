@@ -74,6 +74,7 @@ new class extends Component {
     {
         $this->docus = $this->docus_sorted();
         $this->docus_sorted = $this->docus;
+        $this->edition_year = EditionYear::find($this->edition_year_id)->year;
     }
 
     public function orderBy(string $field)
@@ -158,30 +159,22 @@ new class extends Component {
     }
 };
 ?>
-<x-slot name="header">
-    <header class="flex items-center justify-between w-full p-5 border-b border-zinc-200">
-        <nav>
-            <div class="flex items-center gap-3 text-sm">
-                <span class="text-zinc-500">Evaluations</span>
-                <span class="text-zinc-500">/</span>
-                <span class="font-bold">{{ $edition_year }}</span>
-                <span class="text-zinc-500">/</span>
-                <span class="text-sm text-zinc-500 w-fit whitespace-nowrap">{{ $evaluations->count() }}
-                    évaluations</span>
-            </div>
-        </nav>
-    </header>
-</x-slot>
 
 @include('partials.heading', [
-    'route' => 'Evaluations/' . $edition_year . '/' . $evaluations->count(),
+    // 'route' => 'Evaluations/' . $edition_year . '/' . $evaluations->count(),
+    'route' => 'Evaluations',
     'bold' => 1,
 ])
 
 {{-- <div class="p-5 grid xl:grid-cols-[2fr_1fr] grid-rows-3 gap-5 h-full"> --}}
-<div class="p-5 lg:grid lg:grid-cols-[2fr_1fr] lg:gap-5">
+<div class="px-10 lg:grid lg:grid-cols-[2fr_1fr] lg:gap-5 overflow-y-scroll">
     <div class="row-span-full">
-        <div class="flex flex-row-reverse items-center gap-8 peer">
+        <div class="mb-4"></div>
+        <div class="flex flex-row-reverse items-center gap-4 peer">
+            <div class="flex flex-col w-25">
+                <span class="text-sm text-zinc-500">{{ $this->edition_year }}</span>
+                <span class="text-xs text-zinc-400">{{ $this->docus->count() }} docus</span>
+            </div>
             <flux:select class="w-fit" size="sm" wire:model.live='edition_year_id'>
                 @foreach (Edition::allEditions() as $edition_year)
                     <flux:select.option value="{{ $edition_year->id }}">FFSB {{ $edition_year->year }}
@@ -248,6 +241,7 @@ new class extends Component {
         </div>
     </div>
     <div id="docu-informations" class="flex flex-col gap-y-5">
+        <div class="mb-4"></div>
         @if (isset($selected_docu))
             <livewire:docu-info class="border" :rounded="true" :docu="$this->selected_docu" />
             <livewire:evaluations.docu-evaluations class="py-5 border" :rounded="true" :docu="$this->selected_docu" />

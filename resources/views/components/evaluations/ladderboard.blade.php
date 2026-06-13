@@ -26,7 +26,7 @@ new class extends Component {
     }
 };
 ?>
-<div class="flex flex-col p-5 border rounded-lg border-zinc-300">
+<div class="flex flex-col p-5 border rounded-lg border-zinc-200">
     <h3 class="text-sm text-zinc-500">
         Classement du nombre de docus vu
     </h3>

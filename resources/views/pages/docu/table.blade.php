@@ -78,25 +78,6 @@ new class extends Component {
     </flux:modal.trigger>
 @endcomponent
 
-{{-- <x-slot name="header">
-    <header class="flex items-center justify-between w-full p-5 border-b border-zinc-200 max-h-15">
-        <nav>
-            <div class="flex items-center gap-3 text-sm">
-                <span class="text-zinc-500">Documentaires</span>
-            </div>
-        </nav>
-        <flux:modal.trigger name="create-docu">
-            <flux:button size="sm" variant="primary" color="violet" class="cursor-pointer hidden! md:block!">
-                Ajouter un documentaire
-            </flux:button>
-            <flux:button size="sm" variant="primary" color="violet" class="cursor-pointer md:hidden"
-                icon="document-plus">
-            </flux:button>
-        </flux:modal.trigger>
-    </header>
-    <livewire:docu.create />
-</x-slot> --}}
-
 <div class="px-10 space-y-4">
     <div class="mb-4"></div>
     <div class="flex flex-row-reverse flex-wrap-reverse lg:flex-nowrap gap-x-8 gap-y-3">
