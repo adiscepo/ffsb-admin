@@ -64,7 +64,7 @@ new class extends Component {
     </header>
 </x-slot>
 
-<main class="flex flex-col gap-y-4 lg:grid lg:grid-cols-[1.5fr_2fr_2fr] min-h-full">
+<main class="flex flex-col gap-y-4 lg:grid lg:grid-cols-[1fr_1.5fr_2fr]">
     <livewire:docu-info :docu="$docu" class="border-r border-zinc-200 h-full" />
     <livewire:evaluations.docu-evaluations :docu="$docu" />
     @if ($this->form_evaluation)
