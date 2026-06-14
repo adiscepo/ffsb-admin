@@ -19,32 +19,34 @@
                 wire:navigate>
                 {{ __('Tableau de bord') }}
             </flux:sidebar.item>
-            @if (Route::has('docus'))
-                {{-- <flux:sidebar.group expandable="true" :heading="__('Documentaires')" class="grid"> --}}
-                <flux:sidebar.item icon="film" :href="route('docus')" :current="request()->routeIs('docus')"
-                    wire:navigate>
-                    {{ __('Documentaires') }}
-                </flux:sidebar.item>
-                {{-- </flux:sidebar.group> --}}
-            @endif
-            @if (Route::has('evaluations'))
-                <flux:sidebar.item icon="document-text" :href="route('evaluations')"
-                    :current="request()->routeIs('evaluations')" wire:navigate>
-                    {{ __('Evaluations') }}
-                </flux:sidebar.item>
-            @endif
-            @if (Route::has('subsides'))
-                <flux:sidebar.item icon="building-office-2" :href="route('subsides')"
-                    :current="request()->routeIs('subsides')" wire:navigate>
-                    {{ __('Subsides') }}
-                </flux:sidebar.item>
-            @endif
-            @if (Route::has('expenses'))
-                <flux:sidebar.item icon="banknotes" :href="route('expenses')" :current="request()->routeIs('expenses')"
-                    wire:navigate>
-                    {{ __('Dépenses') }}
-                </flux:sidebar.item>
-            @endif
+            <flux:sidebar.group expandable="true" :heading="__('Programme')" class="grid">
+                @if (Route::has('docus'))
+                    <flux:sidebar.item icon="film" :href="route('docus')" :current="request()->routeIs('docus')"
+                        wire:navigate>
+                        {{ __('Documentaires') }}
+                    </flux:sidebar.item>
+                @endif
+                @if (Route::has('evaluations'))
+                    <flux:sidebar.item icon="document-text" :href="route('evaluations')"
+                        :current="request()->routeIs('evaluations')" wire:navigate>
+                        {{ __('Evaluations') }}
+                    </flux:sidebar.item>
+                @endif
+            </flux:sidebar.group>
+            <flux:sidebar.group expandable="true" :heading="__('Trésorerie')" class="grid">
+                @if (Route::has('subsides'))
+                    <flux:sidebar.item icon="building-office-2" :href="route('subsides')"
+                        :current="request()->routeIs('subsides')" wire:navigate>
+                        {{ __('Subsides') }}
+                    </flux:sidebar.item>
+                @endif
+                @if (Route::has('expenses'))
+                    <flux:sidebar.item icon="banknotes" :href="route('expenses')"
+                        :current="request()->routeIs('expenses')" wire:navigate>
+                        {{ __('Dépenses') }}
+                    </flux:sidebar.item>
+                @endif
+            </flux:sidebar.group>
         </flux:sidebar.nav>
 
         <flux:spacer />

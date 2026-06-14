@@ -42,8 +42,9 @@ new class extends Component {
     {
         $this->min_date = $min_date;
         $this->max_date = $max_date;
-        $this->current_month = 5;
-        $this->current_year = 2026;
+        $min_date = CarbonImmutable::createFromFormat('d/m/Y', $min_date);
+        $this->current_month = $min_date->month;
+        $this->current_year = $min_date->year;
         $this->id = $id;
         $this->getCurrentMonth($this->current_month, $this->current_year);
     }
@@ -83,7 +84,7 @@ new class extends Component {
     $class_clickable = 'rounded cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-500';
 @endphp
 
-<div class="relative z-50" x-on:click.outside='open = false' x-data="{
+<div class="relative" x-on:click.outside='open = false' x-data="{
     query: '',
     open: false,
     id: @js($this->id),
@@ -224,7 +225,7 @@ new class extends Component {
         <input type="text" @click="open = true" @keyup.enter="selectDate(selected_date)" x-model='selected_date'
             x-bind:value="selected_date" />
     </div>
-    <div class="w-full flex flex-col text-sm items-stretch rounded-lg shadow-lg bg-white overflow-y-scroll rounded-t-none border-t-0 absolute border p-3 space-y-5 dark:bg-zinc-700 dark:border-zinc-700"
+    <div class="w-full flex flex-col text-sm items-stretch rounded-lg shadow-lg bg-white overflow-y-scroll rounded-t-none border-t-0 absolute border p-3 space-y-5 dark:bg-zinc-700 dark:border-zinc-700 z-20"
         x-show="open">
         <div class="flex justify-between">
             <div>
