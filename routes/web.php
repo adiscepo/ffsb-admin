@@ -15,7 +15,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::livewire('evaluations/{year}', 'pages::evaluation.evaluations')->name('evaluation');
 
     Route::livewire('programs/{year}', 'pages::programs.index')->name('programs');
-    Route::livewire('program/{id}', 'pages::programs.single')->name('programs');
+    Route::livewire('program/{id}', 'pages::programs.single')->name('program');
 
     // Bugs
     Route::livewire('support/bugs/report', 'pages::support.bugs.report')->name('support.bugs.report');
