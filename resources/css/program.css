@@ -1,0 +1,13 @@
+@import 'tailwindcss';
+
+:root {
+  --program-row-height: 40px;
+}
+
+@layer components {
+  .program-event {
+    @apply absolute overflow-hidden rounded;
+    top: var(--program-event-top);
+    height: var(--program-event-height);
+  }
+}

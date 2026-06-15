@@ -32,6 +32,12 @@
                         {{ __('Evaluations') }}
                     </flux:sidebar.item>
                 @endif
+                @if (Route::has('programs'))
+                    <flux:sidebar.item icon="calendar-date-range" :href="route('programs')"
+                        :current="request()->routeIs('programs')" wire:navigate>
+                        {{ __('Programmes') }}
+                    </flux:sidebar.item>
+                @endif
             </flux:sidebar.group>
             <flux:sidebar.group expandable="true" :heading="__('Trésorerie')" class="grid">
                 @if (Route::has('subsides'))

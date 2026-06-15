@@ -11,7 +11,7 @@ new class extends Component {
     public int $edition_year_id;
     public Collection $programs;
 
-    public function mount(?int $year)
+    public function mount(?int $year = null)
     {
         if (isset($year)) {
             $edition = EditionYear::where('year', $year)->first();

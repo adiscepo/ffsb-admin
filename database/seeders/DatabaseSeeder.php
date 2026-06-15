@@ -9,6 +9,9 @@ use App\Domains\Evaluations\EvaluationField;
 use App\Domains\Docus\Docu;
 use App\Domains\Docus\DocuLink;
 use App\Domains\Docus\Field;
+use App\Domains\Programs\Enum\ProgramEventKind;
+use App\Domains\Programs\Program;
+use App\Domains\Programs\ProgramEvent;
 use App\Models\EditionYear;
 use App\Models\ProductionHouse;
 use App\Models\Status;
@@ -192,5 +195,25 @@ class DatabaseSeeder extends Seeder
                 $bug->tags()->attach($bug_tags->random());
             }
         }
+
+        // Program
+        $program = Program::factory(1)->create([
+            'name' => 'FFSB 2024',
+            'start_date' => date_create('2024-03-18'),
+            'end_date' => date_create('2024-03-24'),
+            'edition_year_id' => $edition_years->last(),
+            'user_id' => 1,
+        ]);
+
+        ProgramEvent::factory(1)->create([
+            'start' => date_create('2024-03-18 18:00:00'),
+            'duration' => 30,
+            'kind' => ProgramEventKind::OTHER,
+            'payload' => [
+                'title' => 'Inauguration',
+                'description' => "Nous vous convions à la soirée d'inauguration du Festival du Film Scientifique de Bruxelles et du Printemps des Sciences 2024 ! La soirée commencera à 18h30 et un drink et fingerfoods vous y sera offert."
+            ],
+            'program_id' => $program->first()->id,
+        ]);
     }
 }

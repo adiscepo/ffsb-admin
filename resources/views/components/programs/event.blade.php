@@ -1,0 +1,20 @@
+@use('function App\Helpers\HumanTiming\to_human')
+
+
+<div {{ $attributes->only('class')->merge(['class' => 'program-event bg-zinc-50 border border-zinc-300 w-full']) }}
+    style="
+    --program-event-top: calc(var(--program-row-height) * {{ $start_row }});
+    --program-event-height: calc(var(--program-row-height) * {{ $spanRows }});
+  ">
+    <div class="relative flex gap-x-2 h-full p-1.5">
+        <div class="h-full w-3 bg-violet-300 rounded-full"></div>
+        <div class="h-full flex flex-col">
+            <span class="font-bold text-zinc-700">{{ $title }}</span>
+            <span class="font-light text-sm text-zinc-400">Projection</span>
+        </div>
+        <div class="absolute right-2 top-1">
+            <span class="font-light text-sm text-zinc-700">{{ to_human($duration) }}</span>
+        </div>
+    </div>
+    {{-- {{ $slot }} --}}
+</div>

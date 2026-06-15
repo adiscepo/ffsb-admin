@@ -9,11 +9,13 @@ use Illuminate\Support\Collection;
 new class extends Component {
     public Program $program;
     public int $number_days;
+    public Collection $events;
 
     public function mount(int $id)
     {
         $this->program = Program::findOrFail($id);
         $this->number_days = $this->program->number_days();
+        $this->events = $this->program->getCalendar();
     }
 };
 ?>
@@ -34,23 +36,22 @@ new class extends Component {
     </div>
     <div class="mb-4"></div>
 
-    <div class="grid grid-cols-{{ $number_days }} border rounded bg-zinc-50">
+    <div class="grid grid-cols-{{ $number_days }} border rounded bg-zinc-300">
         <div class="col-span-full border-b py-1 grid grid-cols-{{ $number_days }} justify-items-center">
             @foreach ($program->interval_days() as $day)
                 <span class="text-zinc-600">{{ $day->isoFormat('LL') }}</span>
             @endforeach
         </div>
         @for ($day = 0; $day < $number_days; $day++)
-            <div>
+            <div class="flex flex-col relative box-border">
                 @for ($i = 7; $i < 24; $i++)
-                    @if (random_int(0, 2) == 0)
-                        <div class="h-18 bg-white"></div>
-                    @else
-                        <div class="h-10 hover:bg-zinc-200 cursor-pointer">
-
-                        </div>
-                    @endif
+                    <div
+                        class="h-[var(--program-row-height)] hover:bg-zinc-100 bg-zinc-50 cursor-pointer border-[0.1pt]">
+                    </div>
                 @endfor
+                @foreach ($events[$day] as $event)
+                    <x-program-event :event="$event" />
+                @endforeach
             </div>
         @endfor
     </div>

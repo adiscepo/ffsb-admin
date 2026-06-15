@@ -3,9 +3,12 @@
 namespace App\Domains\Programs;
 
 use App\Domains\Events\Traits\Eventable;
+use App\Domains\Programs\Enum\ProgramEventKind;
+use App\Domains\Programs\Factory\ProgramEventFactory;
 use App\Models\EditionYear;
 use App\Models\Status;
 use App\Models\User;
+use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -17,10 +20,12 @@ class ProgramEvent extends Model
 {
     use HasFactory, Eventable;
 
-    protected $fillable = ['program_id', 'start_event', 'duration', 'kind', 'payload'];
+    protected $fillable = ['program_id', 'start', 'duration', 'kind', 'payload'];
 
     protected $casts = [
         'payload' => 'array',
+        'start' => 'datetime',
+        'kind' => ProgramEventKind::class,
     ];
 
     public function program(): BelongsTo
@@ -28,8 +33,26 @@ class ProgramEvent extends Model
         return $this->belongsTo(Program::class);
     }
 
-    // protected static function newFactory(): ProgramFactory
-    // {
-    //     return ProgramFactory::new();
-    // }
+    // The format of date has to be consistent wrt 'Y-m-d' format.
+    public function getDay()
+    {
+        return CarbonImmutable::parse($this->start)->format('Y-m-d');
+    }
+
+    public function getHour()
+    {
+        return CarbonImmutable::parse($this->start)->format('H:i:s');
+    }
+
+    // Return the number of minutes between the start of the day (00:00) and
+    // the start of the event
+    public function getStartInMinutes()
+    {
+        return $this->start->startOfDay()->diffInMinutes($this->start, false);
+    }
+
+    protected static function newFactory(): ProgramEventFactory
+    {
+        return ProgramEventFactory::new();
+    }
 }

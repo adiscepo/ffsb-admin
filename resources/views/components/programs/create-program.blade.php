@@ -1,6 +1,7 @@
 <?php
 use Livewire\Component;
 use Carbon\CarbonImmutable;
+use Carbon\Carbon;
 use App\Models\ProductionHouse;
 use App\Domains\Programs\Actions\CreateProgram;
 use Facades\App\Domains\Edition\Edition;
@@ -16,9 +17,9 @@ new class extends Component {
     public function selectDate(int $id, string $selected)
     {
         if ($id == 0) {
-            $this->dates['start'] = $selected;
+            $this->dates['start'] = Carbon::createFromFormat('d/m/Y', $selected)->format('Y-m-d');
         } else {
-            $this->dates['end'] = $selected;
+            $this->dates['end'] = Carbon::createFromFormat('d/m/Y', $selected)->format('Y-m-d');
         }
     }
 

@@ -3,6 +3,7 @@
 namespace App\Domains\Programs;
 
 use App\Domains\Events\Traits\Eventable;
+use App\Domains\Programs\Factory\ProgramFactory;
 use App\Models\EditionYear;
 use App\Models\Status;
 use App\Models\User;
@@ -14,6 +15,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Support\Collection;
 
 class Program extends Model
 {
@@ -38,20 +40,42 @@ class Program extends Model
 
     public function number_days(): int
     {
-        $start_date = Carbon::createFromFormat('d/m/Y', $this->start_date);
-        $end_date = Carbon::createFromFormat('d/m/Y', $this->end_date);
+        $start_date = Carbon::create($this->start_date);
+        $end_date = Carbon::create($this->end_date);
         return $start_date->diff($end_date)->days + 1;
     }
 
     public function interval_days(): CarbonPeriod
     {
-        $start_date = Carbon::createFromFormat('d/m/Y', $this->start_date);
-        $end_date = Carbon::createFromFormat('d/m/Y', $this->end_date);
+        $start_date = Carbon::create($this->start_date);
+        $end_date = Carbon::create($this->end_date);
         return CarbonPeriod::create($start_date, $end_date);
     }
 
-    // protected static function newFactory(): ProgramFactory
-    // {
-    //     return ProgramFactory::new();
-    // }
+    public function events(): HasMany
+    {
+        return $this->hasMany(ProgramEvent::class);
+    }
+
+    public function getCalendar()
+    {
+        $calendar = collect();
+        foreach ($this->interval_days() as $day) {
+            $calendar->push($this->eventsFor($day));
+        }
+        return $calendar;
+    }
+
+    public function eventsFor($date)
+    {
+        $startOfDay = Carbon::parse($date)->startOfDay();
+        $endOfDay = Carbon::parse($date)->endOfDay();
+
+        return ProgramEvent::whereBetween('start', [$startOfDay, $endOfDay])->get();
+    }
+
+    protected static function newFactory(): ProgramFactory
+    {
+        return ProgramFactory::new();
+    }
 }
