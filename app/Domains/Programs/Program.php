@@ -8,6 +8,7 @@ use App\Models\EditionYear;
 use App\Models\Status;
 use App\Models\User;
 use Carbon\Carbon;
+use Carbon\CarbonImmutable;
 use Carbon\CarbonPeriod;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -22,6 +23,11 @@ class Program extends Model
     use HasFactory, Eventable;
 
     protected $fillable = ['name', 'start_date', 'end_date', 'edition_year_id', 'user_id', 'version'];
+
+    protected $casts = [
+        'start_date' => "datetime",
+        'end_date' => "datetime",
+    ];
 
     public function author(): BelongsTo
     {

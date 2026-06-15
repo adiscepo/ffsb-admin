@@ -9,6 +9,7 @@ use Illuminate\Support\Collection;
 new class extends Component {
     public Program $program;
     public int $number_days;
+    public $selected_datetime;
     public Collection $events;
 
     public function mount(int $id)
@@ -16,6 +17,12 @@ new class extends Component {
         $this->program = Program::findOrFail($id);
         $this->number_days = $this->program->number_days();
         $this->events = $this->program->getCalendar();
+    }
+
+    public function setDate($day, $hour)
+    {
+        $this->selected_datetime = $this->program->interval_days()->toArray()[$day]->format('Y-m-d') . ' ' . $hour . ':00:00';
+        error_log($this->selected_datetime);
     }
 };
 ?>
@@ -37,7 +44,7 @@ new class extends Component {
     <div class="mb-4"></div>
 
     <div class="grid grid-cols-{{ $number_days }} border rounded bg-zinc-300">
-        <div class="col-span-full border-b py-1 grid grid-cols-{{ $number_days }} justify-items-center">
+        <div class="col-span-full border-b py-1 grid grid-cols-{{ $number_days }} justify-items-center bg-zinc-100">
             @foreach ($program->interval_days() as $day)
                 <span class="text-zinc-600">{{ $day->isoFormat('LL') }}</span>
             @endforeach
@@ -45,9 +52,12 @@ new class extends Component {
         @for ($day = 0; $day < $number_days; $day++)
             <div class="flex flex-col relative box-border">
                 @for ($i = 7; $i < 24; $i++)
-                    <div
-                        class="h-[var(--program-row-height)] hover:bg-zinc-100 bg-zinc-50 cursor-pointer border-[0.1pt]">
-                    </div>
+                    <flux:modal.trigger wire:click='setDate({{ $day }}, {{ $i }})'
+                        name="create-event">
+                        <div
+                            class="h-[var(--program-row-height)] hover:bg-zinc-100 bg-zinc-50 cursor-pointer border-[0.1pt]">
+                        </div>
+                    </flux:modal.trigger>
                 @endfor
                 @foreach ($events[$day] as $event)
                     <x-program-event :event="$event" />
@@ -55,4 +65,8 @@ new class extends Component {
             </div>
         @endfor
     </div>
+    <flux:modal wire:model.live='selected_datetim' name="create-event" position="bottom" class="overflow-visible">
+        <livewire:programs.create-program-event :program="$program" :selected_datetime="$selected_datetime" />
+    </flux:modal>
+
 </div>

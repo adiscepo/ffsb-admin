@@ -24,7 +24,7 @@ class ProgramEvent extends Component
 
     public float $span_row;
     public float $start_row;
-    public int $offset = 7;     // Hour to which the program is displayed
+    public int $offset = 7 * 60; // Minutes to which the program is displayed
     public int $unit_time = 60; // The unit of time in the program (1 ut is
                                 // equal to one cell in the program)
 
@@ -42,7 +42,7 @@ class ProgramEvent extends Component
     public function computePosition()
     {
         $this->span_row = $this->event->duration / $this->unit_time;
-        $this->start_row = $this->event->getStartInMinutes() / $this->unit_time - $this->offset;
+        $this->start_row = $this->event->getStartInMinutes() / $this->unit_time - ($this->offset / $this->unit_time);
     }
 
     /**
@@ -58,6 +58,6 @@ class ProgramEvent extends Component
             case ProgramEventKind::PROJECTION:
             case ProgramEventKind::INTERVENTION:
         }
-        return view('components.programs.event');
+        return view('components.programs.base-event');
     }
 }
