@@ -43,7 +43,7 @@ new class extends Component {
     </div>
     <div class="mb-4"></div>
 
-    <div class="grid grid-cols-{{ $number_days }} border rounded bg-zinc-300">
+    <div class="grid grid-cols-{{ $number_days }} border rounded bg-zinc-300 max-md:w-[300%] max-md:overflow-x-scroll">
         <div class="col-span-full border-b py-1 grid grid-cols-{{ $number_days }} justify-items-center bg-zinc-100">
             @foreach ($program->interval_days() as $day)
                 <span class="text-zinc-600">{{ $day->isoFormat('LL') }}</span>
@@ -56,6 +56,9 @@ new class extends Component {
                         name="create-event">
                         <div
                             class="h-[var(--program-row-height)] hover:bg-zinc-100 bg-zinc-50 cursor-pointer border-[0.1pt]">
+                            @if ($day == 0)
+                                <span class="md:ml-[-25pt] text-sm text-zinc-500">{{ $i }}h</span>
+                            @endif
                         </div>
                     </flux:modal.trigger>
                 @endfor
@@ -65,7 +68,8 @@ new class extends Component {
             </div>
         @endfor
     </div>
-    <flux:modal wire:model.live='selected_datetim' name="create-event" position="bottom" class="overflow-visible">
+    <flux:modal wire:model.live='selected_datetim' name="create-event" position="bottom"
+        class="max-sm:w-full overflow-visible">
         <livewire:programs.create-program-event :program="$program" :selected_datetime="$selected_datetime" />
     </flux:modal>
 </div>
