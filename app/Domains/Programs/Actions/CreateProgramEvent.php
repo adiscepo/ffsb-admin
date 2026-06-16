@@ -5,17 +5,17 @@ namespace App\Domains\Programs\Actions;
 use App\Domains\Events\Event;
 use App\Domains\Programs\Enum\ProgramEventKind;
 use App\Domains\Programs\Program;
+use App\Domains\Programs\ProgramEvent;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
 class CreateProgramEvent
 {
 
-    public function execute(User $user, Program $program, string $name, string $start, int $duration, ProgramEventKind $kind, array $payload)
+    public function execute(User $user, Program $program, string $start, int $duration, ProgramEventKind $kind, array $payload)
     {
-        DB::transaction(function () use ($user, $program, $name, $start, $duration, $kind, $payload) {
-            $program_event = Program::create([
-                'name' => $name,
+        DB::transaction(function () use ($user, $program, $start, $duration, $kind, $payload) {
+            $program_event = ProgramEvent::create([
                 'program_id' => $program->id,
                 'start' => $start,
                 'duration' => $duration,

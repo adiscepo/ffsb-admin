@@ -22,7 +22,7 @@ new class extends Component {
     public function setDate($day, $hour)
     {
         $this->selected_datetime = $this->program->interval_days()->toArray()[$day]->format('Y-m-d') . ' ' . $hour . ':00:00';
-        error_log($this->selected_datetime);
+        $this->dispatch('select-datetime', data: $this->selected_datetime);
     }
 };
 ?>
@@ -60,7 +60,7 @@ new class extends Component {
                     </flux:modal.trigger>
                 @endfor
                 @foreach ($events[$day] as $event)
-                    <x-program-event :event="$event" />
+                    <x-program-event draggable="true" :event="$event" />
                 @endforeach
             </div>
         @endfor
@@ -68,5 +68,4 @@ new class extends Component {
     <flux:modal wire:model.live='selected_datetim' name="create-event" position="bottom" class="overflow-visible">
         <livewire:programs.create-program-event :program="$program" :selected_datetime="$selected_datetime" />
     </flux:modal>
-
 </div>

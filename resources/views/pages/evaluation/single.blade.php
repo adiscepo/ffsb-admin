@@ -3,7 +3,7 @@
 use Livewire\Component;
 use Livewire\Attributes\Computed;
 use App\Domains\Docus\Docu;
-use App\Models\Field;
+use App\Domains\Docus\Field;
 use App\Models\ProductionHouse;
 use App\Domains\Evaluation\Evaluations;
 use App\Helpers\HumanTiming;

@@ -58,7 +58,7 @@ class Program extends Model
         return CarbonPeriod::create($start_date, $end_date);
     }
 
-    public function events(): HasMany
+    public function program_events(): HasMany
     {
         return $this->hasMany(ProgramEvent::class);
     }

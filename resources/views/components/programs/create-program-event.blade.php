@@ -1,49 +1,108 @@
 <?php
 use Livewire\Component;
-use Livewire\Mechanisms\HandleComponents\HandleComponents;
 use App\Domains\Programs\Program;
+use App\Domains\Docus\Docu;
 use Carbon\CarbonImmutable;
 use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 use App\Models\ProductionHouse;
-use App\Domains\Programs\Actions\CreateProgram;
+use App\Domains\Programs\Actions\CreateProgramEvent;
+use App\Domains\Programs\Enum\ProgramEventKind;
 use Facades\App\Domains\Edition\Edition;
 
 new class extends Component {
     public Program $program;
     public string $name;
     public string $kind = 'projection';
-    public array $dates = [];
+    public string $date;
+    public string $hour;
     public $selected_datetime;
     public $parent;
+    public array $payload;
+
+    protected $listeners = [
+        'select-datetime' => 'setDateTime',
+        'pill-box:docu' => 'setDocu',
+        'date-picker' => 'setDate',
+    ];
 
     public function mount(Program $program)
     {
         $this->program = $program;
-        // $this->parent = $this->getParentComponentInstance();
-        // dd($this->getParent()->selected_datetime);
     }
 
-    public function rules()
+    public function setDateTime($data)
+    {
+        $this->selected_datetime = Carbon::parse($data);
+        $this->date = $this->selected_datetime->format('Y-m-d');
+        $this->hour = $this->selected_datetime->format('H:i');
+    }
+
+    public function setDate($id, $selected)
+    {
+        $this->date = Carbon::createFromFormat('d/m/Y', $selected)->format('Y-m-d');
+    }
+
+    public function setDocu($selected)
+    {
+        $docu = Docu::find($selected)->first();
+        $this->payload['docu'] = $docu;
+    }
+
+    public function projectionRules()
     {
         return [
-            'name' => 'required|string',
-            'dates.start' => 'required',
-            'dates.end' => 'required',
+            'date' => 'required',
+            'hour' => 'required',
+            'payload.docu' => 'required',
         ];
     }
 
-    public function save(CreateProgram $create)
+    // Return the next available time slot if overlaps with another event
+    // already presents in the program, otherwise return null
+    public function nextAvailableTimeSlot(): bool
     {
-        $this->validate($this->rules());
-        $create->execute(Auth::user(), $this->name, $this->dates['start'], $this->dates['end'], Edition::currentEdition()->id);
-        $this->redirect('/programs/');
+        $duration = 0;
+        switch ($this->kind) {
+            case 'projection':
+                $docu = Docu::find($this->payload['docu']->id)->first();
+                $duration = $docu->duration;
+                break;
+            default:
+                break;
+        }
+        $start_hour = CarbonImmutable::parse($this->date . ' ' . $this->hour);
+        $end_hour = $start_hour->addMinutes($duration);
+        $event_period = CarbonPeriod::create($start_hour, $start_hour->addMinutes($duration));
+        // Loop over all the event in the same day and check if the duration
+        // of the new one overlaps with the ones already in the program
+        foreach ($this->program->eventsFor($this->date) as $event) {
+            $event_period = $event->getPeriod();
+            if ($event_period->overlaps($event_period)) {
+                return $event_period->getIncludedEndDate()->addMinute();
+            }
+        }
+        return null;
     }
 
-    // Enable us to fetch the parent of the component, that useful to fetch
-    // data in it
-    private function getParent()
+    public function save(CreateProgramEvent $create)
     {
-        return app(HandleComponents::class)::$componentStack[0];
+        // dd($this->payload);
+        // $create->execute(Auth::user(), $this->name, $this->dates['start'], $this->dates['end'], Edition::currentEdition()->id);
+        // $this->redirect('/programs/');
+        if ($this->kind == ProgramEventKind::PROJECTION->value) {
+            $this->validate($this->projectionRules());
+            if ($this->isEventOverlapping()) {
+                Flux::toast(variant: 'danger', text: 'Les évènements ne peuvent pas se chevaucher.');
+                return;
+            }
+            $create->execute(Auth::user(), $this->program, Carbon::parse($this->date . ' ' . $this->hour), $this->payload['docu']->duration, ProgramEventKind::PROJECTION, [
+                // Better to only store the id and fetch the docu from it when
+                // rendered to prevent duplication of datas in the db
+                'docu_id' => $this->payload['docu']->id,
+            ]);
+        }
+        $this->redirect('/program/' . $this->program->id, navigate: true);
     }
 };
 ?>
@@ -57,36 +116,43 @@ new class extends Component {
 
         <flux:field>
             <flux:label>Date</flux:label>
-            <livewire:date-picker :min_date="$program->start_date->format('d/m/Y')" :max_date="$program->end_date->format('d/m/Y')" :id="1" />
+            <livewire:date-picker :min_date="$program->start_date->format('d/m/Y')" :max_date="$program->end_date->format('d/m/Y')" :selected_date="$this->selected_datetime != null ? $this->selected_datetime->format('d/m/Y') : null" :id="1"
+                :key="'date-picker-' .
+                    ($this->selected_datetime != null ? $this->selected_datetime->format('dmY') : 'null')" />
         </flux:field>
         <flux:field>
             <flux:label>Heure</flux:label>
-            <flux:input type="time"></flux:input>
+            <flux:input wire:model='hour' type="time"
+                :value="($this->selected_datetime != null ? $this->selected_datetime->format('H:i') : 'null')">
+            </flux:input>
         </flux:field>
     </div>
 
     <flux:radio.group wire:model.live="kind" variant="segmented" class="bg-zinc-50!">
-        <flux:radio value="projection" label="Projection" icon="film" checked />
-        <flux:radio value="intervention" label="Intervention" icon="user" />
-        <flux:radio value="other" label="Autre" icon="ellipsis-horizontal" />
+        <flux:radio :value="ProgramEventKind::PROJECTION->value" label="Projection" icon="film" checked />
+        <flux:radio :value="ProgramEventKind::INTERVENTION->value" label="Intervention" icon="user" />
+        <flux:radio :value="ProgramEventKind::OTHER->value" label="Autre" icon="ellipsis-horizontal" />
     </flux:radio.group>
 
     @switch($this->kind)
         @case('projection')
-            <span>PROJO</span>
+            <flux:field>
+                <flux:label>Documentaire</flux:label>
+                <livewire:pill-box name="docu" :datas="Docu::where('edition_year_id', $program->edition_year_id)->get()->toArray()" :one_result="true" :data_key="'title'" />
+            </flux:field>
         @break
 
         @case('intervention')
-            <span>INTER</span>
+            <span class="italic text-zinc-500">En développement</span>
         @break
 
         @default
-            <span>OTHER</span>
+            <span class="italic text-zinc-500">En développement</span>
     @endswitch
 
     <div class="flex">
         <flux:spacer />
 
-        <flux:button type="submit" variant="primary">Save changes</flux:button>
+        <flux:button wire:click='save' variant="primary">Ajouter</flux:button>
     </div>
 </div>

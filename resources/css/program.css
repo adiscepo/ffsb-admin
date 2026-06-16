@@ -6,7 +6,7 @@
 
 @layer components {
   .program-event {
-    @apply absolute overflow-hidden rounded;
+    @apply absolute overflow-hidden rounded-xs;
     top: var(--program-event-top);
     height: var(--program-event-height);
   }

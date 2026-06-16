@@ -7,7 +7,7 @@ use Livewire\Attributes\Computed;
 use App\Domains\Docus\Docu;
 use App\Models\Tag;
 use App\Models\EditionYear;
-use App\Models\Field;
+use App\Domains\Docus\Field;
 use App\Models\ProductionHouse;
 use function App\Helpers\HumanTiming\to_human;
 
@@ -67,7 +67,7 @@ new class extends Component {
 };
 ?>
 
-@component('partials.heading', ['route' => 'Documentaires'])
+@component('partials.heading', ['route' => 'Documentaires', 'bold' => 1])
     <livewire:docu.create />
     <flux:modal.trigger name="create-docu">
         <flux:button size="sm" variant="primary" color="violet" class="cursor-pointer hidden! md:block!">
@@ -78,7 +78,7 @@ new class extends Component {
     </flux:modal.trigger>
 @endcomponent
 
-<div class="px-10 space-y-4">
+<div class="px-10 space-y-4 h-full overflow-scroll">
     <div class="mb-4"></div>
     <div class="flex flex-row-reverse flex-wrap-reverse lg:flex-nowrap gap-x-8 gap-y-3">
         <div class="flex flex-wrap lg:flex-nowrap flex-row-reverse gap-1.5">

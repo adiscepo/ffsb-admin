@@ -7,6 +7,7 @@ new class extends Component {
     public string $query = '';
     public int $id;
     public array $selected = [];
+    public ?string $selected_date = null;
 
     public array $datas = [];
     public array $results = [];
@@ -38,13 +39,19 @@ new class extends Component {
         Flux::toast(variant: 'danger', text: $message);
     }
 
-    public function mount(string $min_date, string $max_date, int $id)
+    public function mount(string $min_date, string $max_date, int $id, ?string $selected_date = null)
     {
         $this->min_date = $min_date;
         $this->max_date = $max_date;
-        $min_date = CarbonImmutable::createFromFormat('d/m/Y', $min_date);
-        $this->current_month = $min_date->month;
-        $this->current_year = $min_date->year;
+        $this->selected_date = $selected_date;
+        $current_date;
+        if ($this->selected_date) {
+            $current_date = CarbonImmutable::createFromFormat('d/m/Y', $min_date);
+        } else {
+            $current_date = CarbonImmutable::createFromFormat('d/m/Y', $min_date);
+        }
+        $this->current_month = $current_date->month;
+        $this->current_year = $current_date->year;
         $this->id = $id;
         $this->getCurrentMonth($this->current_month, $this->current_year);
     }
@@ -88,7 +95,7 @@ new class extends Component {
     query: '',
     open: false,
     id: @js($this->id),
-    selected_date: null,
+    selected_date: @js($this->selected_date),
     {{-- selected_date: @js('1/' . $this->current_month . '/' . $this->current_year), --}}
     current_month: @js($this->getCurrentMonth($this->current_month, $this->current_year)),
     min_date: @js($this->min_date),

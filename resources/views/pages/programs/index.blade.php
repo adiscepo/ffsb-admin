@@ -34,29 +34,19 @@ new class extends Component {
     'bold' => 0,
 ]) --}}
 
-<x-slot name="header">
-    <header class="flex justify-between items-center gap-x-2 w-full p-5 border-b border-zinc-200">
-        <nav>
-            <div class="flex gap-3 items-center text-sm">
-                <flux:icon.chevron-left variant="mini" />
-                <span class="font-bold">Programmes</span>
-            </div>
-        </nav>
-        <div>
-            <flux:modal.trigger name="create-program">
-                <flux:button size="sm" variant="primary" color="violet" class="cursor-pointer hidden! md:block!">
-                    Créer un programme
-                </flux:button>
-                <flux:button size="sm" variant="primary" color="violet" class="cursor-pointer md:hidden"
-                    icon="calendar-date-range">
-                </flux:button>
-            </flux:modal.trigger>
-            <flux:modal name="create-program" class="max-w-1/5 md:max-w-1/10 overflow-visible">
-                <livewire:programs.create-program />
-            </flux:modal>
-        </div>
-    </header>
-</x-slot>
+@component('partials.heading', ['route' => 'Documentaires', 'bold' => 1])
+    <flux:modal name="create-program" class="max-w-1/5 md:max-w-1/10 overflow-visible">
+        <livewire:programs.create-program />
+    </flux:modal>
+    <flux:modal.trigger name="create-program">
+        <flux:button size="sm" variant="primary" color="violet" class="cursor-pointer hidden! md:block!">
+            Créer un programme
+        </flux:button>
+        <flux:button size="sm" variant="primary" color="violet" class="cursor-pointer md:hidden"
+            icon="calendar-date-range">
+        </flux:button>
+    </flux:modal.trigger>
+@endcomponent
 
 <div class="px-10 overflow-y-scroll">
     <div class="mb-4"></div>

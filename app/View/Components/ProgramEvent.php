@@ -8,6 +8,7 @@ use App\Domains\Events\Event;
 use App\Domains\Docus\Docu;
 use App\Domains\Programs\Enum\ProgramEventKind;
 use App\Domains\Programs\ProgramEvent as ProgramsProgramEvent;
+use App\Domains\Programs\ProjectionEvent;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
@@ -34,8 +35,21 @@ class ProgramEvent extends Component
     public function __construct(ProgramsProgramEvent $event)
     {
         $this->event = $event;
-        $this->title = $event->payload['title'];
-        $this->duration = $event->duration;
+
+        switch ($event->kind) {
+            case ProgramEventKind::OTHER:
+                $this->title = $event->payload['title'];
+                $this->duration = $event->duration;
+                break;
+            case ProgramEventKind::PROJECTION:
+                $docu = Docu::findOrFail($event->payload['docu_id']);
+                $this->title = $docu->title;
+                $this->duration = $docu->duration;
+                break;
+            case ProgramEventKind::INTERVENTION:
+                $this->title = "Intervention";
+                break;
+        }
         $this->computePosition();
     }
 
@@ -56,6 +70,7 @@ class ProgramEvent extends Component
             case ProgramEventKind::OTHER:
                 return view('components.programs.event-other', ['small' => $small]);
             case ProgramEventKind::PROJECTION:
+                return view('components.programs.event-projection', ['small' => $small]);
             case ProgramEventKind::INTERVENTION:
         }
         return view('components.programs.base-event');
