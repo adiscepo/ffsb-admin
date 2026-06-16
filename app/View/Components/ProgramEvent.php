@@ -38,7 +38,7 @@ class ProgramEvent extends Component
 
         switch ($event->kind) {
             case ProgramEventKind::OTHER:
-                $this->title = $event->payload['title'];
+                $this->title = $event->payload['name'];
                 $this->duration = $event->duration;
                 break;
             case ProgramEventKind::PROJECTION:
@@ -47,7 +47,8 @@ class ProgramEvent extends Component
                 $this->duration = $docu->duration;
                 break;
             case ProgramEventKind::INTERVENTION:
-                $this->title = "Intervention";
+                $this->title = $event->payload['name'];
+                $this->duration = $event->duration;
                 break;
         }
         $this->computePosition();
@@ -55,7 +56,7 @@ class ProgramEvent extends Component
 
     public function computePosition()
     {
-        $this->span_row = $this->event->duration / $this->unit_time;
+        $this->span_row = $this->duration / $this->unit_time;
         $this->start_row = $this->event->getStartInMinutes() / $this->unit_time - ($this->offset / $this->unit_time);
     }
 
@@ -72,6 +73,7 @@ class ProgramEvent extends Component
             case ProgramEventKind::PROJECTION:
                 return view('components.programs.event-projection', ['small' => $small]);
             case ProgramEventKind::INTERVENTION:
+                return view('components.programs.event-intervention', ['small' => $small]);
         }
         return view('components.programs.base-event');
     }

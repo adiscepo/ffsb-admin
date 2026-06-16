@@ -50,7 +50,7 @@ class ProgramEvent extends Model
     {
         $start = $this->start;
         $end = $start->addMinutes($this->duration);
-        return CarbonPeriodImmutable::create($start, $end);
+        return CarbonPeriodImmutable::create($start, $end, CarbonPeriod::EXCLUDE_END_DATE);
     }
     // Return the number of minutes between the start of the day (00:00) and
     // the start of the event

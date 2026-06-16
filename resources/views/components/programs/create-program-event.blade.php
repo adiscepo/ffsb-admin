@@ -58,9 +58,29 @@ new class extends Component {
         ];
     }
 
+    public function interventionRules()
+    {
+        return [
+            'date' => 'required',
+            'hour' => 'required',
+            'payload.name' => 'required|string',
+            'payload.duration' => 'required|integer',
+        ];
+    }
+
+    public function otherRules()
+    {
+        return [
+            'date' => 'required',
+            'hour' => 'required',
+            'payload.name' => 'required|string',
+            'payload.description' => 'required|string',
+            'payload.duration' => 'required|integer',
+        ];
+    }
     // Return the next available time slot if overlaps with another event
     // already presents in the program, otherwise return null
-    public function nextAvailableTimeSlot(): bool
+    public function nextAvailableTimeSlot()
     {
         $duration = 0;
         switch ($this->kind) {
@@ -76,10 +96,10 @@ new class extends Component {
         $event_period = CarbonPeriod::create($start_hour, $start_hour->addMinutes($duration));
         // Loop over all the event in the same day and check if the duration
         // of the new one overlaps with the ones already in the program
-        foreach ($this->program->eventsFor($this->date) as $event) {
-            $event_period = $event->getPeriod();
-            if ($event_period->overlaps($event_period)) {
-                return $event_period->getIncludedEndDate()->addMinute();
+        foreach ($this->program->eventsFor($this->date)->reverse() as $event) {
+            $program_event_period = $event->getPeriod();
+            if ($event_period->overlaps($program_event_period)) {
+                return $program_event_period->getIncludedEndDate();
             }
         }
         return null;
@@ -90,17 +110,47 @@ new class extends Component {
         // dd($this->payload);
         // $create->execute(Auth::user(), $this->name, $this->dates['start'], $this->dates['end'], Edition::currentEdition()->id);
         // $this->redirect('/programs/');
-        if ($this->kind == ProgramEventKind::PROJECTION->value) {
-            $this->validate($this->projectionRules());
-            if ($this->isEventOverlapping()) {
-                Flux::toast(variant: 'danger', text: 'Les évènements ne peuvent pas se chevaucher.');
-                return;
-            }
-            $create->execute(Auth::user(), $this->program, Carbon::parse($this->date . ' ' . $this->hour), $this->payload['docu']->duration, ProgramEventKind::PROJECTION, [
-                // Better to only store the id and fetch the docu from it when
-                // rendered to prevent duplication of datas in the db
-                'docu_id' => $this->payload['docu']->id,
-            ]);
+        switch ($this->kind) {
+            case ProgramEventKind::PROJECTION->value:
+                $this->validate($this->projectionRules());
+                $next_slot = $this->nextAvailableTimeSlot();
+                if ($next_slot != null) {
+                    Flux::toast(variant: 'danger', text: 'Les évènements ne peuvent pas se chevaucher, le prochain moment est ' . $next_slot->format('H\hi'));
+                    $this->hour = $next_slot->format('H:i');
+                    return;
+                }
+                $create->execute(Auth::user(), $this->program, Carbon::parse($this->date . ' ' . $this->hour), $this->payload['docu']->duration, ProgramEventKind::PROJECTION, [
+                    // Better to only store the id and fetch the docu from it when
+                    // rendered to prevent duplication of datas in the db
+                    'docu_id' => $this->payload['docu']->id,
+                ]);
+                break;
+            case ProgramEventKind::INTERVENTION->value:
+                $this->validate($this->interventionRules());
+                $next_slot = $this->nextAvailableTimeSlot();
+                if ($next_slot != null) {
+                    Flux::toast(variant: 'danger', text: 'Les évènements ne peuvent pas se chevaucher, le prochain moment est ' . $next_slot->format('H\hi'));
+                    $this->hour = $next_slot->format('H:i');
+                    return;
+                }
+                $create->execute(Auth::user(), $this->program, Carbon::parse($this->date . ' ' . $this->hour), $this->payload['duration'], ProgramEventKind::INTERVENTION, [
+                    'name' => $this->payload['name'],
+                ]);
+                break;
+            default:
+                $this->validate($this->otherRules());
+                $next_slot = $this->nextAvailableTimeSlot();
+                if ($next_slot != null) {
+                    Flux::toast(variant: 'danger', text: 'Les évènements ne peuvent pas se chevaucher, le prochain moment est ' . $next_slot->format('H\hi'));
+                    $this->hour = $next_slot->format('H:i');
+                    return;
+                }
+                $create->execute(Auth::user(), $this->program, Carbon::parse($this->date . ' ' . $this->hour), $this->payload['duration'], ProgramEventKind::OTHER, [
+                    'name' => $this->payload['name'],
+                    'description' => $this->payload['description'],
+                ]);
+                break;
+                break;
         }
         $this->redirect('/program/' . $this->program->id, navigate: true);
     }
@@ -140,14 +190,33 @@ new class extends Component {
                 <flux:label>Documentaire</flux:label>
                 <livewire:pill-box name="docu" :datas="Docu::where('edition_year_id', $program->edition_year_id)->get()->toArray()" :one_result="true" :data_key="'title'" />
             </flux:field>
+            @if (isset($this->payload['docu']))
+                <div class="h-45 overflow-y-scroll">
+                    <livewire:docu-info :small="true" :docu="$this->payload['docu']" />
+                </div>
+            @endif
         @break
 
         @case('intervention')
-            <span class="italic text-zinc-500">En développement</span>
+            <div class="flex justify-between">
+                <flux:input label="Nom" wire:model='payload.name'></flux:input>
+                <flux:input.group class="max-w-32" label="Durée">
+                    <flux:input placeholder="90" wire:model='payload.duration' type="number" />
+                    <flux:input.group.suffix>min</flux:input.group.suffix>
+                </flux:input.group>
+            </div>
         @break
 
         @default
-            <span class="italic text-zinc-500">En développement</span>
+            <div class="flex justify-between">
+                <flux:input label="Nom" wire:model='payload.name'></flux:input>
+                <flux:input.group class="max-w-32" label="Durée">
+                    <flux:input placeholder="90" wire:model='payload.duration' type="number" />
+                    <flux:input.group.suffix>min</flux:input.group.suffix>
+                </flux:input.group>
+            </div>
+            <flux:textarea label="Description" wire:model='payload.description'>
+            </flux:textarea>
     @endswitch
 
     <div class="flex">

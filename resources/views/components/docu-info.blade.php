@@ -27,6 +27,7 @@ new class extends Component {
     // status bar at the bottom (absolute position) need
     // to be rounded only in the bottom as well
     'rounded' => false,
+    'small' => false,
 ])
 
 <div {{ $attributes->class(['relative flex flex-col gap-5 ' . $rounded ?? 'rounded-lg']) }}>
@@ -150,14 +151,16 @@ new class extends Component {
             <p>{{ $docu->comment }}</p>
         </div>
     @endif
-    <div class="mb-2"></div>
-    <div
-        class="absolute w-full bg-zinc-50 bottom-0 flex justify-between px-5 py-2 border-t border-zinc-200 @if ($rounded) rounded-b-lg @endif">
-        <span class="text-xs text-zinc-500">Ajouté par {{ $docu->user->name }}
-            @if (isset($docu->created_at))
-                <span class="text-xs text-zinc-500">{{ $docu->created_at->diffForHumans() }}</span>
-            @endif
-        </span>
-        <span class="text-xs text-zinc-500">FFSB {{ $docu->edition_year->year }}</span>
-    </div>
+    @if (!$small)
+        <div class="mb-2"></div>
+        <div
+            class="absolute w-full bg-zinc-50 bottom-0 flex justify-between px-5 py-2 border-t border-zinc-200 @if ($rounded) rounded-b-lg @endif">
+            <span class="text-xs text-zinc-500">Ajouté par {{ $docu->user->name }}
+                @if (isset($docu->created_at))
+                    <span class="text-xs text-zinc-500">{{ $docu->created_at->diffForHumans() }}</span>
+                @endif
+            </span>
+            <span class="text-xs text-zinc-500">FFSB {{ $docu->edition_year->year }}</span>
+        </div>
+    @endif
 </div>
