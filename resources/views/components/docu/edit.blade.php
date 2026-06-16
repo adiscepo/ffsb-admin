@@ -143,7 +143,7 @@ new class extends Component {
             'subtitle' => $this->subtitle != 'null' ? $this->subtitle : null,
             'target' => $this->target != null ? DocuTarget::fromId($this->target) : null,
             'comment' => $this->comment,
-            'edition_year_id' => EditionYear::where('current', true)->orderBy('year', 'DESC')->first()->id,
+            'edition_year_id' => $this->docu->edition_year_id, // The edition year is not changed (and will not, maybe add a copy mechanism later)
             'links' => $this->links,
             'production_houses' => $this->production_houses,
             'fields' => $this->fields,
