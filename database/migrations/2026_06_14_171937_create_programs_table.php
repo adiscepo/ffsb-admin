@@ -30,7 +30,6 @@ return new class extends Migration
             $table->id();
             $table->foreignId('program_id');
             $table->dateTime('start');
-            $table->integer('duration');
             $table->enum('kind', ProgramEventKind::cases());
             $table->json('payload');
             $table->timestamps();

@@ -119,7 +119,7 @@ new class extends Component {
                     $this->hour = $next_slot->format('H:i');
                     return;
                 }
-                $create->execute(Auth::user(), $this->program, Carbon::parse($this->date . ' ' . $this->hour), $this->payload['docu']->duration, ProgramEventKind::PROJECTION, [
+                $create->execute(Auth::user(), $this->program, Carbon::parse($this->date . ' ' . $this->hour), ProgramEventKind::PROJECTION, [
                     // Better to only store the id and fetch the docu from it when
                     // rendered to prevent duplication of datas in the db
                     'docu_id' => $this->payload['docu']->id,
@@ -133,8 +133,9 @@ new class extends Component {
                     $this->hour = $next_slot->format('H:i');
                     return;
                 }
-                $create->execute(Auth::user(), $this->program, Carbon::parse($this->date . ' ' . $this->hour), $this->payload['duration'], ProgramEventKind::INTERVENTION, [
+                $create->execute(Auth::user(), $this->program, Carbon::parse($this->date . ' ' . $this->hour), ProgramEventKind::INTERVENTION, [
                     'name' => $this->payload['name'],
+                    'duration' => $this->payload['duration'],
                 ]);
                 break;
             default:
@@ -145,9 +146,10 @@ new class extends Component {
                     $this->hour = $next_slot->format('H:i');
                     return;
                 }
-                $create->execute(Auth::user(), $this->program, Carbon::parse($this->date . ' ' . $this->hour), $this->payload['duration'], ProgramEventKind::OTHER, [
+                $create->execute(Auth::user(), $this->program, Carbon::parse($this->date . ' ' . $this->hour), ProgramEventKind::OTHER, [
                     'name' => $this->payload['name'],
                     'description' => $this->payload['description'],
+                    'duration' => $this->payload['duration'],
                 ]);
                 break;
                 break;

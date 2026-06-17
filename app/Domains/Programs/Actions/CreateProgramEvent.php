@@ -12,13 +12,12 @@ use Illuminate\Support\Facades\DB;
 class CreateProgramEvent
 {
 
-    public function execute(User $user, Program $program, string $start, int $duration, ProgramEventKind $kind, array $payload)
+    public function execute(User $user, Program $program, string $start, ProgramEventKind $kind, array $payload)
     {
-        DB::transaction(function () use ($user, $program, $start, $duration, $kind, $payload) {
+        DB::transaction(function () use ($user, $program, $start, $kind, $payload) {
             $program_event = ProgramEvent::create([
                 'program_id' => $program->id,
                 'start' => $start,
-                'duration' => $duration,
                 'kind' => $kind,
                 'payload' => $payload,
             ]);

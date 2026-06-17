@@ -20,10 +20,10 @@ use Illuminate\View\Component;
 class ProgramEvent extends Component
 {
     public ProgramsProgramEvent $event;
-    public string $title;
-    public string $duration;
-    public string $from_to; // eg. 18h à 19h
-    public ?array $categories = null;
+    // public string $title;
+    // public string $duration;
+    // public string $from_to; // eg. 18h à 19h
+    public string $color = "zinc";
 
     public float $span_row;
     public float $start_row;
@@ -37,36 +37,23 @@ class ProgramEvent extends Component
     public function __construct(ProgramsProgramEvent $event)
     {
         $this->event = $event;
-        $this->from_to = $event->getPeriod()->getStartDate()->format('H:i') . " à " . $event->getPeriod()->getEndDate()->format('H:i');
-        switch ($event->kind) {
-            case ProgramEventKind::OTHER:
-                $this->title = $event->payload['name'];
-                $this->duration = $event->duration;
-                break;
-            case ProgramEventKind::PROJECTION:
-                $docu = Docu::findOrFail($event->payload['docu_id']);
-                $this->title = $docu->title;
-                $this->duration = $docu->duration;
-                $this->categories = [];
-                foreach ($docu->fields as $value) {
-                    array_push($this->categories, [
-                        'name' => $value->field,
-                        'color' => $value->color,
-                    ]);
-                }
-                break;
-            case ProgramEventKind::INTERVENTION:
-                $this->title = $event->payload['name'];
-                $this->duration = $event->duration;
-                break;
-        }
         $this->computePosition();
+        $this->computeColor();
     }
 
-    public function computePosition()
+    protected function computePosition()
     {
-        $this->span_row = $this->duration / $this->unit_time;
+        $this->span_row = $this->event->duration / $this->unit_time;
         $this->start_row = $this->event->getStartInMinutes() / $this->unit_time - ($this->offset / $this->unit_time);
+    }
+
+    protected function computeColor()
+    {
+        $this->color = match ($this->event->kind) {
+            ProgramEventKind::PROJECTION => 'violet',
+            ProgramEventKind::INTERVENTION => 'orange',
+            ProgramEventKind::OTHER => 'blue',
+        };
     }
 
     /**
@@ -76,14 +63,14 @@ class ProgramEvent extends Component
     {
         $small = $this->span_row < 1; // If the event is smaller than one cell
 
-        switch ($this->event->kind) {
-            case ProgramEventKind::OTHER:
-                return view('components.programs.event-other', ['small' => $small]);
-            case ProgramEventKind::PROJECTION:
-                return view('components.programs.event-projection', ['small' => $small]);
-            case ProgramEventKind::INTERVENTION:
-                return view('components.programs.event-intervention', ['small' => $small]);
-        }
-        return view('components.programs.base-event');
+        // switch ($this->event->kind) {
+        //     case ProgramEventKind::OTHER:
+        //         return view('components.programs.event-other', ['small' => $small]);
+        //     case ProgramEventKind::PROJECTION:
+        //         return view('components.programs.event-projection', ['small' => $small]);
+        //     case ProgramEventKind::INTERVENTION:
+        //         return view('components.programs.event-intervention', ['small' => $small]);
+        // }
+        return view('components.programs.event', ['small' => $small]);
     }
 }

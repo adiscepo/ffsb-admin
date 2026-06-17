@@ -207,11 +207,11 @@ class DatabaseSeeder extends Seeder
 
         ProgramEvent::factory(1)->create([
             'start' => date_create('2024-03-18 18:00:00'),
-            'duration' => 30,
             'kind' => ProgramEventKind::OTHER,
             'payload' => [
-                'title' => 'Inauguration',
-                'description' => "Nous vous convions à la soirée d'inauguration du Festival du Film Scientifique de Bruxelles et du Printemps des Sciences 2024 ! La soirée commencera à 18h30 et un drink et fingerfoods vous y sera offert."
+                'name' => 'Inauguration',
+                'description' => "Nous vous convions à la soirée d'inauguration du Festival du Film Scientifique de Bruxelles et du Printemps des Sciences 2024 ! La soirée commencera à 18h30 et un drink et fingerfoods vous y sera offert.",
+                'duration' => 30,
             ],
             'program_id' => $program->first()->id,
         ]);
