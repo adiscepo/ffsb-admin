@@ -68,6 +68,13 @@ new class extends Component {
             </div>
         @endfor
     </div>
+    <flux:callout color="zinc" class="mt-2">
+        <flux:callout.heading icon="exclamation-triangle">Chevauchement d'évènements</flux:callout.heading>
+        <flux:callout.text>Lorsqu'un évènement est ajouté, il y a une verification simpliste permettant de savoir si
+            l'évènement n'est pas ajouté au dessus d'un autre. Cette vérification n'a pas lieu si la durée d'évènement
+            est modifiée après avoir été ajoutée (par exemple si la durée d'un docu est modifée, elle pourrait
+            chevaucher un autre évènement dans le programme.)</flux:callout.text>
+    </flux:callout>
     <flux:modal wire:model.live='selected_datetim' name="create-event" position="bottom"
         class="max-sm:w-full overflow-visible">
         <livewire:programs.create-program-event :program="$program" :selected_datetime="$selected_datetime" />

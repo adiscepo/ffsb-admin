@@ -1,23 +1,9 @@
-@use('function App\Helpers\HumanTiming\to_human')
+@use('App\Domains\Programs\Enum\ProgramEventKind')
 
-<x-programs.base-event :start_row="$start_row" :span_row="$span_row">
-    @if ($small)
-        <div class="relative flex items-center gap-x-2 h-full p-1">
-            <div class="h-full w-1 bg-blue-300 rounded-full"></div>
-            <span
-                class="font-bold text-sm text-zinc-700 whitespace-nowrap text-ellipsis overflow-hidden w-full">{{ $title }}</span>
-            <span class="font-light text-xs ml-auto text-zinc-700">{{ to_human($duration) }}</span>
-        </div>
-    @else
-        <div class="relative flex items-center gap-x-2 h-full p-1">
-            <div class="h-full w-1 bg-blue-300 rounded-full"></div>
-            <div class="h-full w-full flex flex-col">
-                <div class="w-full flex justify-around">
-                    <span class="font-bold text-sm text-zinc-700">{{ $title }}</span>
-                    <span class="font-light text-xs text-zinc-700 ml-auto">{{ to_human($duration) }}</span>
-                </div>
-                <span class="font-light text-xs text-zinc-400">Autre</span>
-            </div>
-        </div>
-    @endif
-</x-programs.base-event>
+<flux:modal :name="'event-' . $event->id">
+    <span>{{ $title }}</span>
+</flux:modal>
+<flux:modal.trigger :name="'event-' . $event->id">
+    <x-programs.base-event :$start_row :$span_row :$title :$duration color="blue" :$small :type="ProgramEventKind::OTHER->label()" :$from_to>
+    </x-programs.base-event>
+</flux:modal.trigger>

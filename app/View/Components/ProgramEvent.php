@@ -22,6 +22,7 @@ class ProgramEvent extends Component
     public ProgramsProgramEvent $event;
     public string $title;
     public string $duration;
+    public string $from_to; // eg. 18h à 19h
 
     public float $span_row;
     public float $start_row;
@@ -35,7 +36,7 @@ class ProgramEvent extends Component
     public function __construct(ProgramsProgramEvent $event)
     {
         $this->event = $event;
-
+        $this->from_to = $event->getPeriod()->getStartDate()->format('H:i') . " à " . $event->getPeriod()->getEndDate()->format('H:i');
         switch ($event->kind) {
             case ProgramEventKind::OTHER:
                 $this->title = $event->payload['name'];
