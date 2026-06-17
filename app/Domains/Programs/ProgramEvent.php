@@ -44,31 +44,25 @@ class ProgramEvent extends Model
     /**
      * Get the event's title.
      */
-    // protected function title(): Attribute
-    // {
-    //     return Attribute::make(
-    //         get: function ($value) {
-    //             switch ($this->kind) {
-    //                 case ProgramEventKind::OTHER:
-    //                 case ProgramEventKind::INTERVENTION:
-    //                     return $this->payload['name'];
-    //                 case ProgramEventKind::PROJECTION:
-    //                     $docu = Docu::findOrFail($this->payload['docu_id']);
-    //                     return $docu->title;
-    //             }
-    //         },
-    //     );
-    // }
-
-    /**
-     * Get the event's title.
-     */
     protected function name(): Attribute
     {
         return Attribute::make(
             get: fn() => match ($this->getAttribute('kind')) {
                 ProgramEventKind::PROJECTION => Docu::findOrFail($this->getAttribute('payload')['docu_id'])->title,
                 default => $this->getAttribute('payload')['name'],
+            }
+        );
+    }
+
+    /**
+     * Get the event's title.
+     */
+    protected function description(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => match ($this->getAttribute('kind')) {
+                ProgramEventKind::PROJECTION => Docu::findOrFail($this->getAttribute('payload')['docu_id'])->comment,
+                default => $this->getAttribute('payload')['description'] ?? null,
             }
         );
     }
@@ -97,13 +91,6 @@ class ProgramEvent extends Model
             get: fn() =>  $this->getPeriod()->getStartDate()->format('H:i') . " à " . $this->getPeriod()->getEndDate()->format('H:i'),
         );
     }
-
-    // #[Override]
-    // public function __construct()
-    // {
-    //     parent::__construct();
-    //     $this->from_to = $this->getPeriod()->getStartDate()->format('H:i') . " à " . $this->getPeriod()->getEndDate()->format('H:i');
-    // }
 
     public function program(): BelongsTo
     {

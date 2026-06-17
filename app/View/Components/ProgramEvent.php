@@ -62,15 +62,6 @@ class ProgramEvent extends Component
     public function render(): View|Closure|string
     {
         $small = $this->span_row < 1; // If the event is smaller than one cell
-
-        // switch ($this->event->kind) {
-        //     case ProgramEventKind::OTHER:
-        //         return view('components.programs.event-other', ['small' => $small]);
-        //     case ProgramEventKind::PROJECTION:
-        //         return view('components.programs.event-projection', ['small' => $small]);
-        //     case ProgramEventKind::INTERVENTION:
-        //         return view('components.programs.event-intervention', ['small' => $small]);
-        // }
         return view('components.programs.event', ['small' => $small]);
     }
 }
