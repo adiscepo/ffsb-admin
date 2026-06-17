@@ -2,10 +2,11 @@
 
 namespace App\Helpers\HumanTiming;
 
-function to_human(int $time, bool $small_format = true, bool $no_seconds = true)
+function to_human(int $time_in_minutes, bool $small_format = true, bool $no_seconds = true): string
 {
-    $time = $time * 60;
-    // $time = $time < 1 ? 1 : $time;
+    // Convert minutes to seconds
+    $time = $time_in_minutes * 60;
+
     $tokens = [
         31536000 => 'an',
         2592000 => 'mois',
@@ -15,6 +16,7 @@ function to_human(int $time, bool $small_format = true, bool $no_seconds = true)
         60 => 'minute',
         1 => 'seconde',
     ];
+
     if ($small_format) {
         $tokens = [
             31536000 => 'an',
@@ -26,26 +28,27 @@ function to_human(int $time, bool $small_format = true, bool $no_seconds = true)
             1 => 'sec',
         ];
     }
-    $i = 0;
+
     $units = [];
     foreach ($tokens as $unit => $text) {
-        if ($time < $unit or $i == 2 or ($unit == 1 and $no_seconds)) {
+        if ($time == 0) break;
+
+        // Skip if time is less than unit or if we don't want seconds
+        if ($time < $unit || ($unit == 1 && $no_seconds)) {
             continue;
         }
-        $numberOfUnits = floor($time / $unit);
-        if ($i == 0) {
-            array_push(
-                $units,
-                $numberOfUnits.''.$text.(($text != 'mois' and ! $small_format) ? ($numberOfUnits > 1 ? 's' : '') : '')
-            );
-        }else {
-            array_push(
-                $units,
-                $numberOfUnits
-            );
+
+        $numberOfUnits = intdiv($time, $unit);
+
+        $unitString = $numberOfUnits;
+        if (!$small_format && $text !== 'mois') {
+            $unitString .= $text . ($numberOfUnits > 1 ? 's' : '');
+        } else {
+            $unitString .= $text;
         }
-        $time = $time - $unit;
-        $i += 1;
+
+        $units[] = $unitString;
+        $time %= $unit;
     }
 
     return implode('', $units);

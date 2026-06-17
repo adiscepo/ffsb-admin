@@ -57,7 +57,8 @@ new class extends Component {
                         <div
                             class="h-[var(--program-row-height)] hover:bg-zinc-100 bg-zinc-50 cursor-pointer border-[0.1pt]">
                             @if ($day == 0)
-                                <span class="md:ml-[-25pt] text-sm text-zinc-500">{{ $i }}h</span>
+                                <span
+                                    class="md:ml-[-25pt] md:block md:mt-[-10pt] text-sm text-zinc-500">{{ $i }}h</span>
                             @endif
                         </div>
                     </flux:modal.trigger>
@@ -73,7 +74,8 @@ new class extends Component {
         <flux:callout.text>Lorsqu'un évènement est ajouté, il y a une verification simpliste permettant de savoir si
             l'évènement n'est pas ajouté au dessus d'un autre. Cette vérification n'a pas lieu si la durée d'évènement
             est modifiée après avoir été ajoutée (par exemple si la durée d'un docu est modifée, elle pourrait
-            chevaucher un autre évènement dans le programme.)</flux:callout.text>
+            chevaucher un autre évènement dans le programme.).<br /> Les évènements se chevauchant sont entourés en
+            rouge.</flux:callout.text>
     </flux:callout>
     <flux:modal wire:model.live='selected_datetim' name="create-event" position="bottom"
         class="max-sm:w-full overflow-visible">

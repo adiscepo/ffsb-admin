@@ -8,6 +8,7 @@
     'color' => 'violet',
     'small' => false,
     'from_to',
+    'categories' => null,
 ])
 
 <div {{ $attributes->only('class')->merge(['class' => 'program-event bg-white border-[0.1pt] border-box border-zinc-200 w-full']) }}

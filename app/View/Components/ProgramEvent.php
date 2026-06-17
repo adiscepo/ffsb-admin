@@ -23,6 +23,7 @@ class ProgramEvent extends Component
     public string $title;
     public string $duration;
     public string $from_to; // eg. 18h à 19h
+    public ?array $categories = null;
 
     public float $span_row;
     public float $start_row;
@@ -46,6 +47,13 @@ class ProgramEvent extends Component
                 $docu = Docu::findOrFail($event->payload['docu_id']);
                 $this->title = $docu->title;
                 $this->duration = $docu->duration;
+                $this->categories = [];
+                foreach ($docu->fields as $value) {
+                    array_push($this->categories, [
+                        'name' => $value->field,
+                        'color' => $value->color,
+                    ]);
+                }
                 break;
             case ProgramEventKind::INTERVENTION:
                 $this->title = $event->payload['name'];
