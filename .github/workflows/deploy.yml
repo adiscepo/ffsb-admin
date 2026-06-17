@@ -22,6 +22,7 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.DEPLOY_SERVER_USER }}@${{ secrets.DEPLOY_SERVER_IP }} "
             cd /var/www/${{ secrets.DEPLOY_SERVER_DIR }} &&
+            php artisan down
             git reset --hard HEAD && git clean -df &&
             git pull origin main &&
             cp .env.production .env
@@ -32,4 +33,5 @@ jobs:
             php artisan optimize:clear &&
             php artisan config:cache &&
             php artisan route:cache
+            php artisan up
           "
