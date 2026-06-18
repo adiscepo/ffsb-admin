@@ -37,14 +37,14 @@ new class extends Component {
 
 <div class="px-10 overflow-y-scroll">
     <div class="mb-4"></div>
-    <div class="flex items-center justify-between gap-4 peer">
+    <div class="flex items-center justify-between gap-4 peer sticky left-0">
         <div class="flex flex-col gap-y-0.5">
             <span class="text text-zinc-900 dark:text-zinc-100">{{ $program->name }}</span>
             <span class="text-xs text-zinc-400">Créé par {{ $program->author->name }}</span>
         </div>
-        <div class="flex gap-x-2 text-sm text-zinc-700 dark:text-zinc-300">
+        <div class="flex gap-x-2 max-sm:items-center md:text-sm text-zinc-700 dark:text-zinc-300">
             @foreach (ProgramEventKind::cases() as $kind)
-                <div>
+                <div class="max-sm:flex max-sm:items-center max-sm:flex-col max-sm:gap-y-1">
                     <span>{{ $kind->label() }}</span>
                     <flux:badge class="py-0.5!" color="{{ ProgramEvent::computeColor($kind) }}">
                         {{ $this->program->eventsOf($kind)->count() }}</flux:badge>
