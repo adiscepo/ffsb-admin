@@ -127,7 +127,6 @@ class ProgramEvent extends Model
             // Because the events are stored in db, eventsFor will return also
             // the current event
             if ($event->id == $this->id) continue;
-            error_log('Comparing ' . $this->start . ' with ' . $event->start);
             $program_event_period = $event->getPeriod();
             if ($event_period->overlaps($program_event_period)) {
                 return true;

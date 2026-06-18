@@ -39,20 +39,22 @@
                     </flux:sidebar.item>
                 @endif
             </flux:sidebar.group>
-            <flux:sidebar.group expandable="true" :heading="__('Trésorerie')" class="grid">
-                @if (Route::has('subsides'))
-                    <flux:sidebar.item icon="building-office-2" :href="route('subsides')"
-                        :current="request()->routeIs('subsides')" wire:navigate>
-                        {{ __('Subsides') }}
-                    </flux:sidebar.item>
-                @endif
-                @if (Route::has('expenses'))
-                    <flux:sidebar.item icon="banknotes" :href="route('expenses')"
-                        :current="request()->routeIs('expenses')" wire:navigate>
-                        {{ __('Dépenses') }}
-                    </flux:sidebar.item>
-                @endif
-            </flux:sidebar.group>
+            @if (Route::has('tresorery'))
+                <flux:sidebar.group expandable="true" :heading="__('Trésorerie')" class="grid">
+                    @if (Route::has('subsides'))
+                        <flux:sidebar.item icon="building-office-2" :href="route('subsides')"
+                            :current="request()->routeIs('subsides')" wire:navigate>
+                            {{ __('Subsides') }}
+                        </flux:sidebar.item>
+                    @endif
+                    @if (Route::has('expenses'))
+                        <flux:sidebar.item icon="banknotes" :href="route('expenses')"
+                            :current="request()->routeIs('expenses')" wire:navigate>
+                            {{ __('Dépenses') }}
+                        </flux:sidebar.item>
+                    @endif
+                </flux:sidebar.group>
+            @endif
         </flux:sidebar.nav>
 
         <flux:spacer />

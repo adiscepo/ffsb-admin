@@ -2,8 +2,12 @@
 @use('function App\Helpers\HumanTiming\to_human')
 @props(['event', 'start_row', 'span_row', 'color' => 'violet', 'small' => false, 'categories' => null])
 
+@php
+    $is_overlapping = $event->isOverlappingOtherEvent();
+@endphp
+
 <flux:modal.trigger :name="'event-' . $event->id">
-    <div {{ $attributes->only('class')->merge(['class' => 'program-event bg-white border-[0.1pt] border-box border-zinc-200 w-full ' . ($event->isOverlappingOtherEvent() ? 'border-red-500!' : '')]) }}
+    <div {{ $attributes->only('class')->merge(['class' => 'program-event bg-white border-[0.1pt] border-box border-zinc-200 w-full ' . ($is_overlapping ? 'border-red-500!' : '')]) }}
         style="
     --program-event-top: calc(var(--program-row-height) * {{ $start_row }});
     --program-event-height: calc(var(--program-row-height) * {{ $span_row }});
@@ -25,11 +29,16 @@
                     </div>
                     <span class="font-light text-xs text-zinc-400">{{ $event->from_to }}</span>
                 </div>
+                @if ($is_overlapping)
+                    <div class="bg-red-200 text-red-500 text-xs p-0.5 rounded-2xl absolute right-1 bottom-0.5">
+                        <flux:icon icon="exclamation-circle" class="size-3" />
+                    </div>
+                @endif
             </div>
         @endif
     </div>
 </flux:modal.trigger>
 
 <flux:modal :name="'event-' . $event->id">
-    <x-programs.event-infos :$event />
+    <livewire:programs.event-infos :$event />
 </flux:modal>
