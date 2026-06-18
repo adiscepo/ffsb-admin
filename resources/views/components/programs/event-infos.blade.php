@@ -33,6 +33,7 @@ new class extends Component {
     </div>
     <p class="text-sm text-zinc-500">{{ $event->description }}</p>
     <flux:button wire:click='delete' variant="primary" color="red" iconLeading="trash" class="w-fit self-end"
-        size="sm">Supprimer
+        size="sm">
+        Supprimer
     </flux:button>
 </div>

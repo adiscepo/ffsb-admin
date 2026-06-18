@@ -3,6 +3,8 @@
 use Livewire\Component;
 use App\Models\EditionYear;
 use App\Domains\Programs\Program;
+use App\View\Components\ProgramEvent;
+use App\Domains\Programs\Enum\ProgramEventKind;
 use Facades\App\Domains\Edition\Edition;
 use Illuminate\Support\Collection;
 
@@ -35,18 +37,29 @@ new class extends Component {
 
 <div class="px-10 overflow-y-scroll">
     <div class="mb-4"></div>
-    <div class="flex items-center gap-4 peer">
+    <div class="flex items-center justify-between gap-4 peer">
         <div class="flex flex-col gap-y-0.5">
-            <span class="text text-zinc-900">{{ $program->name }}</span>
+            <span class="text text-zinc-900 dark:text-zinc-100">{{ $program->name }}</span>
             <span class="text-xs text-zinc-400">Créé par {{ $program->author->name }}</span>
+        </div>
+        <div class="flex gap-x-2 text-sm text-zinc-700 dark:text-zinc-300">
+            @foreach (ProgramEventKind::cases() as $kind)
+                <div>
+                    <span>{{ $kind->label() }}</span>
+                    <flux:badge class="py-0.5!" color="{{ ProgramEvent::computeColor($kind) }}">
+                        {{ $this->program->eventsOf($kind)->count() }}</flux:badge>
+                </div>
+            @endforeach
         </div>
     </div>
     <div class="mb-4"></div>
 
-    <div class="grid grid-cols-{{ $number_days }} border rounded bg-zinc-300 max-md:w-[300%] max-md:overflow-x-scroll">
-        <div class="col-span-full border-b py-1 grid grid-cols-{{ $number_days }} justify-items-center bg-zinc-100">
+    <div
+        class="grid grid-cols-{{ $number_days }} border rounded bg-zinc-300 dark:bg-zinc-700 max-md:w-[300%] max-md:overflow-x-scroll">
+        <div
+            class="col-span-full border-b py-1 grid grid-cols-{{ $number_days }} justify-items-center bg-zinc-100 dark:bg-zinc-700">
             @foreach ($program->interval_days() as $day)
-                <span class="text-zinc-600">{{ $day->isoFormat('LL') }}</span>
+                <span class="text-zinc-600 dark:text-zinc-400">{{ $day->isoFormat('LL') }}</span>
             @endforeach
         </div>
         @for ($day = 0; $day < $number_days; $day++)
@@ -55,7 +68,7 @@ new class extends Component {
                     <flux:modal.trigger wire:click='setDate({{ $day }}, {{ $i }})'
                         name="create-event">
                         <div
-                            class="h-[var(--program-row-height)] hover:bg-zinc-100 bg-zinc-50 cursor-pointer border-[0.1pt]">
+                            class="h-[var(--program-row-height)] hover:bg-zinc-100 dark:hover:bg-zinc-900 bg-zinc-50 dark:bg-zinc-700 cursor-pointer border-[0.1pt]">
                             @if ($day == 0)
                                 <span
                                     class="md:ml-[-25pt] md:block md:mt-[-10pt] text-sm text-zinc-500">{{ $i }}h</span>

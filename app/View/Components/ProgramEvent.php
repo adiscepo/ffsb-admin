@@ -38,22 +38,23 @@ class ProgramEvent extends Component
     {
         $this->event = $event;
         $this->computePosition();
-        $this->computeColor();
+        $this->color = ProgramEvent::computeColor($this->event->kind);
     }
+
+    static function computeColor(ProgramEventKind $kind): string
+    {
+        return match ($kind) {
+            ProgramEventKind::PROJECTION => 'violet',
+            ProgramEventKind::INTERVENTION => 'orange',
+            ProgramEventKind::OTHER => 'blue',
+        };
+    }
+
 
     protected function computePosition()
     {
         $this->span_row = $this->event->duration / $this->unit_time;
         $this->start_row = $this->event->getStartInMinutes() / $this->unit_time - ($this->offset / $this->unit_time);
-    }
-
-    protected function computeColor()
-    {
-        $this->color = match ($this->event->kind) {
-            ProgramEventKind::PROJECTION => 'violet',
-            ProgramEventKind::INTERVENTION => 'orange',
-            ProgramEventKind::OTHER => 'blue',
-        };
     }
 
     /**

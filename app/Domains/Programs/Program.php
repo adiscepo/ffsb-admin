@@ -3,6 +3,7 @@
 namespace App\Domains\Programs;
 
 use App\Domains\Events\Traits\Eventable;
+use App\Domains\Programs\Enum\ProgramEventKind;
 use App\Domains\Programs\Factory\ProgramFactory;
 use App\Models\EditionYear;
 use App\Models\Status;
@@ -78,6 +79,11 @@ class Program extends Model
         $endOfDay = Carbon::parse($date)->endOfDay();
 
         return ProgramEvent::whereBetween('start', [$startOfDay, $endOfDay])->get();
+    }
+
+    public function eventsOf(ProgramEventKind $kind)
+    {
+        return $this->program_events->where('kind', $kind);
     }
 
     protected static function newFactory(): ProgramFactory
