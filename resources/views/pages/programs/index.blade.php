@@ -8,7 +8,6 @@ use Facades\App\Domains\Edition\Edition;
 use Illuminate\Support\Collection;
 
 new class extends Component {
-    public int $edition_year;
     public int $edition_year_id;
     public Collection $programs;
 
@@ -18,14 +17,16 @@ new class extends Component {
             $edition = EditionYear::where('year', $year)->first();
             if (isset($edition)) {
                 $this->edition_year_id = $edition->id;
-                $this->edition_year = $edition->year;
             }
         }
         if (!isset($this->edition_year)) {
             $this->edition_year_id = Edition::currentEdition()->id;
-            $this->edition_year = Edition::currentEdition()->year;
         }
-        $this->programs = Program::where('edition_year_id', $this->edition_year_id)->get();
+    }
+
+    public function getProgram()
+    {
+        return Program::where('edition_year_id', $this->edition_year_id)->get();
     }
 
     public function redirectProgram(int $id)
@@ -34,11 +35,6 @@ new class extends Component {
     }
 };
 ?>
-
-{{-- @include('partials.heading', [
-    'route' => 'Programmes',
-    'bold' => 0,
-]) --}}
 
 @component('partials.heading', ['route' => 'Documentaires', 'bold' => 1])
     <flux:modal name="create-program" class="max-w-1/5 md:max-w-1/10 overflow-visible">
@@ -56,19 +52,27 @@ new class extends Component {
 
 <div class="px-10 overflow-y-scroll">
     <div class="mb-4"></div>
-    <div class="flex items-center gap-4 peer">
-        <div class="flex flex-col">
-            <span class="text text-zinc-900">Liste des programmes pour l'édition {{ $this->edition_year }}</span>
-            {{-- <span class="text-xs text-zinc-400">{{ }}</span> --}}
+    <div class="flex items-center justify-between gap-4 peer">
+        <div class="flex gap-x-1.5 items-center">
+            <span class="text-zinc-900 dark:text-zinc-100 w-fit whitespace-nowrap">Liste des programmes pour l'édition
+            </span>
+            <flux:select class="" size="sm" wire:model.live='edition_year_id'>
+                @foreach (EditionYear::orderBy('year', 'asc')->get() as $edition_year)
+                    <flux:select.option value="{{ $edition_year->id }}">{{ $edition_year->year }}
+                    </flux:select.option>
+                @endforeach
+            </flux:select>
         </div>
+
+
     </div>
     <div class="mb-4"></div>
     <ul class="grid md:grid-cols-3 gap-2">
-        @foreach ($programs as $program)
-            <div class="flex flex-col p-1.5 border border-zinc-200 bg-zinc-50 rounded hover:bg-zinc-100 cursor-pointer"
+        @foreach ($this->getProgram() as $program)
+            <div class="flex flex-col p-1.5 border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-700 rounded hover:bg-zinc-100 dark:hover:bg-zinc-600 cursor-pointer"
                 wire:click='redirectProgram({{ $program->id }})'>
                 <a>{{ $program->name }}</a>
-                <span class="text-xs text-zinc-500">Créé par {{ $program->author->name }}</span>
+                <span class="text-xs text-zinc-500 dark:text-zinc-300">Créé par {{ $program->author->name }}</span>
                 <div class="mb-2"></div>
                 <div class="flex gap-x-3 text-xs">
                     @foreach (ProgramEventKind::cases() as $kind)
