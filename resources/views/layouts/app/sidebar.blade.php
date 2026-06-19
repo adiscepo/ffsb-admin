@@ -19,7 +19,7 @@
                 wire:navigate>
                 {{ __('Tableau de bord') }}
             </flux:sidebar.item>
-            <flux:sidebar.group expandable="true" :heading="__('Programme')" class="grid">
+            <flux:sidebar.group :heading="__('Programme')" class="grid">
                 @if (Route::has('docus'))
                     <flux:sidebar.item icon="film" :href="route('docus')" :current="request()->routeIs('docus')"
                         wire:navigate>
