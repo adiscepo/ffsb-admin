@@ -217,6 +217,9 @@ new class extends Component {
                             <flux:label>Catégorie</flux:label>
                             <livewire:pill-box name="fields" :event_name="'update-datas-fields'" :datas="$db_fields" :data_key="'field'" />
                         </flux:field>
+                        <flux:modal name="create-field" class="w-1/10">
+                            <livewire:field.create />
+                        </flux:modal>
                         <flux:modal.trigger name="create-field">
                             <flux:button class="cursor-pointer" icon="plus" />
                         </flux:modal.trigger>
@@ -267,5 +270,4 @@ new class extends Component {
         </form>
     </flux:modal>
     <livewire:house-prod.create />
-    <livewire:field.create />
 </div>

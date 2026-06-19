@@ -14,7 +14,7 @@ new class extends Component {
         $this->color = $color;
     }
 
-    public function rules()
+    protected function rules()
     {
         return [
             'field' => 'string|required|unique:fields,field',
@@ -22,9 +22,19 @@ new class extends Component {
         ];
     }
 
+    protected function messages()
+    {
+        return [
+            'field.unique' => 'Cette catégorie existe déjà.',
+            'content.min' => 'The :attribute is too short.',
+        ];
+    }
+
     public function save()
     {
+        $this->field = capitalize($this->field);
         $validated = $this->validate($this->rules());
+        dd($validated);
         Field::create($validated);
         $this->reset();
         $this->dispatch('new-field');
@@ -33,37 +43,34 @@ new class extends Component {
     }
 };
 ?>
-<div x-data="{ color: null }">
-    <flux:modal name="create-field" class="max-w-1/5 md:max-w-1/10">
-        <div class="space-y-2">
-            <flux:heading size="lg">
-                Ajouter une catégorie
-            </flux:heading>
+<div x-data="{ color: null }" class="">
+    <div class="space-y-2">
+        <flux:heading size="lg">
+            Ajouter une catégorie
+        </flux:heading>
+    </div>
+
+    <form wire:submit.prevent="save" class="space-y-4 mt-4">
+        <flux:input label="Nom" placeholder="Archéologie" wire:model.live="field" />
+
+        <div class="flex flex-wrap place-items-center gap-5 my-5">
+            @foreach ($this->colors as $color)
+                <div class="w-5 h-5 rounded {{ 'bg-' . $color }}-500 cursor-pointer hover:shadow-inner"
+                    wire:click='this.color = color' @click="color = '{{ $color }}'; $wire.setColor(color)">
+                </div>
+            @endforeach
         </div>
-
-        <form wire:submit.prevent="save" class="space-y-4 mt-4">
-            <flux:input label="Nom" placeholder="Archéologie" wire:model.live="field" />
-
-            <div class="flex flex-wrap place-items-center gap-5">
+        <div class="flex justify-center items-center">
+            @if (!empty($this->field))
                 @foreach ($this->colors as $color)
-                    <div class="w-5 h-5 rounded {{ 'bg-' . $color }}-500 cursor-pointer hover:shadow-inner"
-                        wire:click='this.color = color' @click="color = '{{ $color }}'; $wire.setColor(color)">
-                    </div>
+                    <flux:badge x-show="color == '{{ $color }}'" wire:model='field' color='{{ $color }}'>
+                        <span>{{ $this->field }}</span>
+                    </flux:badge>
                 @endforeach
-            </div>
-            <div class="flex justify-center items-center">
-                @if (!empty($this->field))
-                    @foreach ($this->colors as $color)
-                        <flux:badge x-show="color == '{{ $color }}'" wire:model='field'
-                            color='{{ $color }}'>
-                            <span>{{ $this->field }}</span>
-                        </flux:badge>
-                    @endforeach
-                @endif
-            </div>
-            <flux:button class="w-full cursor-pointer" variant="primary" type="submit" color="green">
-                Ajouter
-            </flux:button>
-        </form>
-    </flux:modal>
+            @endif
+        </div>
+        <flux:button class="w-full cursor-pointer" variant="primary" type="submit" color="green">
+            Ajouter
+        </flux:button>
+    </form>
 </div>
