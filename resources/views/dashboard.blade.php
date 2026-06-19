@@ -4,8 +4,7 @@
             <div class="relative rounded-xl border border-neutral-200 dark:border-neutral-700">
                 <livewire:widget.last-added-docu />
             </div>
-            <div
-                class="relative aspect-video overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700">
+            <div class="relative rounded-xl border border-neutral-200 dark:border-neutral-700">
                 <livewire:widget.random-unevaluated />
             </div>
             <div
