@@ -3,6 +3,7 @@
 use Livewire\Component;
 use App\Models\EditionYear;
 use App\Domains\Programs\Program;
+use App\Domains\Programs\Enum\ProgramEventKind;
 use Facades\App\Domains\Edition\Edition;
 use Illuminate\Support\Collection;
 
@@ -25,6 +26,11 @@ new class extends Component {
             $this->edition_year = Edition::currentEdition()->year;
         }
         $this->programs = Program::where('edition_year_id', $this->edition_year_id)->get();
+    }
+
+    public function redirectProgram(int $id)
+    {
+        $this->redirect('/program/' . $id, navigate: true);
     }
 };
 ?>
@@ -57,11 +63,18 @@ new class extends Component {
         </div>
     </div>
     <div class="mb-4"></div>
-    <ul class="flex flex-col">
-        @foreach ($programs as $id => $program)
-            <div class="list-disc list-item ">
-                <a href="/program/{{ $program->id }}">{{ $program->name }}</a>
-                <span class="text-sm text-zinc-500">Créé par {{ $program->author->name }}</span>
+    <ul class="grid md:grid-cols-3 gap-2">
+        @foreach ($programs as $program)
+            <div class="flex flex-col p-1.5 border border-zinc-200 bg-zinc-50 rounded hover:bg-zinc-100 cursor-pointer"
+                wire:click='redirectProgram({{ $program->id }})'>
+                <a>{{ $program->name }}</a>
+                <span class="text-xs text-zinc-500">Créé par {{ $program->author->name }}</span>
+                <div class="mb-2"></div>
+                <div class="flex gap-x-3 text-xs">
+                    @foreach (ProgramEventKind::cases() as $kind)
+                        <x-programs.number-event :kind="$kind" :program="$program" />
+                    @endforeach
+                </div>
             </div>
         @endforeach
     </ul>

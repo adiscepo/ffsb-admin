@@ -44,11 +44,7 @@ new class extends Component {
         </div>
         <div class="flex gap-x-2 max-sm:items-center md:text-sm text-zinc-700 dark:text-zinc-300">
             @foreach (ProgramEventKind::cases() as $kind)
-                <div class="max-sm:flex max-sm:items-center max-sm:flex-col max-sm:gap-y-1">
-                    <span>{{ $kind->label() }}</span>
-                    <flux:badge class="py-0.5!" color="{{ ProgramEvent::computeColor($kind) }}">
-                        {{ $this->program->eventsOf($kind)->count() }}</flux:badge>
-                </div>
+                <x-programs.number-event :kind="$kind" :program="$program" />
             @endforeach
         </div>
     </div>

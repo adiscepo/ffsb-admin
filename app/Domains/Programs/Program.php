@@ -78,7 +78,7 @@ class Program extends Model
         $startOfDay = Carbon::parse($date)->startOfDay();
         $endOfDay = Carbon::parse($date)->endOfDay();
 
-        return ProgramEvent::whereBetween('start', [$startOfDay, $endOfDay])->get();
+        return ProgramEvent::whereBetween('start', [$startOfDay, $endOfDay])->where('program_id', $this->id)->get();
     }
 
     public function eventsOf(ProgramEventKind $kind)
