@@ -3,6 +3,8 @@
 use Livewire\Component;
 use App\Models\EditionYear;
 use App\Domains\Programs\Program;
+use App\Domains\Programs\ProgramEvent as Event;
+use App\Domains\Programs\Actions\MoveProgramEvent;
 use App\View\Components\ProgramEvent;
 use App\Domains\Programs\Enum\ProgramEventKind;
 use Facades\App\Domains\Edition\Edition;
@@ -23,8 +25,19 @@ new class extends Component {
 
     public function setDate($day, $hour)
     {
-        $this->selected_datetime = $this->program->interval_days()->toArray()[$day]->format('Y-m-d') . ' ' . $hour . ':00:00';
+        $this->selected_datetime = $this->formatDatetime($day, $hour);
         $this->dispatch('select-datetime', data: $this->selected_datetime);
+    }
+
+    public function formatDatetime($day, $hour): string
+    {
+        return $this->program->interval_days()->toArray()[$day]->format('Y-m-d') . ' ' . $hour . ':00:00';
+    }
+
+    public function moveEvent(MoveProgramEvent $move, int $event_id, int $day, int $hour)
+    {
+        $move->execute(Auth::user(), Event::findOrFail($event_id), $this->formatDatetime($day, $hour));
+        $this->redirect('/program/' . $this->program->id, navigate: true);
     }
 };
 ?>
@@ -60,20 +73,29 @@ new class extends Component {
         </div>
         @for ($day = 0; $day < $number_days; $day++)
             <div class="flex flex-col relative box-border">
-                @for ($i = 7; $i < 24; $i++)
-                    <flux:modal.trigger wire:click='setDate({{ $day }}, {{ $i }})'
+                @for ($hour = 7; $hour < 24; $hour++)
+                    <flux:modal.trigger wire:click='setDate({{ $day }}, {{ $hour }})'
                         name="create-event">
-                        <div
-                            class="h-[var(--program-row-height)] hover:bg-zinc-100 dark:hover:bg-zinc-900 bg-zinc-50 dark:bg-zinc-700 cursor-pointer border-[0.1pt]">
+                        <div class="program-zone" x-on:dragover.prevent="onDragenter($event)"
+                            x-on:drop.prevent="onDrop($event)" x-on:dragleave="onDragleave($event)"
+                            x-data="dropzone({
+                                _this: @this,
+                                day: @js($day),
+                                hour: @js($hour),
+                            })">
                             @if ($day == 0)
                                 <span
-                                    class="md:ml-[-25pt] md:block md:mt-[-10pt] text-sm text-zinc-500">{{ $i }}h</span>
+                                    class="md:ml-[-25pt] md:block md:mt-[-10pt] text-sm text-zinc-500">{{ $hour }}h</span>
                             @endif
                         </div>
                     </flux:modal.trigger>
                 @endfor
                 @foreach ($events[$day] as $event)
-                    <x-program-event draggable="true" :event="$event" />
+                    <div draggable="true"
+                        x-on:dragstart="(e) => {e.dataTransfer.setData('event-id', {{ $event->id }})}"
+                        :key="$day.$hour">
+                        <x-program-event :event="$event" />
+                    </div>
                 @endforeach
             </div>
         @endfor
@@ -86,8 +108,39 @@ new class extends Component {
             chevaucher un autre évènement dans le programme.).<br /> Les évènements se chevauchant sont entourés en
             rouge.</flux:callout.text>
     </flux:callout>
-    <flux:modal wire:model.live='selected_datetim' name="create-event" position="bottom"
+    <flux:modal wire:model.live='selected_datetime' name="create-event" position="bottom"
         class="max-sm:w-full overflow-visible">
         <livewire:programs.create-program-event :program="$program" :selected_datetime="$selected_datetime" />
     </flux:modal>
 </div>
+@script
+    <script>
+        Alpine.data('dropzone', ({
+            _this,
+            day,
+            hour
+        }) => {
+
+            return ({
+                isDragging: false,
+                isDropped: false,
+                isLoading: false,
+
+                onDrop(e) {
+                    this.isDropped = true
+                    moved_event = e.dataTransfer.getData('event-id');
+                    this.$el.removeAttribute('data-dragging');
+                    $wire.moveEvent(moved_event, day, hour);
+                },
+                onDragenter(event) {
+                    this.isDragging = true
+                    this.$el.setAttribute('data-dragging', '');
+                },
+                onDragleave() {
+                    this.isDragging = false
+                    this.$el.removeAttribute('data-dragging');
+                }
+            });
+        })
+    </script>
+@endscript

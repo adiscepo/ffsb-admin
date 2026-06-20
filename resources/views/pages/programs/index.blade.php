@@ -36,7 +36,7 @@ new class extends Component {
 };
 ?>
 
-@component('partials.heading', ['route' => 'Documentaires', 'bold' => 1])
+@component('partials.heading', ['route' => 'Programmes', 'bold' => 1])
     <flux:modal name="create-program" class="max-w-1/5 md:max-w-1/10 overflow-visible">
         <livewire:programs.create-program />
     </flux:modal>
@@ -67,13 +67,14 @@ new class extends Component {
 
     </div>
     <div class="mb-4"></div>
-    <ul class="grid md:grid-cols-3 gap-2">
+    <ul class="flex flex-wrap gap-2">
         @foreach ($this->getProgram() as $program)
-            <div class="flex flex-col p-1.5 border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-700 rounded hover:bg-zinc-100 dark:hover:bg-zinc-600 cursor-pointer"
+            <div class="p-3 border w-fit border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-700 rounded hover:bg-zinc-100 dark:hover:bg-zinc-600 cursor-pointer space-y-3"
                 wire:click='redirectProgram({{ $program->id }})'>
-                <a>{{ $program->name }}</a>
-                <span class="text-xs text-zinc-500 dark:text-zinc-300">Créé par {{ $program->author->name }}</span>
-                <div class="mb-2"></div>
+                <div class="flex flex-col">
+                    <a>{{ $program->name }}</a>
+                    <span class="text-xs text-zinc-500 dark:text-zinc-300">Créé par {{ $program->author->name }}</span>
+                </div>
                 <div class="flex gap-x-3 text-xs">
                     @foreach (ProgramEventKind::cases() as $kind)
                         <x-programs.number-event :kind="$kind" :program="$program" />
