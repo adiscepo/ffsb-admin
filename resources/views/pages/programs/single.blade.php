@@ -14,13 +14,15 @@ new class extends Component {
     public Program $program;
     public int $number_days;
     public $selected_datetime;
-    public Collection $events;
+    public $events;
+    public string $uuid = 'MLKJMLKJ';
 
     public function mount(int $id)
     {
         $this->program = Program::findOrFail($id);
         $this->number_days = $this->program->number_days();
-        $this->events = $this->program->getCalendar();
+        // $this->events = $this->program->getCalendar();
+        $this->events = $this->program->program_events;
     }
 
     public function setDate($day, $hour)
@@ -37,7 +39,8 @@ new class extends Component {
     public function moveEvent(MoveProgramEvent $move, int $event_id, int $day, int $hour)
     {
         $move->execute(Auth::user(), Event::findOrFail($event_id), $this->formatDatetime($day, $hour));
-        $this->redirect('/program/' . $this->program->id, navigate: true);
+        // $this->redirect('/program/' . $this->program->id, navigate: true);
+        $this->uuid = 'poiu';
     }
 };
 ?>
@@ -48,9 +51,9 @@ new class extends Component {
 ])
 
 
-<div class="px-10 overflow-y-scroll">
+<div class="md:flex md:flex-col md:items-center space-y-2 px-10 overflow-y-scroll">
     <div class="mb-4"></div>
-    <div class="flex items-center justify-between gap-4 peer sticky left-0">
+    <div class="flex items-center justify-between gap-4 peer sticky left-0 w-full">
         <div class="flex flex-col gap-y-0.5">
             <span class="text text-zinc-900 dark:text-zinc-100">{{ $program->name }}</span>
             <span class="text-xs text-zinc-400">Créé par {{ $program->author->name }}</span>
@@ -61,16 +64,17 @@ new class extends Component {
             @endforeach
         </div>
     </div>
-    <div class="mb-4"></div>
-
     <div
-        class="grid grid-cols-{{ $number_days }} border rounded bg-zinc-300 dark:bg-zinc-700 max-md:w-[300%] max-md:overflow-x-scroll">
+        class="grid grid-cols-[repeat({{ $number_days }},var(--program-row-width))] border rounded bg-zinc-300 dark:bg-zinc-700 w-fit max-md:overflow-x-scroll relative">
         <div
             class="col-span-full border-b py-1 grid grid-cols-{{ $number_days }} justify-items-center bg-zinc-100 dark:bg-zinc-700">
             @foreach ($program->interval_days() as $day)
                 <span class="text-zinc-600 dark:text-zinc-400">{{ $day->isoFormat('LL') }}</span>
             @endforeach
         </div>
+    </div>
+    <div
+        class="grid grid-cols-[repeat({{ $number_days }},var(--program-row-width))] border rounded bg-zinc-300 dark:bg-zinc-700 w-fit max-md:overflow-x-scroll relative">
         @for ($day = 0; $day < $number_days; $day++)
             <div class="flex flex-col relative box-border">
                 @for ($hour = 7; $hour < 24; $hour++)
@@ -90,17 +94,16 @@ new class extends Component {
                         </div>
                     </flux:modal.trigger>
                 @endfor
-                @foreach ($events[$day] as $event)
-                    <div draggable="true"
-                        x-on:dragstart="(e) => {e.dataTransfer.setData('event-id', {{ $event->id }})}"
-                        :key="$day.$hour">
-                        <x-program-event :event="$event" />
-                    </div>
-                @endforeach
             </div>
         @endfor
+        @foreach ($events as $event)
+            <div class="absolute" draggable="true"
+                x-on:dragstart="(e) => {e.dataTransfer.setData('event-id', {{ $event->id }})}">
+                <x-program-event :event="$event" />
+            </div>
+        @endforeach
     </div>
-    <flux:callout color="zinc" class="mt-2">
+    <flux:callout color="zinc" class="w-full">
         <flux:callout.heading icon="exclamation-triangle">Chevauchement d'évènements</flux:callout.heading>
         <flux:callout.text>Lorsqu'un évènement est ajouté, il y a une verification simpliste permettant de savoir si
             l'évènement n'est pas ajouté au dessus d'un autre. Cette vérification n'a pas lieu si la durée d'évènement

@@ -92,6 +92,11 @@ class ProgramEvent extends Model
         );
     }
 
+    public function relativeId()
+    {
+        return $this->program->start_date->diff($this->start)->days;
+    }
+
     public function program(): BelongsTo
     {
         return $this->belongsTo(Program::class);
