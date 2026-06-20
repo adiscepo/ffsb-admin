@@ -110,7 +110,7 @@ class ProgramEvent extends Model
 
     public function getHour()
     {
-        return CarbonImmutable::parse($this->start)->format('H:i:s');
+        return CarbonImmutable::parse($this->start)->format('H:i');
     }
 
     public function getPeriod(): CarbonPeriodImmutable
