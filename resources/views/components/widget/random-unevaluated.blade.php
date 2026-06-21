@@ -22,7 +22,7 @@ new class extends Component {
         $this->docu = $query
             ->whereRelation('edition_year', 'year', Edition::currentEdition()->year)
             ->orderBy('id', 'DESC')
-            ->get()
+            ->get()?
             ->random();
     }
 };
