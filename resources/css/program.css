@@ -2,7 +2,7 @@
 
 :root {
   --program-row-height: 40px;
-  --program-row-width: 200px;
+  --program-row-width: 225px;
 }
 
 @layer components {
@@ -16,9 +16,9 @@
 }
 
 .program-zone {
-    @apply h-[var(--program-row-height)] hover:bg-zinc-100  hover:bg-zinc-100 dark:hover:bg-zinc-900 bg-zinc-50 dark:bg-zinc-700 cursor-pointer border-[0.1pt];
+    @apply h-[var(--program-row-height)] hover:bg-zinc-50 dark:hover:bg-zinc-900 bg-white dark:bg-zinc-700 cursor-pointer border border-zinc-100;
 }
 
 .program-zone[data-dragging] {
-    @apply bg-zinc-200;
+    @apply bg-zinc-100;
 }

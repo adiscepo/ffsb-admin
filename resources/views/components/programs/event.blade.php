@@ -7,7 +7,7 @@
 @endphp
 
 <flux:modal.trigger :name="'event-' . $event->id">
-    <div {{ $attributes->only('class')->merge(['class' => 'program-event bg-white border-[0.1pt] border-box border-zinc-200 ' . ($is_overlapping ? 'border-red-500!' : '')]) }}
+    <div {{ $attributes->only('class')->merge(['class' => 'program-event bg-white border-[0.1pt] border-box border-zinc-200 cursor-pointer hover:scale-102 transition ' . ($is_overlapping ? 'border-red-500!' : '')]) }}
         style="
     --program-event-top: calc(var(--program-row-height) * {{ $start_row }});
     --program-event-height: calc(var(--program-row-height) * {{ $span_row }});
