@@ -10,7 +10,7 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-@source inline('{sm:,md:,lg:,xl:,}grid-cols-{{1..1000..200}}');
+@source inline('{sm:,md:,lg:,xl:,}grid-cols-{{1..20..1}}');
 @source inline('grid-cols-[repeat({1..40..1},var(--program-row-width))]');
 @source inline('{sm:,md:,lg:,xl:,}bg-{blue,violet,orange}-{50,{100..900..100}}');
 
