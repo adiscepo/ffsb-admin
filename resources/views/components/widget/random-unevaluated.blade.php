@@ -37,7 +37,7 @@ new class extends Component {
         <div class="flex justify-between">
             <h2 class="text-sm text-zinc-700 dark:text-zinc-200">Un docu non évalué au hasard</h2>
             @if (isset($docu))
-            <flux:icon wire:click='fetchDocu()' icon="arrow-path" class="size-6 p-1 hover:bg-zinc-100 rounded" />
+                <flux:icon wire:click='fetchDocu()' icon="arrow-path" class="size-6 p-1 hover:bg-zinc-100 rounded" />
             @endif
         </div>
         <div class="mb-1"></div>
@@ -63,12 +63,12 @@ new class extends Component {
                 <a href="/docu/{{ $docu->id }}" wire:navigate
                     class="flex gap-x-0.5 items-center text-xs text-zinc-500 dark:text-zinc-400 underline">Voir le
                     documentaire
-                    <flux:icon.chevron-right class="size-4" /></span></a>
+                    <flux:icon.chevron-right class="size-4" /></a>
             </div>
         @else
             <p class="text-sm text-zinc-500 dark:text-zinc-300 italic">
                 Tous les documentaires sont évalués ! 🎉
             </p>
+        @endif
     </div>
-    @endif
 </div>

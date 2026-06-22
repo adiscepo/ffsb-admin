@@ -41,7 +41,7 @@ new class extends Component {
                 <a href="/docu/{{ $docu->id }}" wire:navigate
                     class="flex gap-x-0.5 items-center text-xs text-zinc-500 dark:text-zinc-400 underline">Voir le
                     documentaire
-                    <flux:icon.chevron-right class="size-4" /></span></a>
+                    <flux:icon.chevron-right class="size-4" /></a>
             </div>
         @else
             <p class="text-sm text-zinc-500 dark:text-zinc-300 italic">Il n'y a encore aucun documentaire sur le site...
