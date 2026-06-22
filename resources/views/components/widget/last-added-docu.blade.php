@@ -16,10 +16,10 @@ new class extends Component {
 {{-- Need to check if the evaluation belongs to the connected user, if so the evaluation is in edit mode. Otherwise, the evaluation is readonly --}}
 
 <div class="py-5 relative h-full">
-    @if (isset($docu))
-        <div class="relative flex flex-col gap-y-2 px-5 overflow-hidden">
-            <h2 class="text-sm text-zinc-700 dark:text-zinc-200">Dernier documentaire ajouté</h2>
-            <div class="mb-1"></div>
+    <div class="relative flex flex-col gap-y-2 px-5 overflow-hidden">
+        <h2 class="text-sm text-zinc-700 dark:text-zinc-200">Dernier documentaire ajouté</h2>
+        <div class="mb-1"></div>
+        @if (isset($docu))
             <div class="flex items-center justify-center">
                 <p class="text-lg text-zinc-800 dark:text-zinc-100">{{ $docu->title }}</p>
             </div>
@@ -43,8 +43,9 @@ new class extends Component {
                     documentaire
                     <flux:icon.chevron-right class="size-4" /></span></a>
             </div>
-        </div>
-    @else
-        <p class="text-sm text-zinc-500 dark:text-zinc-300 italic">Il n'y a encore aucun documentaire sur le site...</p>
-    @endif
+        @else
+            <p class="text-sm text-zinc-500 dark:text-zinc-300 italic">Il n'y a encore aucun documentaire sur le site...
+            </p>
+        @endif
+    </div>
 </div>

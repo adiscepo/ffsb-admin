@@ -19,11 +19,15 @@ new class extends Component {
         $query = Docu::whereDoesntHave('evaluations', function (Builder $query) {
             $query->where('user_id', Auth::user()->id);
         });
-        $this->docu = $query
+        $unevaluated_docus = $query
             ->whereRelation('edition_year', 'year', Edition::currentEdition()->year)
             ->orderBy('id', 'DESC')
-            ?->get()
-            ->random();
+            ->get();
+        if ($unevaluated_docus->count() > 0) {
+            $this->docu = $unevaluated_docus->random();
+        } else {
+            $this->docu = null;
+        }
     }
 };
 ?>
@@ -32,7 +36,9 @@ new class extends Component {
     <div class="relative flex flex-col gap-y-2 px-5 overflow-hidden">
         <div class="flex justify-between">
             <h2 class="text-sm text-zinc-700 dark:text-zinc-200">Un docu non évalué au hasard</h2>
+            @if (isset($docu))
             <flux:icon wire:click='fetchDocu()' icon="arrow-path" class="size-6 p-1 hover:bg-zinc-100 rounded" />
+            @endif
         </div>
         <div class="mb-1"></div>
         @if (isset($docu))
@@ -59,10 +65,10 @@ new class extends Component {
                     documentaire
                     <flux:icon.chevron-right class="size-4" /></span></a>
             </div>
+        @else
+            <p class="text-sm text-zinc-500 dark:text-zinc-300 italic">
+                Tous les documentaires sont évalués ! 🎉
+            </p>
     </div>
-@else
-    <p class="text-sm text-zinc-500 dark:text-zinc-300 italic">
-        Tous les documentaires sont évalués ! 🎉
-    </p>
     @endif
 </div>
