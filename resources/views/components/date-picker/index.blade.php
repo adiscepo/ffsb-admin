@@ -45,15 +45,15 @@ new class extends Component {
         $this->max_date = $max_date;
         $this->selected_date = $selected_date;
         $current_date;
-        if ($this->selected_date) {
-            $current_date = CarbonImmutable::createFromFormat('d/m/Y', $min_date);
+        if ($selected_date) {
+            $current_date = CarbonImmutable::createFromFormat('d/m/Y', $selected_date);
         } else {
             $current_date = CarbonImmutable::createFromFormat('d/m/Y', $min_date);
         }
         $this->current_month = $current_date->month;
         $this->current_year = $current_date->year;
         $this->id = $id;
-        $this->getCurrentMonth($this->current_month, $this->current_year);
+        // $this->getCurrentMonth($this->current_month, $this->current_year);
     }
 
     public function getCurrentMonth($month, int $year)

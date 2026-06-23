@@ -2,7 +2,7 @@
 
 :root {
   --program-row-height: 40px;
-  --program-row-width: 225px;
+  --program-row-width: 210px;
 }
 
 @layer components {
