@@ -16,6 +16,7 @@ new class extends Component {
     protected $edit_mode = false;
     public array $evaluations;
     public string $comment;
+    public bool $draft;
 
     protected $listeners = [
         'changed_eval' => 'changeEvaluation',
@@ -34,6 +35,7 @@ new class extends Component {
         }
         $this->evaluations = $this->evaluation->getEvaluations();
         $this->comment = $this->evaluation->comment;
+        $this->draft = $this->evaluation->draft;
     }
 
     public function mount(Docu $docu, EvaluationCreate $create)
@@ -42,7 +44,7 @@ new class extends Component {
         // If the evaluation doesn't exists for the documentary for the
         // connected user, we create one
         if (Evaluation::where(['user_id' => Auth::user()->id, 'docu_id' => $docu->id])->count() == 0) {
-            $create->execute(Auth::user(), $this->docu);
+            $create->execute(Auth::user(), $this->docu, null, null, draft: true);
         }
         $this->hydrateValues(Auth::user()->id);
     }
@@ -52,16 +54,12 @@ new class extends Component {
         $this->hydrateValues($author_id);
     }
 
-    public function save(EvaluationCreate $create, EvaluationEdit $update)
+    public function save(EvaluationEdit $update)
     {
-        $data = [
-            'evaluations' => $this->evaluations,
-            'comment' => $this->comment,
-        ];
         if (!isset($this->evaluation)) {
-            $create->execute(Auth::user(), $this->docu, $data);
+            $update->execute(Auth::user(), $this->docu, $this->comment, null, $this->draft);
         } else {
-            $update->execute($this->evaluation, $data);
+            $update->execute(Auth::user(), $this->evaluation, $this->comment, $this->evaluations, $this->draft);
         }
         Flux::toast(variant: 'success', text: 'Evaluation sauvée', position: 'top end');
         $this->changeEvaluation(Auth::user()->id);
@@ -82,7 +80,12 @@ new class extends Component {
 
 <div class="border-r border-zinc-200 py-5">
     <div class="px-5">
-        <h2 class="text-lg text-zinc-700">Votre évaluation</h2>
+        <div class="flex gap-x-2">
+            <h2 class="text-lg text-zinc-700">Votre évaluation</h2>
+            @if ($evaluation->isDraft())
+                <flux:badge>Brouillon</flux:badge>
+            @endif
+        </div>
         <div class="mb-4"></div>
         <form wire:submit.prevent='save' class="flex flex-col gap-2">
             @foreach (EvaluationCriterion::all() as $criterion)
@@ -112,8 +115,16 @@ new class extends Component {
             <textarea name="" id="" cols="0" rows="2"
                 class="w-full h-full p-2 rounded border resize-none text-sm focus:outline-none dark:border-zinc-600 col-span-full"
                 placeholder="Commentaire général supplémentaire, notes, etc." wire:model='comment'></textarea>
-            <flux:button type='submit' class="self-end cursor-pointer" icon="pencil-square">Enregistrer
-            </flux:button>
+
+            <div class="flex gap-x-3 items-center justify-end">
+                <flux:field variant="inline">
+                    <flux:label>Brouillon</flux:label>
+                    <flux:switch wire:model.live="draft" />
+                    <flux:error name="draft" />
+                </flux:field>
+                <flux:button type='submit' class="self-end cursor-pointer" icon="pencil-square">Enregistrer
+                </flux:button>
+            </div>
         </form>
     </div>
 </div>

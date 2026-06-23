@@ -22,6 +22,7 @@ class EvaluationFactory extends Factory
     {
         return [
             'comment' => fake()->text(100),
+            'draft' => fake()->boolean(20),
         ];
     }
 }

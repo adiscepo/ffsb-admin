@@ -29,7 +29,9 @@ new class extends Component {
         @if ($docu->evaluations->count() > 0)
             <div class="grid grid-cols-1 gap-5 xl:grid-cols-2">
                 @foreach ($docu->evaluations as $evaluation)
-                    <livewire:evaluations.docu-evaluation-box :evaluation="$evaluation" />
+                    @if (!$evaluation->isDraft() || $evaluation->user_id == Auth::user()->id)
+                        <livewire:evaluations.docu-evaluation-box :evaluation="$evaluation" />
+                    @endif
                 @endforeach
                 @if ($docu->evaluations->where('user_id', Auth::user()->id)->count() == 0)
                     <livewire:evaluations.new-evaluation-box />

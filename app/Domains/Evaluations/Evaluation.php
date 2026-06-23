@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Domains\Docus\Docu;
 use App\Domains\Evaluations\EvaluationCriterion;
 use App\Domains\Evaluations\Factory\EvaluationFactory;
+use App\Domains\Events\Traits\Eventable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -15,9 +16,9 @@ use Illuminate\Support\Collection;
 class Evaluation extends Model
 {
     /** @use HasFactory<EvaluationFactory> */
-    use HasFactory;
+    use HasFactory, Eventable;
 
-    protected $fillable = ['user_id', 'docu_id', 'comment'];
+    protected $fillable = ['user_id', 'docu_id', 'comment', 'draft'];
 
     public function user(): BelongsTo
     {
@@ -32,6 +33,11 @@ class Evaluation extends Model
     public function fields(): HasMany
     {
         return $this->hasMany(EvaluationField::class);
+    }
+
+    public function isDraft(): bool
+    {
+        return $this->draft;
     }
 
     public function note(): int
