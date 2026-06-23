@@ -5,6 +5,7 @@ use App\Models\EditionYear;
 use App\Domains\Programs\Program;
 use App\Domains\Programs\ProgramEvent as Event;
 use App\Domains\Programs\Actions\MoveProgramEvent;
+use App\Domains\Programs\Actions\DeleteProgram;
 use App\View\Components\ProgramEvent;
 use App\Domains\Programs\Enum\ProgramEventKind;
 use Facades\App\Domains\Edition\Edition;
@@ -15,7 +16,6 @@ new class extends Component {
     public int $number_days;
     public $selected_datetime;
     public $events;
-    public string $uuid = 'MLKJMLKJ';
 
     public function mount(int $id)
     {
@@ -40,7 +40,12 @@ new class extends Component {
     {
         $move->execute(Auth::user(), Event::findOrFail($event_id), $this->formatDatetime($day, $hour));
         // $this->redirect('/program/' . $this->program->id, navigate: true);
-        $this->uuid = 'poiu';
+    }
+
+    public function delete(DeleteProgram $delete)
+    {
+        $delete->execute(Auth::user(), $this->program);
+        $this->redirect('/programs', navigate: true);
     }
 };
 ?>
@@ -51,21 +56,28 @@ new class extends Component {
 ])
 
 
-<div class="md:flex md:flex-col md:items-center space-y-2 px-10 overflow-y-scroll">
+<div class="md:flex md:flex-col md:items-start space-y-2 px-10 overflow-scroll">
     <div class="mb-4"></div>
     <div class="flex items-center justify-between gap-4 peer sticky left-0 w-full">
         <div class="flex flex-col gap-y-0.5">
             <span class="text text-zinc-900 dark:text-zinc-100">{{ $program->name }}</span>
             <span class="text-xs text-zinc-400">Créé par {{ $program->author->name }}</span>
         </div>
-        <div class="flex gap-x-2 max-sm:items-center md:text-sm text-zinc-700 dark:text-zinc-300">
-            @foreach (ProgramEventKind::cases() as $kind)
-                <x-programs.number-event :kind="$kind" :program="$program" />
-            @endforeach
+        <div class="flex items-center gap-x-5">
+            <div class="flex gap-x-2 max-sm:items-center md:text-sm text-zinc-700 dark:text-zinc-300">
+                @foreach (ProgramEventKind::cases() as $kind)
+                    <x-programs.number-event :kind="$kind" :program="$program" />
+                @endforeach
+            </div>
+            @if ($program->author == Auth::user())
+                <flux:button icon:variant="mini" iconLeading="trash" variant="primary" color="red" size="sm"
+                    wire:confirm='Êtes-vous sûr de vouloir supprimer ce programme ?' wire:click='delete()'>
+                </flux:button>
+            @endif
         </div>
     </div>
     <div
-        class="grid grid-cols-[repeat({{ $number_days }},var(--program-row-width))] border rounded bg-zinc-300 dark:bg-zinc-700 w-fit max-md:overflow-x-scroll relative">
+        class="grid grid-cols-[repeat({{ $number_days }},var(--program-row-width))] border rounded bg-zinc-300 dark:bg-zinc-700  relative">
         <div
             class="col-span-full border-b py-1 grid grid-cols-{{ $number_days }} justify-items-center bg-zinc-100 dark:bg-zinc-700">
             @foreach ($program->interval_days() as $day)
@@ -74,7 +86,7 @@ new class extends Component {
         </div>
     </div>
     <div
-        class="grid grid-cols-[repeat({{ $number_days }},var(--program-row-width))] border rounded bg-zinc-300 dark:bg-zinc-700 w-fit max-md:overflow-x-scroll relative">
+        class="grid grid-cols-[repeat({{ $number_days }},var(--program-row-width))] border rounded bg-zinc-300 dark:bg-zinc-700 relative">
         @for ($day = 0; $day < $number_days; $day++)
             <div class="flex flex-col relative box-border">
                 @for ($hour = 7; $hour < 24; $hour++)
@@ -89,7 +101,7 @@ new class extends Component {
                             })">
                             @if ($day == 0)
                                 <span
-                                    class="md:ml-[-25pt] md:block md:mt-[-10pt] text-sm text-zinc-500">{{ $hour }}h</span>
+                                    class="inline-block mt-2 ml-2 md:ml-[-25pt] md:block md:mt-[-10pt] text-sm text-zinc-500">{{ $hour }}h</span>
                             @endif
                         </div>
                     </flux:modal.trigger>
@@ -103,7 +115,7 @@ new class extends Component {
             </div>
         @endforeach
     </div>
-    <flux:callout color="zinc" class="w-full">
+    <flux:callout color="zinc" class="sticky left-0 w-full">
         <flux:callout.heading icon="exclamation-triangle">Chevauchement d'évènements</flux:callout.heading>
         <flux:callout.text>Lorsqu'un évènement est ajouté, il y a une verification simpliste permettant de savoir si
             l'évènement n'est pas ajouté au dessus d'un autre. Cette vérification n'a pas lieu si la durée d'évènement

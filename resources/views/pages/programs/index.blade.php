@@ -69,18 +69,25 @@ new class extends Component {
     <div class="mb-4"></div>
     <ul class="flex flex-wrap gap-2">
         @foreach ($this->getProgram() as $program)
-            <div class="p-3 border w-fit border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-700 rounded hover:bg-zinc-100 dark:hover:bg-zinc-600 cursor-pointer space-y-3"
+            <div class="p-3 border w-fit border-zinc-200 dark:border-zinc-800 dark:bg-zinc-700 rounded hover:bg-zinc-50 dark:hover:bg-zinc-600 cursor-pointer space-y-3 max-sm:w-full relative"
                 wire:click='redirectProgram({{ $program->id }})'>
                 <div class="flex flex-col">
                     <a>{{ $program->name }}</a>
-                    <span class="text-xs text-zinc-500 dark:text-zinc-300">Créé par {{ $program->author->name }}</span>
+                    <span
+                        class="text-xs text-zinc-500 dark:text-zinc-300">{{ $program->start_date->locale('fr')->translatedFormat('d F Y') }}
+                        au {{ $program->end_date->locale('fr')->translatedFormat('d F Y') }}</span>
                 </div>
                 <div class="flex gap-x-3 text-xs">
                     @foreach (ProgramEventKind::cases() as $kind)
                         <x-programs.number-event :kind="$kind" :program="$program" />
                     @endforeach
                 </div>
+                <span class="text-xs text-zinc-500 dark:text-zinc-300">Créé par {{ $program->author->name }}</span>
             </div>
         @endforeach
+        @if ($this->getProgram()->count() == 0)
+            <span class="italic text-zinc-500">Il n'y a encore aucun programme pour l'édition
+                {{ EditionYear::findOrFail($this->edition_year_id)->year }}</span>
+        @endif
     </ul>
 </div>

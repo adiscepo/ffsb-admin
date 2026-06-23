@@ -128,14 +128,15 @@ new class extends Component {
     }
 
     protected $listeners = [
-        'changed_eval' => 'redirectEval',
+        'selected_evaluation' => 'redirectEval',
         'form_evaluation' => 'formEvaluation',
     ];
 
     #On['changed_eval']
     public function redirectEval(int $id)
     {
-        $this->redirect('/docu/' . $id, navigate: true);
+        $docu_id = Evaluation::findOrFail($id)->docu_id;
+        $this->redirect('/docu/' . $docu_id, navigate: true);
     }
 
     public function selectDocu(int $id)
@@ -212,10 +213,12 @@ new class extends Component {
                                 {{ to_human($docu->duration) }}
                             </flux:table.cell>
                             <flux:table.cell>
-                                @if ($docu->seenBy(Auth::user()->id))
+                                @if ($docu->hasDraftEvaluationFrom(Auth::user()->id))
+                                    <div class="w-5 h-5 rounded-full bg-orange-300"></div>
+                                @elseif ($docu->seenBy(Auth::user()->id))
                                     <div class="w-5 h-5 bg-green-300 rounded-full"></div>
                                 @else
-                                    <div class="w-5 h-5 rounded-full bg-zinc-300"></div>
+                                    <div class="w-5 h-5 bg-zinc-300 rounded-full"></div>
                                 @endif
                             </flux:table.cell>
                             @php
