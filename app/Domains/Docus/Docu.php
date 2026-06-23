@@ -90,20 +90,29 @@ class Docu extends Model
 
     public function seenBy(int $user_id): bool
     {
-        return $this->evaluations()->where('user_id', $user_id)->count() > 0;
+        return $this->evaluations()->where(['user_id' => $user_id, 'draft' => false])->count() > 0;
+    }
+
+    public function hasDraftEvaluationFrom(int $user_id): bool
+    {
+        $evaluation = $this->evaluations()->where('user_id', $user_id)->first();
+        if ($evaluation != null) {
+            return $evaluation->isDraft();
+        }
+        return false;
     }
 
     public function noteFrom(int $user_id): ?int
     {
         if ($this->seenBy($user_id)) {
-            return $this->evaluations()->where('user_id', $user_id)->first()->note();
+            return $this->evaluations()->where(['user_id' => $user_id, 'draft' => false])->first()->note();
         }
         return null;
     }
 
     public function numberEvaluations(): int
     {
-        return $this->evaluations()->count();
+        return $this->evaluations()->where('draft', false)->count();
     }
     /**
      * Return the average note for all the evaluation on the docu
