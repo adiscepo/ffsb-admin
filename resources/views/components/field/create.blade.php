@@ -32,14 +32,14 @@ new class extends Component {
 
     public function save()
     {
-        $this->field = capitalize($this->field);
+        $this->field = ucfirst($this->field);
         $validated = $this->validate($this->rules());
-        dd($validated);
         Field::create($validated);
         $this->reset();
         $this->dispatch('new-field');
         Flux::modal('create-field')->close();
         Flux::toast(variant: 'success', text: 'Catégorie ajoutée');
+        // $this->redirect('/fields/', navigate: true);
     }
 };
 ?>
