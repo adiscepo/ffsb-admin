@@ -74,7 +74,7 @@ new class extends Component {
 
 @include('partials.heading', ['route' => 'Support/Bugs/#' . $bug->id])
 
-<main class="mx-auto max-sm:p-5 md:w-9/12 py-5 space-y-4">
+<main class="mx-auto max-sm:p-5 md:w-9/12 py-5 space-y-4 overflow-y-scroll">
     <h1 class="font-medium text-2xl">{{ $bug->title }} <span
             class="text-zinc-500 font-light">#{{ $bug->id }}</span>
     </h1>
