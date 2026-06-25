@@ -161,7 +161,8 @@ new class extends Component {
     <flux:modal variant="flyout" name="create-docu" class="max-w-max">
         <form class="space-y-6" wire:submit.prevent='save'>
             <div class="space-y-2">
-                <flux:heading size="lg" class="flex justify-between text-zinc-900 dark:text-white">Editer le
+                <flux:heading size="lg" class="flex items-center justify-between text-zinc-900 dark:text-white">
+                    Editer le
                     documentaire
                     <i>{{ $docu->title }}</i>
                     <flux:field class="w-fit ml-auto" variant="inline">
