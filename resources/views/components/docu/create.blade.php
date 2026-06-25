@@ -5,6 +5,7 @@ use Livewire\Attributes\On;
 use App\Livewire\Forms\DocuForm;
 use App\Models\ProductionHouse;
 use App\Models\EditionYear;
+use Facades\App\Domains\Edition\Edition;
 use App\Domains\Docus\Docu;
 use App\Domains\Docus\DocuLink;
 use App\Domains\Docus\Enum\DocuTarget;
@@ -22,6 +23,7 @@ new class extends Component {
     public ?string $subtitle = null;
     public string $synopsis = '';
     public int $year = 2025;
+    public int $edition_year_id;
     public array $production_houses = [];
     public array $fields = [];
     public ?string $target = null;
@@ -76,6 +78,7 @@ new class extends Component {
 
     public function mount()
     {
+        $this->edition_year_id = Edition::currentEdition()->id;
         $this->fetchProductionHouses(false);
         $this->fetchFields(false);
     }
@@ -130,7 +133,7 @@ new class extends Component {
             'subtitles' => $this->subtitle != 'null' ? $this->subtitle : null,
             'target' => $this->target,
             'comment' => $this->comment,
-            'edition_year_id' => EditionYear::where('current', true)->orderBy('year', 'DESC')->first()->id,
+            'edition_year_id' => $this->edition_year_id,
             'links' => $this->links,
             'production_houses' => $this->production_houses,
             'fields' => $this->fields,
@@ -145,11 +148,19 @@ new class extends Component {
 <div x-data='{ nb_links: 0 }'>
     <flux:modal variant="flyout" name="create-docu" class="max-w-max">
         <form class="space-y-6" wire:submit.prevent='save'>
-            <div class="space-y-2">
+            <div class="space-y-2 relative">
                 <flux:heading size="lg" class="text-zinc-900 dark:text-white">Ajouter un documentaire</flux:heading>
                 <flux:text class="text-zinc-600 dark:text-zinc-400">
                     Un nouveau documentaire dans la liste !
                 </flux:text>
+                <flux:field class="w-fit absolute top-0 right-5">
+                    <flux:select class="" size="sm" wire:model='edition_year_id'>
+                        @foreach (EditionYear::orderBy('year', 'asc')->get() as $edition_year)
+                            <flux:select.option value="{{ $edition_year->id }}">{{ $edition_year->year }}
+                            </flux:select.option>
+                        @endforeach
+                    </flux:select>
+                </flux:field>
             </div>
             <flux:fieldset class="space-y-3">
                 {{-- INFORMATIONS GENERALES --}}

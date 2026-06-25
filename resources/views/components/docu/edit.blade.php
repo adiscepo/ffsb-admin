@@ -23,6 +23,7 @@ new class extends Component {
     public ?string $subtitle = null;
     public string $synopsis = '';
     public int $year = 2025;
+    public int $edition_year_id;
     public array $production_houses = [];
     public array $fields = [];
     public ?int $target = null;
@@ -40,6 +41,7 @@ new class extends Component {
         $this->subtitle = $docu->subtitles;
         $this->synopsis = $docu->summary;
         $this->year = $docu->year;
+        $this->edition_year_id = $docu->edition_year_id;
         $this->production_houses = $docu->from->pluck('id')->toArray();
         $this->fields = $docu->fields->pluck('id')->toArray();
         $this->target = $docu->target != null ? DocuTarget::id($docu->target) : null;
@@ -143,7 +145,7 @@ new class extends Component {
             'subtitle' => $this->subtitle != 'null' ? $this->subtitle : null,
             'target' => $this->target != null ? DocuTarget::fromId($this->target) : null,
             'comment' => $this->comment,
-            'edition_year_id' => $this->docu->edition_year_id, // The edition year is not changed (and will not, maybe add a copy mechanism later)
+            'edition_year_id' => $this->edition_year_id,
             'links' => $this->links,
             'production_houses' => $this->production_houses,
             'fields' => $this->fields,
@@ -159,8 +161,18 @@ new class extends Component {
     <flux:modal variant="flyout" name="create-docu" class="max-w-max">
         <form class="space-y-6" wire:submit.prevent='save'>
             <div class="space-y-2">
-                <flux:heading size="lg" class="text-zinc-900 dark:text-white">Editer le documentaire
+                <flux:heading size="lg" class="flex justify-between text-zinc-900 dark:text-white">Editer le
+                    documentaire
                     <i>{{ $docu->title }}</i>
+                    <flux:field class="w-fit ml-auto" variant="inline">
+                        <flux:label>Edition</flux:label>
+                        <flux:select class="" size="sm" wire:model='edition_year_id'>
+                            @foreach (EditionYear::orderBy('year', 'asc')->get() as $edition_year)
+                                <flux:select.option value="{{ $edition_year->id }}">{{ $edition_year->year }}
+                                </flux:select.option>
+                            @endforeach
+                        </flux:select>
+                    </flux:field>
                 </flux:heading>
             </div>
             <flux:fieldset class="space-y-3">
