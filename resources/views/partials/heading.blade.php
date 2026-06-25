@@ -17,9 +17,19 @@
                             $is_bold = $bold == $i;
                         }
                     @endphp
+                    @php
+                        $link = null;
+                        if (count(explode(':', $part)) > 1) {
+                            $ref = explode(':', $part);
+                            if (Route::has($ref[1])) {
+                                $link = route($ref[1]);
+                                $part = $ref[0];
+                            }
+                        }
+                    @endphp
                     @if ($i < count($splitted_route) - 1)
-                        <span
-                            class="@if ($is_bold) font-bold @else text-zinc-500 @endif">{{ $part }}</span>
+                        <a class="@if ($is_bold) font-bold @else text-zinc-500 @endif"
+                            @if (isset($link)) href="{{ $link }}" @endif>{{ $part }}</a>
                         <span class="text-zinc-500">/</span>
                     @else
                         <span

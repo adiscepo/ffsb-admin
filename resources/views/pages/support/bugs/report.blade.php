@@ -7,7 +7,7 @@ use App\Domains\Bugs\Actions\CreateBug;
 
 return new class extends Component {
     public string $title = '';
-    public string $description = "Décrire clairement le problème\n\nEtapes pour reproduire\n1. Aller sur lien\n2. Cliquer sur bouton\n3. L'erreur s'affiche\n\nComportement attendu\n(Que devrait-il se produire)\n\nEnvironement:\n- Chrome\n- Théme clair";
+    public string $description = '';
     public array $tags;
     public ?string $file = null;
     public string $storage_folder = 'bugs';
@@ -61,11 +61,24 @@ return new class extends Component {
         <flux:input label="Titre" wire:model='title' placeholder="Erreur d'ajout de docus" />
         <flux:field>
             <flux:label>Type</flux:label>
-            {{-- {{ dd(Tag::for(Bug::class)->toArray()) }} --}}
             <livewire:pill-box name="tags" :datas="Tag::for(Bug::class)->toArray()" />
         </flux:field>
     </div>
-    <flux:textarea rows="13" wire:model='description' class="text-zinc-500! dark:text-zinc-400!"></flux:textarea>
+    <flux:textarea rows="13" wire:model='description' class="text-zinc-500! dark:text-zinc-400!"
+        placeholder="Décrire clairement le problème
+
+Etapes pour reproduire
+    1. Aller sur lien
+    2. Cliquer sur bouton
+    3. L'erreur s'affiche
+
+Comportement attendu
+    (Que devrait-il se produire)
+
+Environement:
+    - Chrome
+    - Théme clair">
+    </flux:textarea>
     <flux:field>
         <flux:label>Capture d'écran</flux:label>
         <livewire:file-upload :folder_storage="$this->storage_folder" :multiple="false" />

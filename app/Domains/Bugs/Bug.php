@@ -64,6 +64,13 @@ class Bug extends Model
         $this->attributes['files_upload'] =  json_encode($files);
     }
 
+    public function hasFiles(): bool
+    {
+        if (isset($this->files_upload))
+            return count($this->files_upload) > 0;
+        return false;
+    }
+
     /**
      * Set the factory (because use a non-common path)
      *

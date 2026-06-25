@@ -40,29 +40,16 @@ new class extends Component {
     }
 };
 ?>
-<x-slot name="header">
-    <header class="flex justify-between items-center gap-x-2 w-full p-5 border-b border-zinc-200">
-        <nav>
-            <div class="flex gap-3 items-center text-sm">
-                <a href="/docus" wire:navigate class="flex items-center gap-3">
-                    <flux:icon.chevron-left variant="mini" />
-                    <span class="text-zinc-500">Documentaires</span>
-                </a>
-                <span class="text-zinc-500">/</span>
-                <span class="font-bold">{{ $docu->title }}</span>
-            </div>
-        </nav>
-        <livewire:docu.edit :docu="$docu" />
-        <flux:modal.trigger name="create-docu">
-            <flux:button size="sm" variant="primary" color="violet" class="cursor-pointer hidden! md:block!">
-                Editer
-            </flux:button>
-            <flux:button size="sm" variant="primary" color="violet" class="cursor-pointer md:hidden"
-                icon="pencil">
-            </flux:button>
-        </flux:modal.trigger>
-    </header>
-</x-slot>
+@component('partials.heading', ['route' => 'Documentaires:docus/' . $docu->title])
+    <livewire:docu.edit :docu="$docu" />
+    <flux:modal.trigger name="create-docu">
+        <flux:button size="sm" variant="primary" color="violet" class="cursor-pointer hidden! md:block!">
+            Editer
+        </flux:button>
+        <flux:button size="sm" variant="primary" color="violet" class="cursor-pointer md:hidden" icon="pencil">
+        </flux:button>
+    </flux:modal.trigger>
+@endcomponent
 
 <main class="flex flex-col gap-y-4 lg:grid lg:grid-cols-[1fr_1.5fr_2fr] grow">
     <livewire:docu-info :rounded="false" :docu="$docu" class="border-r border-zinc-200 h-full" />

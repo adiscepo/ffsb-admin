@@ -72,7 +72,7 @@ new class extends Component {
 };
 ?>
 
-@include('partials.heading', ['route' => 'Support/Bugs/#' . $bug->id])
+@include('partials.heading', ['route' => 'Support/Bugs:support.bugs.list/#' . $bug->id])
 
 <main class="overflow-y-scroll">
     <div class="mx-auto max-sm:p-5 md:w-9/12 py-5 space-y-4">
@@ -95,7 +95,7 @@ new class extends Component {
                     </x-slot>
                     <p class="text-zinc-800 dark:text-zinc-200 py-2" wire:model='$description'>{!! nl2br($bug->description) !!}
                     </p>
-                    @if ($bug->files_upload != null)
+                    @if ($bug->hasFiles())
                         @foreach ($bug->files_upload as $file)
                             <img class="w-1/2" src="{{ Storage::url($file) }}" />
                         @endforeach

@@ -51,7 +51,7 @@ new class extends Component {
 ?>
 
 @include('partials.heading', [
-    'route' => 'Programmes/' . $program->name,
+    'route' => 'Programmes:programs/' . $program->name,
     'bold' => 1,
 ])
 
