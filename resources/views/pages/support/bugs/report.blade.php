@@ -4,15 +4,25 @@ use Livewire\Component;
 use App\Models\Tag;
 use App\Domains\Bugs\Bug;
 use App\Domains\Bugs\Actions\CreateBug;
+use Livewire\WithFileUploads;
+use Illuminate\Support\Collection;
 
 return new class extends Component {
+    use WithFileUploads;
+
     public string $title = '';
     public string $description = '';
     public array $tags;
     public ?string $file = null;
     public string $storage_folder = 'bugs';
+    public array $filenames = [];
 
-    public function mount() {}
+    public Collection $attachments;
+
+    public function mount()
+    {
+        $this->attachments = collect();
+    }
 
     public function rules()
     {
@@ -29,8 +39,9 @@ return new class extends Component {
 
     public function handleFileUpload($data)
     {
-        $this->file = $this->storage_folder . '/' . $data;
+        $this->attachments->push($this->storage_folder . '/' . $data);
     }
+
     public function updateTags(array $selected)
     {
         $this->tags = $selected;
@@ -43,7 +54,7 @@ return new class extends Component {
             'title' => $this->title,
             'description' => $this->description,
             'tags' => $this->tags,
-            'files_upload' => [$this->file],
+            'files_upload' => $this->attachments ?? $this->attachments,
         ];
         $create->execute(Auth::user(), $datas);
         $this->redirect('/support/bugs', navigate: true);
@@ -81,7 +92,9 @@ Environement:
     </flux:textarea>
     <flux:field>
         <flux:label>Capture d'écran</flux:label>
-        <livewire:file-upload :folder_storage="$this->storage_folder" :multiple="false" />
+        {{-- <livewire:file-upload :folder_storage="$this->storage_folder" :multiple="true" wire:model='filenames' /> --}}
+        <livewire:file-upload :folder_storage="$this->storage_folder" wire:model="attachments" :multiple="true" />
+        {{-- <flux:input.file wire:model='filenames' multiple="true" /> --}}
     </flux:field>
     <flux:button wire:click='save()' icon="bug-ant" class="self-end">
         Signaler

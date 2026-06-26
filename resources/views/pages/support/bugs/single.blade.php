@@ -96,9 +96,12 @@ new class extends Component {
                     <p class="text-zinc-800 dark:text-zinc-200 py-2" wire:model='$description'>{!! nl2br($bug->description) !!}
                     </p>
                     @if ($bug->hasFiles())
-                        @foreach ($bug->files_upload as $file)
-                            <img class="w-1/2" src="{{ Storage::url($file) }}" />
-                        @endforeach
+                        <div class="md:grid md:grid-cols-2 gap-2">
+                            @foreach ($bug->files_upload as $file)
+                                <x-file-modal-view src="{{ Storage::url($file) }}" />
+                                {{-- <img class="w-1/2" src="{{ Storage::url($file) }}" /> --}}
+                            @endforeach
+                        </div>
                     @endif
                 </x-message>
                 <ol class="ml-20" data-timeline="" {{ $attributes }}>
