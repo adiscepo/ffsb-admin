@@ -32,7 +32,7 @@ new class extends Component {
 @endcomponent
 
 <div class="grid md:grid-cols-2 grid-rows-1 h-full overflow-y-scroll">
-    <div class="overflow-y-scroll px-10 pb-10 row-start-2">
+    <div class="overflow-y-scroll px-10 pb-10">
         <div class="mb-10"></div>
         <div class="space-y-2">
             <h3 class="text-lg text-zinc-600 dark:text-zinc-300 w-fit whitespace-nowrap">
