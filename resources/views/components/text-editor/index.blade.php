@@ -30,8 +30,26 @@ new class extends Component {
     @push('scripts')
         <script defer>
             document.addEventListener('DOMContentLoaded', () => {
+                const toolbarOptions = [
+                    ['bold', 'italic', 'underline', 'strike'], // toggled buttons
+                    ['link', 'image'],
+
+                    [{
+                        'list': 'ordered'
+                    }, {
+                        'list': 'bullet'
+                    }],
+                    [{
+                        'color': []
+                    }, {
+                        'background': []
+                    }], // dropdown with defaults from theme
+                ];
                 const editor = new Quill('#{{ $quillId }}', {
                     placeholder: '{{ $placeholder }}',
+                    modules: {
+                        toolbar: toolbarOptions
+                    },
                     theme: 'snow',
                 });
 

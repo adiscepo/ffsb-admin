@@ -18,6 +18,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::livewire('programs/{year}', 'pages::programs.index');
     Route::livewire('program/{id}', 'pages::programs.single')->name('program');
 
+    // Route::livewire('edition', 'pages::edition.index')->name('edition');
+
+    Route::livewire('meetings', 'pages::admin.meetings.index')->name('meetings');
+
     // Bugs
     Route::livewire('support/bugs/report', 'pages::support.bugs.report')->name('support.bugs.report');
     Route::livewire('support/bugs', 'pages::support.bugs.list')->name('support.bugs.list');

@@ -1,6 +1,8 @@
 <?php
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use App\Domains\Files\Actions\CreateFile;
+use App\Domains\Files\Actions\DeleteFile;
 
 /**
  * Dispatches 'file-uploaded' with the stored filename whenever a file is saved.
@@ -10,9 +12,10 @@ new class extends Component {
     use WithFileUploads;
 
     protected int $max_size = 5000000; // In bytes
-    protected array $formats = ['png', 'jpg', 'jpeg', 'gif'];
+    #[Locked]
+    public array $formats;
 
-    public $upload;
+    public $upload; // Livewire temp-upload binding (single slot, reused per file)
 
     #[Locked]
     public string $uuid;
@@ -56,9 +59,10 @@ new class extends Component {
 
     /**
      * Called by Alpine after each individual Livewire temp-upload completes.
-     * Validates the extension, stores the file, and appends metadata.
+     * - Single mode: replaces the existing file (dispatches 'file-removed' first if needed).
+     * - Multiple mode: appends to the list.
      */
-    public function save(): void
+    public function save(CreateFile $create, DeleteFile $delete): void
     {
         $extension = strtolower(pathinfo($this->upload->getFilename(), PATHINFO_EXTENSION));
 
@@ -71,19 +75,33 @@ new class extends Component {
 
         $this->upload->storeAs($this->folder_storage, $stored_name, 'public');
 
-        $this->filenames[] = [
+        $entry = [
             'client_filename' => $this->upload->getClientOriginalName(),
             'filename' => $stored_name,
             'file_size' => $this->upload->getSize(),
         ];
 
+        $create->execute(Auth::user(), $entry['filename'], $this->folder_storage . '/' . $stored_name, $entry['client_filename'], $entry['file_size']);
+
+        if (!$this->multiple) {
+            // Replace: evict the previous file first, then store the new one.
+            if (!empty($this->filenames[0])) {
+                $delete->execute(Auth::user(), $this->filenames[0]['filename']);
+                $this->dispatch('file-removed', $this->filenames[0]['filename']);
+            }
+            $this->filenames = [$entry];
+        } else {
+            $this->filenames[] = $entry;
+        }
+
         // Reset the temp-upload slot so the next file can bind correctly.
         $this->upload = null;
 
         $this->dispatch('file-uploaded', $stored_name);
+        $this->error = null;
     }
 
-    public function removeFile(int $index): void
+    public function removeFile(int $index, DeleteFile $delete): void
     {
         $entry = $this->filenames[$index] ?? null;
         if (!$entry) {
@@ -92,6 +110,7 @@ new class extends Component {
 
         array_splice($this->filenames, $index, 1);
 
+        $delete->execute(Auth::user(), $entry['filename']);
         $this->dispatch('file-removed', $entry['filename']);
     }
 
@@ -144,35 +163,52 @@ new class extends Component {
         })"
             x-on:input.prevent="onInput" class="sr-only" id="{{ $this->uuid }}" />
 
-        {{-- Prompt / error / loading --}}
-        <div class="{{ $btn_classes }}">
-            @if ($error)
-                <flux:icon.exclamation-triangle class="text-red-500 dark:text-red-300" />
-                <p class="text-sm text-red-600 dark:text-red-300">{{ $error }}</p>
-            @else
-                <flux:icon.cloud-arrow-up class="text-[#9f9fa9] group-data-dragging:text-black" variant="solid" />
-
-                <div class="not-group-data-dragging:hidden group-data-dragging:visible">
-                    <p class="text-xs text-zinc-800 dark:text-zinc-200">Tu peux lâcher !</p>
+        {{-- Single mode: current file shown inside the dropzone --}}
+        @if (!$this->multiple && !empty($this->filenames[0]))
+            @php $file = $this->filenames[0]; @endphp
+            <div class="flex gap-2 group-data-loading:invisible">
+                @if ($this->isImage($file['filename']))
+                    <flux:avatar
+                        src="{{ Storage::temporaryUrl($this->folder_storage . '/' . $file['filename'], now()->addMinutes(5)) }}" />
+                @else
+                    <flux:icon.document variant="solid" class="size-8 text-violet-300 shrink-0" />
+                @endif
+                <div>
+                    <p class="text-sm text-zinc-600 dark:text-zinc-200">{{ $file['client_filename'] }}</p>
+                    <p class="text-xs text-zinc-400">{{ $this->formatSize($file['file_size']) }}</p>
+                    <p class="text-xs text-zinc-400">Cliquez ou glissez pour remplacer</p>
                 </div>
+            </div>
+        @else
+            <div class="{{ $btn_classes }}">
+                @if ($error)
+                    <flux:icon.exclamation-triangle class="text-red-500 dark:text-red-300" />
+                    <p class="text-sm text-red-600 dark:text-red-300">{{ $error }}</p>
+                @else
+                    <flux:icon.cloud-arrow-up class="text-[#9f9fa9] group-data-dragging:text-black" variant="solid" />
 
-                <div class="not-group-data-dragging:visible group-data-dragging:hidden">
-                    <p class="text-xs text-center text-zinc-800 dark:text-zinc-200">
-                        {{ $this->multiple ? 'Glissez ou cliquez pour ajouter vos fichiers' : 'Glissez ou cliquez pour ajouter votre fichier' }}
-                    </p>
-                    <p class="text-zinc-400 text-xs text-center" wire:loaded>
-                        {{ $this->getFormats() }} · max {{ $this->max_size / 1_000_000 }} MB
-                    </p>
-                </div>
-            @endif
-        </div>
+                    <div class="not-group-data-dragging:hidden group-data-dragging:visible">
+                        <p class="text-xs text-zinc-800 dark:text-zinc-200">Tu peux lâcher !</p>
+                    </div>
+
+                    <div class="not-group-data-dragging:visible group-data-dragging:hidden">
+                        <p class="text-xs text-center text-zinc-800 dark:text-zinc-200">
+                            {{ $this->multiple ? 'Glissez ou cliquez pour ajouter vos fichiers' : 'Glissez ou cliquez pour ajouter votre fichier' }}
+                        </p>
+                        <p class="text-zinc-400 text-xs text-center" wire:loaded>
+                            {{ $this->getFormats() }} · max {{ $this->max_size / 1_000_000 }} MB
+                        </p>
+                    </div>
+                @endif
+            </div>
+        @endif
 
         <div class="group-data-loading:visible invisible absolute">
             <flux:icon.loading />
         </div>
     </label>
 
-    @if (count($this->filenames))
+    @if ($this->multiple && count($this->filenames))
         <ul class="flex flex-col gap-y-1">
             @foreach ($this->filenames as $index => $file)
                 <li
@@ -238,6 +274,7 @@ new class extends Component {
                         pending--;
                         if (pending === 0) $el.removeAttribute('data-loading');
                     },
+                    // progress (no-op; Livewire fires its own events)
                     () => {},
                 );
             });
@@ -269,9 +306,7 @@ new class extends Component {
                 this.$el.removeAttribute('data-dragging');
             },
 
-            onDragover() {
-                // Intentionally empty
-            },
+            onDragover() {},
         }));
 
         Alpine.data('uploadClick', ({

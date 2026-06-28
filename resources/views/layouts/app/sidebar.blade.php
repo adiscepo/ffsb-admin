@@ -38,6 +38,12 @@
                         {{ __('Programmes') }}
                     </flux:sidebar.item>
                 @endif
+                @if (Route::has('fields'))
+                    <flux:sidebar.item icon="tag" :href="route('fields')" :current="request()->routeIs('fields')"
+                        wire:navigate>
+                        {{ __('Catégories') }}
+                    </flux:sidebar.item>
+                @endif
             </flux:sidebar.group>
             @if (Route::has('tresorery'))
                 <flux:sidebar.group expandable="true" :heading="__('Trésorerie')" class="grid">
@@ -55,9 +61,47 @@
                     @endif
                 </flux:sidebar.group>
             @endif
+            @if (Route::has('meetings'))
+                <flux:sidebar.group heading="Administratif">
+                    @if (Route::has('meetings'))
+                        <flux:sidebar.item icon="user-group" :href="route('meetings')"
+                            :current="request()->routeIs('meetings')" wire:navigate>
+                            {{ __('Réunions') }}
+                        </flux:sidebar.item>
+                    @endif
+                    @if (Route::has('bp'))
+                        <flux:sidebar.item icon="user-group" :href="route('bp')"
+                            :current="request()->routeIs('bp')" wire:navigate>
+                            {{ __('Bilan prévisionnel') }}
+                        </flux:sidebar.item>
+                    @endif
+                </flux:sidebar.group>
+            @endif
+            @if (Route::has('edition'))
+                <flux:sidebar.group heading="Gestion">
+                    @if (Route::has('edition'))
+                        <flux:sidebar.item icon="tag" :href="route('edition')"
+                            :current="request()->routeIs('edition')" wire:navigate>
+                            {{ __('Editions') }}
+                        </flux:sidebar.item>
+                    @endif
+                </flux:sidebar.group>
+            @endif
         </flux:sidebar.nav>
-
-        <flux:spacer />
+        @if (Auth::user()->id == 1)
+            {{-- TODO: Replace with a policy (admin, developer, etc.) --}}
+            <flux:sidebar.spacer />
+            <flux:sidebar.nav>
+                <flux:sidebar.group heading="Support">
+                    @if (Route::has('support.bugs.list'))
+                        <flux:sidebar.item icon="bug-ant" :href="route('support.bugs.list')"
+                            :current="request()->routeIs('support.bugs.list')" wire:navigate>
+                            {{ __('Liste des bugs') }}
+                        </flux:sidebar.item>
+                    @endif
+                </flux:sidebar.group>
+            </flux:sidebar.nav>
+        @endif
 
         {{-- <flux:sidebar.nav>
                 <flux:sidebar.item icon="zanzibar-git-2" href="https://github.com/laravel/livewire-starter-kit" target="_blank">
@@ -134,6 +178,7 @@
     @endpersist
 
     @fluxScripts
+    @stack('scripts')
 </body>
 
 </html>
