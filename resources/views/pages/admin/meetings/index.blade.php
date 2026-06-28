@@ -4,11 +4,11 @@ use Livewire\Component;
 use App\Domains\Meetings\Meeting;
 
 new class extends Component {
-    public Meeting $current_meeting;
+    public ?Meeting $current_meeting;
 
     public function mount()
     {
-        $this->current_meeting = Meeting::latest()->get()->first();
+        $this->current_meeting = Meeting::latest()->get()->first() ?? null;
     }
 
     public function selectMeeting(Meeting $meeting)
@@ -39,33 +39,31 @@ new class extends Component {
                 Réunions passées
             </h3>
             <div class="flex flex-col gap-y-5">
-                @foreach (Meeting::orderBy('id', 'desc')->get() as $meeting)
-                    <div class="border border-zinc-200 rounded-lg text-zinc-400 text-sm p-3 space-y-2 cursor-pointer hover:shadow"
-                        wire:click='selectMeeting({{ $meeting }})'>
-                        <div class="flex justify-between">
-                            <span class="font-semibold text-zinc-900 text-base">{{ $meeting->name }}</span>
+                @if ($current_meeting != null)
+                    @foreach (Meeting::orderBy('id', 'desc')->get() as $meeting)
+                        <div class="border border-zinc-200 rounded-lg text-zinc-400 text-sm p-3 space-y-2 cursor-pointer hover:shadow"
+                            wire:click='selectMeeting({{ $meeting }})'>
+                            <div class="flex justify-between">
+                                <span class="font-semibold text-zinc-900 text-base">{{ $meeting->name }}</span>
+                                <span class="flex gap-x-1 items-center">
+                                    <flux:icon icon="user-group" variant="micro" />
+                                    {{ count($meeting->members) }} participant.e.s
+                                </span>
+                            </div>
                             <span class="flex gap-x-1 items-center">
-                                <flux:icon icon="user-group" variant="micro" />
-                                {{ count($meeting->members) }} participant.e.s
+                                <flux:icon icon="calendar-date-range" variant="micro" />
+                                {{ $meeting->datetime->translatedFormat('d F Y') }}
                             </span>
                         </div>
-                        <span class="flex gap-x-1 items-center">
-                            <flux:icon icon="calendar-date-range" variant="micro" />
-                            {{ $meeting->datetime->translatedFormat('d F Y') }}
-                        </span>
-                    </div>
-                    {{--                 <span class="flex gap-x-1 items-center">
-                    <flux:icon icon="clock" variant="micro" />
-                    {{ $meeting->datetime->translatedFormat('H:i') }}
-                </span>
-                <span class="flex gap-x-1 items-center">
-                    <flux:icon icon="map-pin" variant="micro" />
-                    {{ $meeting->location }}
-                </span> --}}
-                @endforeach
+                    @endforeach
+                @else
+                    <span class="italic text-zinc-500">Il n'y a pas encore de réunions</span>
+                @endif
             </div>
         </div>
     </div>
-    <livewire:meetings.single :meeting="$current_meeting" :key="$current_meeting->id"
-        class="row-span-2 col-start-2 border-l border-zinc-200" />
+    @if ($current_meeting != null)
+        <livewire:meetings.single :meeting="$current_meeting" :key="$current_meeting->id"
+            class="row-span-2 col-start-2 border-l border-zinc-200" />
+    @endif
 </div>
