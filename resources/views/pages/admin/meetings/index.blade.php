@@ -31,8 +31,8 @@ new class extends Component {
     </flux:modal.trigger>
 @endcomponent
 
-<div class="grid grid-cols-2 grid-rows-1 h-full overflow-y-scroll">
-    <div class="overflow-y-scroll px-10 pb-10">
+<div class="grid md:grid-cols-2 grid-rows-1 h-full overflow-y-scroll">
+    <div class="overflow-y-scroll px-10 pb-10 row-start-2">
         <div class="mb-10"></div>
         <div class="space-y-2">
             <h3 class="text-lg text-zinc-600 dark:text-zinc-300 w-fit whitespace-nowrap">
@@ -40,7 +40,7 @@ new class extends Component {
             </h3>
             <div class="flex flex-col gap-y-5">
                 @if ($current_meeting != null)
-                    @foreach (Meeting::orderBy('id', 'desc')->get() as $meeting)
+                    @foreach (Meeting::orderBy('datetime', 'desc')->get() as $meeting)
                         <div class="border border-zinc-200 rounded-lg text-zinc-400 text-sm p-3 space-y-2 cursor-pointer hover:shadow"
                             wire:click='selectMeeting({{ $meeting }})'>
                             <div class="flex justify-between">
@@ -64,6 +64,6 @@ new class extends Component {
     </div>
     @if ($current_meeting != null)
         <livewire:meetings.single :meeting="$current_meeting" :key="$current_meeting->id"
-            class="row-span-2 col-start-2 border-l border-zinc-200" />
+            class="row-span-2 md:col-start-2 max-sm:mb-10 max-sm:border-t md:border-l border-zinc-200" />
     @endif
 </div>
