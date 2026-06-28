@@ -2,8 +2,10 @@
 
 use Livewire\Component;
 use App\Domains\Meetings\Meeting;
+use App\Domains\Meetings\Actions\ToggleMemberMeeting;
 use App\Domains\Files\File;
 use Illuminate\Support\Collection;
+use App\Models\User;
 
 new class extends Component {
     public Meeting $meeting;
@@ -13,6 +15,7 @@ new class extends Component {
     protected $listeners = [
         'file-uploaded' => 'handleUploadFile',
         'file-removed' => 'handleRemoveFile',
+        'pill-box:members' => 'updateMembers',
     ];
 
     public function mount(Meeting $meeting)
@@ -39,15 +42,27 @@ new class extends Component {
         $this->meeting->addUploadedFiles($this->attachments->toArray());
         $this->redirect(request()->header('Referer'), navigate: true);
     }
+
+    public function updateMembers(array $selected, ToggleMemberMeeting $toggle)
+    {
+        $datas = collect();
+        foreach ($selected as $id => $user_id) {
+            $datas->push(User::find($user_id));
+        }
+        $toggle->execute(Auth::user(), $this->meeting, $datas);
+        $this->meeting = Meeting::find($this->meeting->id);
+    }
 };
 ?>
 
 <div {{ $attributes->only('class')->merge(['class' => 'px-10 overflow-y-scroll']) }}>
     <div class="mb-10"></div>
     <div class="space-y-2">
-        <h3 class="text-2xl text-zinc-900 dark:text-zinc-100 w-fit whitespace-nowrap">
-            {{ $meeting->name }}
-        </h3>
+        <div class="flex items-center justify-between">
+            <h3 class="text-2xl text-zinc-900 dark:text-zinc-100 w-fit whitespace-nowrap">
+                {{ $meeting->name }}
+            </h3>
+        </div>
         <div class="flex gap-x-5 items-center text-zinc-400 text-sm">
             <span class="flex gap-x-1 items-center">
                 <flux:icon icon="calendar-date-range" variant="micro" />
@@ -62,8 +77,8 @@ new class extends Component {
                 {{ $meeting->location }}
             </span>
         </div>
-        <div class="flex gap-x-2 items-center text-zinc-400 text-sm">
-            <span class="flex gap-x-1 items-center">
+        <div class="flex gap-x-2 items-center text-sm">
+            <span class="flex gap-x-1 items-center text-zinc-400 ">
                 <flux:icon icon="user-group" variant="micro" />
                 Participant.e.s
             </span>
@@ -71,6 +86,17 @@ new class extends Component {
                 <flux:avatar size="xs" circle :src="$member->getProfilePicture()"
                     :initials="$member->initials()" />
             @endforeach
+            <flux:modal.trigger name="toggle-members">
+                <span
+                    class="flex gap-x-1 items-center w-fit py-0.5 px-2 text-xs text-zinc-500 bg-zinc-200 border border-zinc-300 rounded-full cursor-pointer hover:bg-zinc-300">
+                    Ajouter
+                </span>
+            </flux:modal.trigger>
+            <flux:modal name="toggle-members" class="overflow-visible">
+                <span class="text-zinc-900 font-semibold">Ajouter des participant.e.s</span>
+                <div class="mb-3"></div>
+                <livewire:pill-box class="text-zinc-900" name="members" :datas="User::all()->toArray()" :selected="$meeting->members->pluck('id')->toArray()" />
+            </flux:modal>
         </div>
         <div class="mb-5"></div>
         <div class="flex flex-col text-sm border border-zinc-200 rounded-lg py-4 px-5 space-y-2">

@@ -173,10 +173,10 @@ new class extends Component {
             </flux:badge>
         </template>
     </div>
-    <input class="{{ $classes }}" x-model='query' x-bind:class="open ? 'rounded-b-none border-b-0' : ''"
-        x-on:focus="open = true" x-on:keydown.tab="open = false" x-on:input="open = true; updateElements()"
-        x-on:keyup.up="decrementHighlight()" x-on:keyup.down="incrementHighlight()"
-        x-on:keyup.enter="toggleSelected(highlighted_id)" />
+    <input {{ $attributes->only('class')->merge(['class' => $classes]) }} x-model='query'
+        x-bind:class="open ? 'rounded-b-none border-b-0' : ''" x-on:focus="open = true" x-on:keydown.tab="open = false"
+        x-on:input="open = true; updateElements()" x-on:keyup.up="decrementHighlight()"
+        x-on:keyup.down="incrementHighlight()" x-on:keyup.enter="toggleSelected(highlighted_id)" />
     <div class="w-full z-20 flex flex-col text-sm items-stretch rounded-lg shadow-lg bg-white max-h-50 overflow-y-scroll rounded-t-none border-t-0 absolute border dark:bg-zinc-700 dark:border-zinc-800"
         x-show="open" x-id="['element']" id="dropdown-element">
         <template x-for="item_id in getShowed()" :key="name + '-' + item_id">
