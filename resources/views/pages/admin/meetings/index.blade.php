@@ -31,7 +31,7 @@ new class extends Component {
     </flux:modal.trigger>
 @endcomponent
 
-<div class="grid md:grid-cols-2 grid-rows-1 h-full overflow-y-scroll">
+<div class="grid md:grid-cols-2 max-sm:grid-rows-2 h-full overflow-y-scroll">
     <div class="overflow-y-scroll px-10 pb-10">
         <div class="mb-10"></div>
         <div class="space-y-2">
