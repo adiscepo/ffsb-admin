@@ -40,7 +40,7 @@ new class extends Component {
     public function saveFile()
     {
         $this->meeting->addUploadedFiles($this->attachments->toArray());
-        $this->redirect(request()->header('Referer'), navigate: true);
+        $this->redirect('/meetings/' . $this->meeting->id, navigate: true);
     }
 
     public function updateMembers(array $selected, ToggleMemberMeeting $toggle)

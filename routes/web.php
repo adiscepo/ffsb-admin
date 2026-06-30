@@ -20,7 +20,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Route::livewire('edition', 'pages::edition.index')->name('edition');
 
-    Route::livewire('meetings', 'pages::admin.meetings.index')->name('meetings');
+    // Route::livewire('meetings', 'pages::admin.meetings.index')->name('meetings');
+    Route::livewire('meetings/{id?}', 'pages::admin.meetings.index')->name('meetings');
 
     // Bugs
     Route::livewire('support/bugs/report', 'pages::support.bugs.report')->name('support.bugs.report');
