@@ -6,9 +6,13 @@ use App\Domains\Meetings\Meeting;
 new class extends Component {
     public ?Meeting $current_meeting;
 
-    public function mount()
+    public function mount(?int $id = null)
     {
-        $this->current_meeting = Meeting::latest()->get()->first() ?? null;
+        if ($id != null) {
+            $this->current_meeting = Meeting::findOrFail($id);
+        } else {
+            $this->current_meeting = Meeting::latest()->get()->first() ?? null;
+        }
     }
 
     public function selectMeeting(Meeting $meeting)
