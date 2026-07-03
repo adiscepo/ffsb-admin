@@ -243,19 +243,21 @@ new class extends Component {
             </flux:table>
         </div>
     </div>
-    <div id="docu-informations" class="flex flex-col gap-y-5">
-        <div class="mb-4"></div>
-        @if (isset($selected_docu))
-            <livewire:docu-info class="border" :rounded="true" :docu="$this->selected_docu" />
-            <livewire:evaluations.docu-evaluations class="py-5 border" :rounded="true" :docu="$this->selected_docu" />
-        @else
-            <div class="flex items-center justify-center p-8 h-fit">
-                <span class="text-sm italic text-zinc-500">
-                    Sélectionnez un documentaire pour voir ses infos
-                </span>
-            </div>
-        @endif
-        <livewire:evaluations.ladderboard />
+    <div id="docu-informations" class="my-4">
+        <aside class="sticky top-5 flex flex-col gap-y-5">
+
+            @if (isset($selected_docu))
+                <livewire:docu-info class="border" :rounded="true" :docu="$this->selected_docu" />
+                <livewire:evaluations.docu-evaluations class="py-5 border" :rounded="true" :docu="$this->selected_docu" />
+            @else
+                <div class="flex items-center justify-center p-8 h-fit">
+                    <span class="text-sm italic text-zinc-500">
+                        Sélectionnez un documentaire pour voir ses infos
+                    </span>
+                </div>
+            @endif
+            <livewire:evaluations.ladderboard />
+        </aside>
     </div>
 </div>
 
