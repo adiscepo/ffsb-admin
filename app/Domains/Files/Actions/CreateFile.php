@@ -13,7 +13,7 @@ class CreateFile
     public function execute(User $user, string $filename, string $full_path, string $client_filename, int $size, ?string $extension = null)
     {
         DB::transaction(function () use ($user, $filename, $full_path, $client_filename, $size, $extension) {
-            File::create([
+            $file = File::create([
                 'filename' => $filename,
                 'full_path' => $full_path,
                 'client_name' => $client_filename,
@@ -25,6 +25,9 @@ class CreateFile
             $event_create = Event::create([
                 'author_id' => $user->id,
                 'type' => 'add_file',
+                'payload' => [
+                    'file_id' => $file->filename,
+                ]
             ]);
 
             $user->events()->attach($event_create);

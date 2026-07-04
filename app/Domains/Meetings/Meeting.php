@@ -2,7 +2,9 @@
 
 namespace App\Domains\Meetings;
 
+use App\Domains\Events\Event;
 use App\Domains\Events\Traits\Eventable;
+use App\Domains\Files\File;
 use App\Domains\Meetings\Factory\MeetingFactory;
 use App\Models\User;
 
@@ -10,6 +12,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Facades\Auth;
 
 class Meeting extends Model
 {
@@ -55,6 +58,15 @@ class Meeting extends Model
      */
     public function addUploadedFiles(array $files)
     {
+        foreach ($files as $file) {
+            $this->events()->attach(Event::create([
+                'author_id' => Auth::user()->id,
+                'type' => 'add_file',
+                'payload' => [
+                    'file_id' => File::findOrFail($file)->filename,
+                ]
+            ]));
+        }
         $this->attributes['files_upload'] = json_encode(array_merge($this->files_upload ?? [], $files));
         $this->save();
     }

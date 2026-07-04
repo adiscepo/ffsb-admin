@@ -1,6 +1,6 @@
 @props([
     'header' => null,
-    'icon' => null,
+    'icon' => 'question-mark-circle',
     'author' => null,
     'time' => null,
     'color' => 'zinc',

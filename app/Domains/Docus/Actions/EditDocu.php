@@ -81,7 +81,7 @@ class EditDocu
 
             $event_create = Event::create([
                 'author_id' => $user->id,
-                'type' => 'edit_docu',
+                'type' => 'edit',
             ]);
 
             $user->events()->attach($event_create);

@@ -5,12 +5,12 @@ use Livewire\Component;
 new class extends Component {
     const EVENT_VALUE_UPDATED = '';
 
-    public $value;
+    public string $value;
 
     public string $quillId;
     public string $placeholder;
 
-    public function mount($value = '', string $placeholder = '')
+    public function mount(string $value, string $placeholder)
     {
         $this->value = $value;
         $this->placeholder = $placeholder;
@@ -24,12 +24,12 @@ new class extends Component {
 };
 ?>
 
-<div {{ $attributes->merge(['class' => '']) }} wire:ignore>
-    <div class="mb-10" id="{{ $quillId }}"></div>
+<div {{ $attributes->only('class')->merge(['class' => '']) }} wire:ignore>
+    <div class="mb-10" id="{{ $quillId }}" x-init="loadEditor('{{ $quillId }}', '{!! $value !!}')"></div>
     {{-- <input type="hidden" id="{{ $quillId . '-area' }}" value="{!! $value !!}" /> --}}
     @push('scripts')
         <script defer>
-            document.addEventListener('DOMContentLoaded', () => {
+            function loadEditor(quillId, value) {
                 const toolbarOptions = [
                     ['bold', 'italic', 'underline', 'strike'], // toggled buttons
                     ['link', 'image'],
@@ -45,7 +45,7 @@ new class extends Component {
                         'background': []
                     }], // dropdown with defaults from theme
                 ];
-                const editor = new Quill('#{{ $quillId }}', {
+                let editor = new Quill("#" + quillId, {
                     placeholder: '{{ $placeholder }}',
                     modules: {
                         toolbar: toolbarOptions
@@ -53,17 +53,17 @@ new class extends Component {
                     theme: 'snow',
                 });
 
-                const delta = editor.clipboard.convert({
-                    html: '{!! $value !!}'
+                let delta = editor.clipboard.convert({
+                    html: value,
                 });
                 editor.setContents(delta, 'silent')
 
                 editor.on('text-change', function() {
-                    let value = document.getElementsByClassName('ql-editor')[0].innerHTML;
+                    let value = document.getElementById(quillId).children[0].innerHTML;
                     @this.set('value', value)
                 })
 
-            });
+            }
         </script>
     @endpush
 </div>

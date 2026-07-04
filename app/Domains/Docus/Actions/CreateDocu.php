@@ -46,7 +46,7 @@ class CreateDocu
 
             $event_create = Event::create([
                 'author_id' => $user->id,
-                'type' => 'create_docu',
+                'type' => 'create',
             ]);
 
             $user->events()->attach($event_create);

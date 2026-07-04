@@ -26,7 +26,7 @@ class CreateMeeting
 
             $event_create = Event::create([
                 'author_id' => $user->id,
-                'type' => 'create_meeting',
+                'type' => 'create',
             ]);
 
             $user->events()->attach($event_create);

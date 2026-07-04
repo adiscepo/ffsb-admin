@@ -2,89 +2,31 @@
 
 namespace App\Domains\Meetings\Actions;
 
-use App\Domains\Docus\DocuLink;
 use App\Models\User;
-use App\Domains\Docus\Docu;
 use App\Domains\Events\Event;
+use App\Domains\Meetings\Meeting;
 use Illuminate\Support\Facades\DB;
 
 class EditMeeting
 {
 
-    public function execute(User $user, Docu $docu, ?array $data = null)
+    public function execute(User $user, Meeting $meeting, string $name, string $datetime, string $location, string $description)
     {
-        DB::transaction(function () use ($user, $docu, $data) {
-            $docu->update([
-                'title' => $data['title'],
-                'summary' => $data['summary'],
-                'duration' => $data['duration'],
-                'year' => $data['year'],
-                'lang' => $data['lang'],
-                'subtitles' => $data['subtitle'],
-                'target' => $data['target'],
-                'comment' => $data['comment'],
-                'edition_year_id' => $data['edition_year_id'],
+        DB::transaction(function () use ($user, $meeting, $name, $datetime, $location, $description) {
+            $meeting->update([
+                'name' => $name,
+                'datetime' => $datetime,
+                'location' => $location,
+                'description' => $description,
             ]);
 
-            foreach ($data['links'] as $id => $link) {
-                $docu_link = DocuLink::where("url", $link['url'])->first();
-                if (!$docu->see_at->contains($docu_link)) {
-                    DocuLink::create([
-                        'url' => $link['url'],
-                        'password' => $link['password'],
-                        'deadline' => !empty($link['deadline']) ? $link['deadline'] : null,
-                        'docu_id' => $docu->id,
-                    ]);
-                } else {
-                    $docu_link->update([
-                        'url' => $link['url'],
-                        'password' => $link['password'],
-                        'deadline' => !empty($link['deadline']) ? $link['deadline'] : null,
-                        'docu_id' => $docu->id,
-                    ]);
-                }
-            }
-
-            $links_id = collect($data['links'])->pluck('id');
-            foreach ($docu->see_at as $link) {
-                if (!$links_id->contains($link->id)) {
-                    // Production house was removed
-                    $link->delete();
-                }
-            }
-
-            foreach ($data['production_houses'] as $id => $production_house) {
-                if (!$docu->from->contains($production_house)) {
-                    $docu->from()->attach($production_house);
-                }
-            }
-
-            foreach ($docu->from as $production_house) {
-                if (!in_array($production_house->id, $data['production_houses'])) {
-                    // Production house was removed
-                    $docu->from()->detach($production_house);
-                }
-            }
-
-            foreach ($data['fields'] as $id => $field) {
-                if (!$docu->fields->contains($field)) {
-                    $docu->fields()->attach($field);
-                }
-            }
-
-            foreach ($docu->fields as $field) {
-                if (!in_array($field->id, $data['fields'])) {
-                    // Production house was removed
-                    $docu->fields()->detach($field);
-                }
-            }
-
-            $event_create = Event::create([
+            $event_edit = Event::create([
                 'author_id' => $user->id,
-                'type' => 'edit_docu',
+                'type' => 'edit',
             ]);
 
-            $user->events()->attach($event_create);
+            $user->events()->attach($event_edit);
+            $meeting->events()->attach($event_edit);
         });
     }
 }
