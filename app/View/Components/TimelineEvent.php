@@ -6,6 +6,7 @@ use App\Domains\Bugs\Bug;
 use Closure;
 use App\Domains\Events\Event;
 use App\Domains\Docus\Docu;
+use App\Domains\Meetings\Meeting;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
@@ -38,6 +39,8 @@ class TimelineEvent extends Component
                         return view('components.timeline.events.create-bug');
                     case Docu::class:
                         return view('components.timeline.events.create-docu');
+                    case Meeting::class:
+                        return view('components.timeline.events.create-meeting');
                 }
             case 'comment':
                 return view('components.timeline.events.comment');
@@ -57,6 +60,21 @@ class TimelineEvent extends Component
                     case Bug::class:
                         return view('components.timeline.events.remove-tag');
                 }
+            case 'add_member':
+                switch ($this->event->pivot->eventable_type) {
+                    case Meeting::class:
+                        return view('components.timeline.events.add-member-meeting');
+                }
+            case 'remove_member':
+                switch ($this->event->pivot->eventable_type) {
+                    case Meeting::class:
+                        return view('components.timeline.events.remove-member-meeting');
+                }
+            case 'add_file':
+                // switch ($this->event->pivot->eventable_type) {
+                //     case Meeting::class:
+                return view('components.timeline.events.add-file');
+                // }
 
             default:
                 return view('components.timeline-item');
