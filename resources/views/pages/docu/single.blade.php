@@ -20,7 +20,7 @@ new class extends Component {
     public function mount(int $id)
     {
         $this->docu = Docu::findOrFail($id);
-        $evaluations = Evaluation::where(['docu_id' => $id]);
+        $evaluations = Evaluation::where(['docu_id' => $id, 'draft' => false]);
         if ($evaluations->count() == 0) {
             $this->current_evaluation_author_id = null;
         } else {
