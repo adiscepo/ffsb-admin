@@ -120,8 +120,7 @@ new class extends Component {
 ?>
 
 <div {{ $attributes->only('class')->merge(['class' => 'px-10 overflow-y-scroll']) }}>
-    <div class="mb-10"></div>
-    <div class="space-y-2">
+    <div class="space-y-2 my-10">
         <div class="flex items-center justify-between">
             <h3 class="text-2xl text-zinc-900 dark:text-zinc-100 w-fit whitespace-nowrap">
                 @if ($edit_mode)

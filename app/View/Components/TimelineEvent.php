@@ -42,6 +42,11 @@ class TimelineEvent extends Component
                     case Meeting::class:
                         return view('components.timeline.events.create-meeting');
                 }
+            case 'edit':
+                switch ($this->event->pivot->eventable_type) {
+                    case Meeting::class:
+                        return view('components.timeline.events.edit-meeting');
+                }
             case 'comment':
                 return view('components.timeline.events.comment');
 
