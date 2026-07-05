@@ -56,13 +56,13 @@ new class extends Component {
     }
 
     // Dispatched by the file-info component
-    public function deleteFile(string $filename)
+    public function deleteFile(string $filename, string $client_name)
     {
         // TODO: This handler is only needed because the files are stored as a
         // JSON array in the database, if the files were linked through a pivot
         // table, all this logic is useless (but I'm too lazy rn to add the
         // migration to handle that)
-        $this->meeting->removeUploadedFile($filename);
+        $this->meeting->removeUploadedFile($filename, $client_name);
     }
 
     public function saveFile()

@@ -72,7 +72,7 @@ class Meeting extends Model
         $this->save();
     }
 
-    public function removeUploadedFile(string $filename)
+    public function removeUploadedFile(string $filename, string $client_name)
     {
         $collection = collect($this->files_upload);
         $collection = $collection->reject(function ($item) use ($filename) {
@@ -82,6 +82,9 @@ class Meeting extends Model
         $this->events()->attach(Event::create([
             'author_id' => Auth::user()->id,
             'type' => 'remove_file',
+            'payload' => [
+                'client_name' => $client_name,
+            ],
         ]));
         $this->save();
     }

@@ -24,7 +24,7 @@ new class extends Component {
     public function deleteFile(DeleteFile $delete)
     {
         $delete->execute(Auth::user(), $this->file->filename);
-        $this->dispatch('delete-document', $this->file->filename);
+        $this->dispatch('delete-document', $this->file->filename, $this->file->client_name);
         Flux::toast(variant: 'success', text: 'Le fichier a bien été supprimé');
     }
 

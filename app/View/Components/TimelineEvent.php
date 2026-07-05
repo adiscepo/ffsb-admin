@@ -65,6 +65,8 @@ class TimelineEvent extends Component
                     case Bug::class:
                         return view('components.timeline.events.remove-tag');
                 }
+            case 'remove_file':
+                        return view('components.timeline.events.remove-file');
             case 'add_member':
                 switch ($this->event->pivot->eventable_type) {
                     case Meeting::class:
