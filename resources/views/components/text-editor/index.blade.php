@@ -25,7 +25,7 @@ new class extends Component {
 ?>
 
 <div {{ $attributes->only('class')->merge(['class' => '']) }} wire:ignore>
-    <div class="mb-10" id="{{ $quillId }}" x-init="loadEditor('{{ $quillId }}', '{!! $value !!}')"></div>
+    <div class="mb-10" id="{{ $quillId }}" x-init="loadEditor('{{ $quillId }}', @js($value))"></div>
     {{-- <input type="hidden" id="{{ $quillId . '-area' }}" value="{!! $value !!}" /> --}}
     @push('scripts')
         <script defer>
