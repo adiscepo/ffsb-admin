@@ -69,7 +69,7 @@ new class extends Component {
     <div class="mb-4"></div>
     <ul class="flex flex-wrap gap-2">
         @foreach ($this->getProgram() as $program)
-            <div class="p-3 border w-fit border-zinc-200 dark:border-zinc-800 dark:bg-zinc-700 rounded-xl hover:bg-zinc-50 dark:hover:bg-zinc-600 cursor-pointer space-y-3 max-sm:w-full relative"
+            <div class="py-3 px-5 border w-fit border-zinc-200 dark:border-zinc-800 dark:bg-zinc-700 rounded-xl hover:bg-zinc-50 dark:hover:bg-zinc-600 cursor-pointer space-y-3 max-sm:w-full relative"
                 wire:click='redirectProgram({{ $program->id }})'>
                 <div class="flex flex-col">
                     <a>{{ $program->name }}</a>

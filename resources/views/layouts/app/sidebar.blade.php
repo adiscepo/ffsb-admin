@@ -7,7 +7,7 @@
 
 <body class="min-h-screen bg-white dark:bg-zinc-800">
     <x-debug-bar />
-    <flux:sidebar sticky collapsible="mobile"
+    <flux:sidebar sticky collapsible="true"
         class="border-e border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900">
         <flux:sidebar.header>
             <x-app-logo :sidebar="true" href="{{ route('dashboard') }}" wire:navigate />
@@ -42,6 +42,12 @@
                     <flux:sidebar.item icon="tag" :href="route('fields')" :current="request()->routeIs('fields')"
                         wire:navigate>
                         {{ __('Catégories') }}
+                    </flux:sidebar.item>
+                @endif
+                @if (Route::has('production_houses'))
+                    <flux:sidebar.item icon="building-storefront" :href="route('production_houses')"
+                        :current="request()->routeIs('production_houses')" wire:navigate>
+                        {{ __('Maisons de production') }}
                     </flux:sidebar.item>
                 @endif
             </flux:sidebar.group>
