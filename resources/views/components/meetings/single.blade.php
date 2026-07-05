@@ -28,6 +28,7 @@ new class extends Component {
         'pill-box:members' => 'updateMembers',
         'text-editor-updated' => 'textEditorValueUpdated',
         'date-picker' => 'updateDate',
+        'delete-document' => 'deleteFile',
     ];
 
     public function mount(Meeting $meeting)
@@ -52,6 +53,16 @@ new class extends Component {
         $this->attachments = $this->attachments->reject(function ($item) use ($file) {
             return $item === $file;
         });
+    }
+
+    // Dispatched by the file-info component
+    public function deleteFile(string $filename)
+    {
+        // TODO: This handler is only needed because the files are stored as a
+        // JSON array in the database, if the files were linked through a pivot
+        // table, all this logic is useless (but I'm too lazy rn to add the
+        // migration to handle that)
+        $this->meeting->removeUploadedFile($filename);
     }
 
     public function saveFile()
@@ -220,10 +231,19 @@ new class extends Component {
                         @php
                             $file = File::find($file);
                         @endphp
-                        <a href="{{ Storage::url($file->full_path) }}" download="{{ $file->client_name }}"
+                        {{-- <a href="{{ Storage::url($file->full_path) }}" download="{{ $file->client_name }}"
                             class="flex gap-x-1 items-center w-fit py-2 px-3 text-xs text-zinc-500 bg-zinc-200 border border-zinc-300 rounded-full cursor-pointer hover:bg-zinc-300">
                             <flux:icon icon="document" class="size-4" />{{ $file->client_name }}
-                        </a>
+                        </a> --}}
+                        <flux:modal name="file-{{ $file->filename }}">
+                            <livewire:files.file-info filename="{{ $file->filename }}" />
+                        </flux:modal>
+                        <flux:modal.trigger name="file-{{ $file->filename }}">
+                            <span
+                                class="flex gap-x-1 items-center w-fit py-2 px-3 text-xs text-zinc-500 bg-zinc-200 border border-zinc-300 rounded-full cursor-pointer hover:bg-zinc-300">
+                                <flux:icon icon="document" class="size-4" />{{ $file->client_name }}
+                            </span>
+                        </flux:modal.trigger>
                     @endforeach
                 </div>
             @else

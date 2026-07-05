@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 
 class Meeting extends Model
@@ -68,6 +69,20 @@ class Meeting extends Model
             ]));
         }
         $this->attributes['files_upload'] = json_encode(array_merge($this->files_upload ?? [], $files));
+        $this->save();
+    }
+
+    public function removeUploadedFile(string $filename)
+    {
+        $collection = collect($this->files_upload);
+        $collection = $collection->reject(function ($item) use ($filename) {
+            return $item === $filename;
+        });
+        $this->attributes['files_upload'] = json_encode($collection->toArray());
+        $this->events()->attach(Event::create([
+            'author_id' => Auth::user()->id,
+            'type' => 'remove_file',
+        ]));
         $this->save();
     }
 

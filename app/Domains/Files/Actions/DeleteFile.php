@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\DB;
 
 class DeleteFile
 {
-
     public function execute(User $user, string $filename)
     {
         DB::transaction(function () use ($user, $filename) {

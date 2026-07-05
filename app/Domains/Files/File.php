@@ -22,4 +22,17 @@ class File extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    static function formatSize(int $bytes): string
+    {
+        if (intdiv($bytes, 1_000_000) > 0) {
+            return round($bytes / 1_000_000, 2) . ' MB';
+        }
+        return round($bytes / 1_000, 2) . ' KB';
+    }
+
+    public function getSize(): string
+    {
+        return File::formatSize($this->size);
+    }
 }

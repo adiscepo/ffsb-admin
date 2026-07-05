@@ -3,6 +3,7 @@ use Livewire\Component;
 use Livewire\WithFileUploads;
 use App\Domains\Files\Actions\CreateFile;
 use App\Domains\Files\Actions\DeleteFile;
+use App\Domains\Files\File;
 
 /**
  * Dispatches 'file-uploaded' with the stored filename whenever a file is saved.
@@ -42,14 +43,6 @@ new class extends Component {
     public function getFormats(): string
     {
         return strtoupper(implode(', ', $this->formats));
-    }
-
-    public function formatSize(int $bytes): string
-    {
-        if (intdiv($bytes, 1_000_000) > 0) {
-            return round($bytes / 1_000_000, 2) . ' MB';
-        }
-        return round($bytes / 1_000, 2) . ' KB';
     }
 
     public function isImage(string $filename): bool
@@ -175,7 +168,7 @@ new class extends Component {
                 @endif
                 <div>
                     <p class="text-sm text-zinc-600 dark:text-zinc-200">{{ $file['client_filename'] }}</p>
-                    <p class="text-xs text-zinc-400">{{ $this->formatSize($file['file_size']) }}</p>
+                    <p class="text-xs text-zinc-400">{{ File::formatSize($file['file_size']) }}</p>
                     <p class="text-xs text-zinc-400">Cliquez ou glissez pour remplacer</p>
                 </div>
             </div>
@@ -225,7 +218,7 @@ new class extends Component {
 
                     <div class="flex flex-col min-w-0">
                         <span class="truncate font-medium">{{ $file['client_filename'] }}</span>
-                        <span class="text-zinc-400">{{ $this->formatSize($file['file_size']) }}</span>
+                        <span class="text-zinc-400">{{ File::formatSize($file['file_size']) }}</span>
                     </div>
 
                     <button type="button" wire:click="removeFile({{ $index }})"
