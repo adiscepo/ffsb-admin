@@ -35,7 +35,7 @@ new class extends Component {
     </flux:modal.trigger>
 @endcomponent
 
-<div class="grid md:grid-cols-2 max-sm:grid-rows-2 h-full overflow-y-scroll">
+<div class="grid md:grid-cols-3 max-sm:grid-rows-3 h-full overflow-y-scroll">
     <div class="overflow-y-scroll px-10 pb-10">
         <div class="mb-10"></div>
         <div class="space-y-2">
@@ -68,6 +68,6 @@ new class extends Component {
     </div>
     @if ($current_meeting != null)
         <livewire:meetings.single :meeting="$current_meeting" :key="$current_meeting->id"
-            class="row-span-2 md:col-start-2 max-sm:mb-10 max-sm:border-t md:border-l border-zinc-200" />
+            class="row-span-2 md:col-span-2 md:col-start-2 max-sm:mb-10 max-sm:border-t md:border-l border-zinc-200" />
     @endif
 </div>
