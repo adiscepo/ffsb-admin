@@ -89,19 +89,17 @@
             @endif
         </flux:sidebar.nav>
         <flux:sidebar.spacer />
-        @if (Auth::user()->id == 1)
-            {{-- TODO: Replace with a policy (admin, developer, etc.) --}}
-            <flux:sidebar.nav>
-                <flux:sidebar.group heading="Support">
-                    @if (Route::has('support.bugs.list'))
-                        <flux:sidebar.item icon="bug-ant" :href="route('support.bugs.list')"
-                            :current="request()->routeIs('support.bugs.list')" wire:navigate>
-                            {{ __('Liste des bugs') }}
-                        </flux:sidebar.item>
-                    @endif
-                </flux:sidebar.group>
-            </flux:sidebar.nav>
-        @endif
+        {{-- TODO: Replace with a policy (admin, developer, etc.) --}}
+        <flux:sidebar.nav>
+            <flux:sidebar.group heading="Support">
+                @if (Route::has('support.bugs.list'))
+                    <flux:sidebar.item icon="bug-ant" :href="route('support.bugs.list')"
+                        :current="request()->routeIs('support.bugs.list')" wire:navigate>
+                        {{ __('Liste des bugs') }}
+                    </flux:sidebar.item>
+                @endif
+            </flux:sidebar.group>
+        </flux:sidebar.nav>
 
         {{-- <flux:sidebar.nav>
                 <flux:sidebar.item icon="zanzibar-git-2" href="https://github.com/laravel/livewire-starter-kit" target="_blank">
