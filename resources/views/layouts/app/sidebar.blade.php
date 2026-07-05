@@ -88,9 +88,9 @@
                 </flux:sidebar.group>
             @endif
         </flux:sidebar.nav>
+        <flux:sidebar.spacer />
         @if (Auth::user()->id == 1)
             {{-- TODO: Replace with a policy (admin, developer, etc.) --}}
-            <flux:sidebar.spacer />
             <flux:sidebar.nav>
                 <flux:sidebar.group heading="Support">
                     @if (Route::has('support.bugs.list'))
