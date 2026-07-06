@@ -238,7 +238,7 @@ new class extends Component {
                     {{-- PUBLIC CIBLE --}}
                     <flux:field>
                         <flux:label>Public cible</flux:label>
-                        <livewire:pill-box name="target" :datas="DocuTarget::toArray()" :one_result="true" />
+                        <livewire:pill-box name="target" :datas="DocuTarget::toArray()" :selected="[DocuTarget::id('public')]" :one_result="true" />
                     </flux:field>
                 </div>
                 {{-- COMMENT --}}
