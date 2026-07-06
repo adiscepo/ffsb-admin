@@ -5,7 +5,7 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\Attributes\Computed;
 use App\Domains\Docus\Docu;
-use App\Models\Tag;
+use App\Domains\Tags\Tag;
 use App\Models\EditionYear;
 use App\Domains\Docus\Field;
 use App\Models\ProductionHouse;

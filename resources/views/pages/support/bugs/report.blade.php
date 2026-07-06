@@ -1,7 +1,7 @@
 <?php
 
 use Livewire\Component;
-use App\Models\Tag;
+use App\Domains\Tags\Tag;
 use App\Domains\Bugs\Bug;
 use App\Domains\Bugs\Actions\CreateBug;
 use Livewire\WithFileUploads;

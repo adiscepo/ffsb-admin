@@ -1,4 +1,4 @@
-@use('App\Models\Tag')
+@use('App\Domains\Tags\Tag')
 
 @php
     $tag = Tag::find($event->payload['tag_id']);

@@ -15,7 +15,7 @@ use App\Domains\Programs\ProgramEvent;
 use App\Models\EditionYear;
 use App\Models\ProductionHouse;
 use App\Models\Status;
-use App\Models\Tag;
+use App\Domains\Tags\Tag;
 use App\Models\User;
 
 use Illuminate\Database\Seeder;

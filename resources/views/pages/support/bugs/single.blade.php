@@ -3,7 +3,7 @@
 use Livewire\Component;
 use App\Domains\Bugs\Bug;
 use App\Models\User;
-use App\Models\Tag;
+use App\Domains\Tags\Tag;
 use App\Domains\Bugs\Actions\AssignBugToUser;
 use App\Domains\Bugs\Actions\RemoveAssignationBug;
 use App\Domains\Bugs\Actions\CommentBug;

@@ -1,7 +1,7 @@
 <?php
 
 use Livewire\Component;
-use App\Models\Tag;
+use App\Domains\Tags\Tag;
 use App\Domains\Evaluations\Evaluation;
 use App\Domains\Docus\Field;
 use App\Models\ProductionHouse;

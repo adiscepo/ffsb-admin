@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\Tag;
+use App\Domains\Tags\Tag;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
