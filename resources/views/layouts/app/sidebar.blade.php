@@ -7,11 +7,11 @@
 
 <body class="min-h-screen bg-white dark:bg-zinc-800">
     <x-debug-bar />
-    <flux:sidebar sticky collapsible="mobile"
-        class="border-e border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900">
+    <flux:sidebar sticky collapsible class="border-e border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900">
         <flux:sidebar.header>
             <x-app-logo :sidebar="true" href="{{ route('dashboard') }}" wire:navigate />
-            <flux:sidebar.collapse class="lg:hidden" />
+            <flux:sidebar.collapse
+                class="in-data-flux-sidebar-on-desktop:not-in-data-flux-sidebar-collapsed-desktop:-mr-2" />
         </flux:sidebar.header>
 
         <flux:sidebar.nav>
@@ -19,38 +19,38 @@
                 wire:navigate>
                 {{ __('Tableau de bord') }}
             </flux:sidebar.item>
-            <flux:sidebar.group :heading="__('Programme')" class="grid">
-                @if (Route::has('docus'))
-                    <flux:sidebar.item icon="film" :href="route('docus')" :current="request()->routeIs('docus')"
-                        wire:navigate>
-                        {{ __('Documentaires') }}
-                    </flux:sidebar.item>
-                @endif
-                @if (Route::has('evaluations'))
-                    <flux:sidebar.item icon="document-text" :href="route('evaluations')"
-                        :current="request()->routeIs('evaluations')" wire:navigate>
-                        {{ __('Evaluations') }}
-                    </flux:sidebar.item>
-                @endif
-                @if (Route::has('programs'))
-                    <flux:sidebar.item icon="calendar-date-range" :href="route('programs')"
-                        :current="request()->routeIs('programs')" wire:navigate>
-                        {{ __('Programmes') }}
-                    </flux:sidebar.item>
-                @endif
-                @if (Route::has('fields'))
-                    <flux:sidebar.item icon="tag" :href="route('fields')" :current="request()->routeIs('fields')"
-                        wire:navigate>
-                        {{ __('Catégories') }}
-                    </flux:sidebar.item>
-                @endif
-                @if (Route::has('production_houses'))
-                    <flux:sidebar.item icon="building-storefront" :href="route('production_houses')"
-                        :current="request()->routeIs('production_houses')" wire:navigate>
-                        {{ __('Maisons de production') }}
-                    </flux:sidebar.item>
-                @endif
-            </flux:sidebar.group>
+            {{-- <flux:sidebar.group icon="star" :heading="__('Programme')" class="grid"> --}}
+            @if (Route::has('docus'))
+                <flux:sidebar.item icon="film" :href="route('docus')" :current="request()->routeIs('docus')"
+                    wire:navigate>
+                    {{ __('Documentaires') }}
+                </flux:sidebar.item>
+            @endif
+            @if (Route::has('evaluations'))
+                <flux:sidebar.item icon="document-text" :href="route('evaluations')"
+                    :current="request()->routeIs('evaluations')" wire:navigate>
+                    {{ __('Evaluations') }}
+                </flux:sidebar.item>
+            @endif
+            @if (Route::has('programs'))
+                <flux:sidebar.item icon="calendar-date-range" :href="route('programs')"
+                    :current="request()->routeIs('programs')" wire:navigate>
+                    {{ __('Programmes') }}
+                </flux:sidebar.item>
+            @endif
+            @if (Route::has('fields'))
+                <flux:sidebar.item icon="tag" :href="route('fields')" :current="request()->routeIs('fields')"
+                    wire:navigate>
+                    {{ __('Catégories') }}
+                </flux:sidebar.item>
+            @endif
+            @if (Route::has('production_houses'))
+                <flux:sidebar.item icon="building-storefront" :href="route('production_houses')"
+                    :current="request()->routeIs('production_houses')" wire:navigate>
+                    {{ __('Maisons de production') }}
+                </flux:sidebar.item>
+            @endif
+            {{-- </flux:sidebar.group> --}}
             @if (Route::has('tresorery'))
                 <flux:sidebar.group expandable="true" :heading="__('Trésorerie')" class="grid">
                     @if (Route::has('subsides'))
@@ -97,7 +97,7 @@
         <flux:sidebar.spacer />
         {{-- TODO: Replace with a policy (admin, developer, etc.) --}}
         <flux:sidebar.nav>
-            <flux:sidebar.group heading="Support">
+            <flux:sidebar.group heading="Support" expandable icon="cog">
                 @if (Route::has('support.bugs.list'))
                     <flux:sidebar.item icon="bug-ant" :href="route('support.bugs.list')"
                         :current="request()->routeIs('support.bugs.list')" wire:navigate>
