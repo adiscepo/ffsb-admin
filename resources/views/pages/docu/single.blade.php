@@ -47,7 +47,8 @@ new class extends Component {
             <livewire:tags.attach :model="Docu::class" :taggable="$docu" />
         </flux:modal>
         <flux:modal.trigger name="tags">
-            <flux:button icon="tag" icon:variant="mini" variant="primary" size="sm" />
+            <flux:button icon="tag" icon:variant="mini" color="violet" variant="primary" size="sm"
+                class="cursor-pointer" />
         </flux:modal.trigger>
         <livewire:docu.edit :docu="$docu" />
         <flux:modal.trigger name="create-docu">
