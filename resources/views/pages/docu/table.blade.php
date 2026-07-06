@@ -204,9 +204,11 @@ new class extends Component {
                     </flux:table.cell>
                     <flux:table.cell>
                         <flux:avatar.group>
-                            @foreach ($docu->evaluations as $evaluation)
-                                <flux:avatar circle size="xs" :initials="$evaluation->user->initials()"
-                                    :src="$evaluation->user->getProfilePicture()" />
+                            @foreach ($docu->published_evaluations() as $evaluation)
+                                @if (!$evaluation->isDraft())
+                                    <flux:avatar circle size="xs" :initials="$evaluation->user->initials()"
+                                        :src="$evaluation->user->getProfilePicture()" />
+                                @endif
                             @endforeach
                         </flux:avatar.group>
                     </flux:table.cell>

@@ -75,6 +75,13 @@ class Docu extends Model
         return $this->hasMany(Evaluation::class);
     }
 
+    public function published_evaluations()
+    {
+        return $this->evaluations->reject(function (Evaluation $eval) {
+            return $eval->isDraft();
+        });
+    }
+
     public function target()
     {
         if ($this->target) {
