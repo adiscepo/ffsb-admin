@@ -3,7 +3,7 @@
 namespace App\Domains\Bugs\Actions;
 
 use App\Domains\Bugs\Bug;
-use App\Models\Tag;
+use App\Domains\Tags\Tag;
 use Illuminate\Support\Facades\DB;
 
 class EditBug

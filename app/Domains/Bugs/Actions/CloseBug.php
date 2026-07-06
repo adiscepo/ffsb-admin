@@ -5,8 +5,6 @@ namespace App\Domains\Bugs\Actions;
 use App\Models\User;
 use App\Domains\Bugs\Bug;
 use App\Domains\Events\Event;
-use App\Models\Tag;
-use App\Models\Status;
 use Illuminate\Support\Facades\DB;
 
 class CloseBug

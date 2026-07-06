@@ -10,22 +10,21 @@ use App\Domains\Docus\Field;
 use App\Domains\Docus\Enum\DocuTarget;
 use App\Domains\Docus\Factory\DocuFactory;
 use App\Domains\Events\Traits\Eventable;
+use App\Domains\Tags\Traits\Taggable;
 use App\Models\User;
 use App\Models\ProductionHouse;
 use App\Models\EditionYear;
-use App\Models\Tag;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 class Docu extends Model
 {
     use HasFactory;
-    use Eventable;
+    use Eventable, Taggable;
 
     protected $fillable = ['title', 'summary', 'duration', 'year', 'user_id', 'lang', 'subtitles', 'target', 'comment', 'edition_year_id'];
 
@@ -69,11 +68,6 @@ class Docu extends Model
     public function fields(): BelongsToMany
     {
         return $this->belongsToMany(Field::class);
-    }
-
-    public function tags(): MorphToMany
-    {
-        return $this->morphToMany(Tag::class, 'taggable');
     }
 
     public function evaluations(): HasMany

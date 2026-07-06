@@ -6,7 +6,6 @@ use App\Domains\Docus\DocuLink;
 use App\Models\User;
 use App\Domains\Docus\Docu;
 use App\Domains\Events\Event;
-use App\Models\Tag;
 use Illuminate\Support\Facades\DB;
 
 class CreateDocu

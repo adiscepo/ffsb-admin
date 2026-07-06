@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Models;
+namespace App\Domains\Tags;
 
+use Database\Factories\TagFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
@@ -32,5 +33,10 @@ class Tag extends Model
     public static function for($model): Collection
     {
         return Tag::where('model', $model)->orWhere('model', null)?->groupBy('name')->select(['id', 'name'])->get();
+    }
+
+    protected static function newFactory(): TagFactory
+    {
+        return TagFactory::new();
     }
 }
