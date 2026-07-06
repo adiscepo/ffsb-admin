@@ -41,14 +41,23 @@ new class extends Component {
 };
 ?>
 @component('partials.heading', ['route' => 'Documentaires:docus/' . $docu->title])
-    <livewire:docu.edit :docu="$docu" />
-    <flux:modal.trigger name="create-docu">
-        <flux:button size="sm" variant="primary" color="violet" class="cursor-pointer hidden! md:block!">
-            Editer
-        </flux:button>
-        <flux:button size="sm" variant="primary" color="violet" class="cursor-pointer md:hidden" icon="pencil">
-        </flux:button>
-    </flux:modal.trigger>
+    <div class="flex gap-x-2">
+        <flux:modal name="tags" class="space-y-2 overflow-visible">
+            <h2>Tags</h2>
+            <livewire:tags.attach :model="Docu::class" :taggable="$docu" />
+        </flux:modal>
+        <flux:modal.trigger name="tags">
+            <flux:button icon="tag" icon:variant="mini" variant="primary" size="sm" />
+        </flux:modal.trigger>
+        <livewire:docu.edit :docu="$docu" />
+        <flux:modal.trigger name="create-docu">
+            <flux:button size="sm" variant="primary" color="violet" class="cursor-pointer hidden! md:block!">
+                Editer
+            </flux:button>
+            <flux:button size="sm" variant="primary" color="violet" class="cursor-pointer md:hidden" icon="pencil">
+            </flux:button>
+        </flux:modal.trigger>
+    </div>
 @endcomponent
 
 <main class="flex flex-col gap-y-4 lg:grid lg:grid-cols-[1fr_1.5fr_2fr] grow">
