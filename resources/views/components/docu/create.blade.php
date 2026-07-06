@@ -79,6 +79,7 @@ new class extends Component {
     public function mount()
     {
         $this->edition_year_id = Edition::currentEdition()->id;
+        $this->target = DocuTarget::PUBLIC->value;
         $this->fetchProductionHouses(false);
         $this->fetchFields(false);
     }
@@ -171,7 +172,7 @@ new class extends Component {
                         <flux:input label="Nom" wire:model='title' placeholder="Fire of Love" />
                         {{-- DUREE --}}
                         <flux:input.group class="max-w-32" label="Durée">
-                            <flux:input placeholder="90" wire:model='duration' type="number" />
+                            <flux:input placeholder="90" min='0' wire:model='duration' type="number" />
                             <flux:input.group.suffix>min</flux:input.group.suffix>
                         </flux:input.group>
                     </div>
