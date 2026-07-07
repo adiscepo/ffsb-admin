@@ -22,9 +22,11 @@ new class extends Component {
         $this->docu = Docu::findOrFail($id);
         $evaluations = Evaluation::where(['docu_id' => $id, 'draft' => false]);
         if ($evaluations->count() == 0) {
-            $this->current_evaluation_author_id = null;
-        } elseif ($this->docu->hasDraftEvaluationFrom(Auth::user()->id)) {
-            $this->current_evaluation_author_id = Auth::user()->id;
+            if ($this->docu->hasDraftEvaluationFrom(Auth::user()->id)) {
+                $this->current_evaluation_author_id = Auth::user()->id;
+            } else {
+                $this->current_evaluation_author_id = null;
+            }
         } else {
             $this->current_evaluation_author_id = $evaluations->first()->user_id;
             $this->form_evaluation = $this->current_evaluation_author_id == Auth::user()->id;
