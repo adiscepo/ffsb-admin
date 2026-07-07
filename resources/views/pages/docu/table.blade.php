@@ -46,7 +46,7 @@ new class extends Component {
         }
 
         if (!empty($this->tag)) {
-            $query = Docu::whereAttachedTo(Tag::where('name', $this->tag)->get());
+            $query = Docu::whereRelation('edition_year', 'year', $this->edition_year)->whereAttachedTo(Tag::where('name', $this->tag)->get());
             return $query->paginate(50);
         }
 
