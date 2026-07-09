@@ -180,8 +180,8 @@ new class extends Component {
             <flux:table.column>Nom</flux:table.column>
             <flux:table.column>Langue</flux:table.column>
             <flux:table.column>Site web</flux:table.column>
-            <flux:table.column>Téléphone</flux:table.column>
-            <flux:table.column>Email</flux:table.column>
+            {{-- <flux:table.column>Téléphone</flux:table.column>
+            <flux:table.column>Email</flux:table.column> --}}
             <flux:table.column>Remarque</flux:table.column>
             <flux:table.column>Status</flux:table.column>
             <flux:table.column>Assignés</flux:table.column>
@@ -201,7 +201,8 @@ new class extends Component {
                     </flux:table.cell>
 
                     <flux:table.cell variant="strong"><img class="w-5"
-                            src="{{ url('/images/flags/' . $production_house->lang . '.png') }}" alt="" srcset="">
+                            src="{{ url('/images/flags/' . $production_house->lang . '.png') }}" alt=""
+                            srcset="">
                     </flux:table.cell>
 
                     <flux:table.cell>
@@ -214,20 +215,8 @@ new class extends Component {
                     </flux:table.cell>
 
                     <flux:table.cell>
-                        @if ($production_house->contact_phone)
-                            {{ $production_house->contact_phone }}
-                        @endif
-                    </flux:table.cell>
-
-                    <flux:table.cell>
-                        @if ($production_house->contact_email)
-                            {{ $production_house->contact_email }}
-                        @endif
-                    </flux:table.cell>
-
-                    <flux:table.cell>
-                        @if ($production_house->contact_email)
-                            <span class="block w-50 overflow-hidden whitespace-nowrap text-ellipsis">
+                        @if ($production_house->remark)
+                            <span class="block w-100 overflow-hidden whitespace-nowrap text-ellipsis">
                                 {{ $production_house->remark }}
                             </span>
                         @endif
