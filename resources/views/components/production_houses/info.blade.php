@@ -34,9 +34,9 @@ new class extends Component {
         <span class="text-sm italic text-zinc-500">Chargement de la maison de production</span>
     </x-loading-message>
     <div class="absolute p-2 right-0">
-        @if ($production_house->tags?->isNotEmpty())
-            @foreach ($production_house->tags as $tag)
-                <flux:badge color="{{ $tag->color }}">{{ $tag->name }}</flux:badge>
+        @if ($production_house->statuses->isNotEmpty())
+            @foreach ($production_house->statuses as $status)
+                <flux:badge color="{{ $status->color }}">{{ $status->name }}</flux:badge>
             @endforeach
         @endif
     </div>

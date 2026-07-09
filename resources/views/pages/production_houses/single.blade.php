@@ -38,6 +38,14 @@ new class extends Component {
             <flux:button icon="tag" icon:variant="mini" color="violet" variant="primary" size="sm"
                 class="cursor-pointer" />
         </flux:modal.trigger> --}}
+        <flux:modal name="statuses" class="space-y-2 overflow-visible">
+            <h2>Tags</h2>
+            <livewire:statuses.attach :model="ProductionHouse::class" :statusable="$production_house" />
+        </flux:modal>
+        <flux:modal.trigger name="statuses">
+            <flux:button icon="tag" icon:variant="mini" color="violet" variant="primary" size="sm"
+                class="cursor-pointer" />
+        </flux:modal.trigger>
         <flux:modal name="edit-production-house" variant="flyout">
             <livewire:production_houses.edit :production_house="$production_house" />
         </flux:modal>
