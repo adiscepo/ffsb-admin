@@ -3,7 +3,7 @@
 use Livewire\Component;
 use Livewire\Attributes\On;
 use App\Livewire\Forms\DocuForm;
-use App\Models\ProductionHouse;
+use App\Domains\ProductionHouses\ProductionHouse;
 use App\Models\EditionYear;
 use Facades\App\Domains\Edition\Edition;
 use App\Domains\Docus\Docu;
@@ -281,5 +281,7 @@ new class extends Component {
             </div>
         </form>
     </flux:modal>
-    <livewire:house-prod.create />
+    <flux:modal name="create-house-prod" class="max-w-max">
+        <livewire:production_houses.create />
+    </flux:modal>
 </div>

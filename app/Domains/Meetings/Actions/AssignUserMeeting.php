@@ -23,7 +23,6 @@ class AssignUserMeeting
                 ]
             ]);
 
-            $user->events()->attach($event_create);
             $meeting->events()->attach($event_create);
         });
     }

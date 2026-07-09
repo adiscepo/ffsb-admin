@@ -2,7 +2,7 @@
 
 use Livewire\Component;
 use App\Domains\Tags\Tag;
-use App\Models\Status;
+use App\Domains\Statuses\Status;
 use App\Domains\Bugs\Bug;
 
 return new class extends Component {

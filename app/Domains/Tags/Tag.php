@@ -2,7 +2,7 @@
 
 namespace App\Domains\Tags;
 
-use Database\Factories\TagFactory;
+use App\Domains\Tags\Factory\TagFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;

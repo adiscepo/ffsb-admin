@@ -25,7 +25,6 @@ class EditMeeting
                 'type' => 'edit',
             ]);
 
-            $user->events()->attach($event_edit);
             $meeting->events()->attach($event_edit);
         });
     }

@@ -49,11 +49,9 @@ class EvaluationEdit
                         'evaluation_id' => $evaluation->id,
                     ],
                 ]);
-                $user->events()->attach($event_publish);
                 $evaluation->events()->attach($event_publish);
             }
 
-            $user->events()->attach($event_edit);
             $evaluation->events()->attach($event_edit);
         });
     }

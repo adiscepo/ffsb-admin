@@ -5,8 +5,8 @@ namespace App\Domains\Programs;
 use App\Domains\Events\Traits\Eventable;
 use App\Domains\Programs\Enum\ProgramEventKind;
 use App\Domains\Programs\Factory\ProgramFactory;
+use App\Domains\Statuses\Traits\Statusable;
 use App\Models\EditionYear;
-use App\Models\Status;
 use App\Models\User;
 use Carbon\Carbon;
 use Carbon\CarbonImmutable;
@@ -21,7 +21,7 @@ use Illuminate\Support\Collection;
 
 class Program extends Model
 {
-    use HasFactory, Eventable;
+    use HasFactory, Eventable, Statusable;
 
     protected $fillable = ['name', 'start_date', 'end_date', 'edition_year_id', 'user_id', 'version'];
 
@@ -38,11 +38,6 @@ class Program extends Model
     public function edition_year(): BelongsTo
     {
         return $this->belongsTo(EditionYear::class);
-    }
-
-    public function statuses(): MorphToMany
-    {
-        return $this->morphToMany(Status::class, 'statusable');
     }
 
     public function number_days(): int

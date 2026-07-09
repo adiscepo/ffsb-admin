@@ -79,12 +79,12 @@ class EditDocu
                 }
             }
 
-            $event_create = Event::create([
+            $event_edit = Event::create([
                 'author_id' => $user->id,
                 'type' => 'edit',
             ]);
 
-            $user->events()->attach($event_create);
+            $docu->events()->attach($event_edit);
         });
     }
 }

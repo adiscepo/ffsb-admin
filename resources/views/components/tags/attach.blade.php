@@ -4,7 +4,7 @@ use Livewire\Component;
 use App\Domains\Tags\Tag;
 use App\Domains\Evaluations\Evaluation;
 use App\Domains\Docus\Field;
-use App\Models\ProductionHouse;
+use App\Domains\ProductionHouses\ProductionHouse;
 use App\Helpers\HumanTiming;
 use Illuminate\Support\Collection;
 use App\Domains\Tags\Actions\ToggleTag;

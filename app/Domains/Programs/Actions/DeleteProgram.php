@@ -25,7 +25,6 @@ class DeleteProgram
             ]);
 
             $program->delete();
-            $user->events()->attach($event_delete);
         });
     }
 }

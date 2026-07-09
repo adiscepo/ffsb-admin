@@ -1,8 +1,8 @@
 <?php
 
-namespace Database\Factories;
+namespace App\Domains\Statuses\Factory;
 
-use App\Models\Status;
+use App\Domains\Statuses\Status;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class StatusFactory extends Factory
 {
+    protected $model = Status::class;
     /**
      * Define the model's default state.
      *

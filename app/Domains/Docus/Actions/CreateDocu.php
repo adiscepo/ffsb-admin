@@ -48,7 +48,7 @@ class CreateDocu
                 'type' => 'create',
             ]);
 
-            $user->events()->attach($event_create);
+            $docu->events()->attach($event_create);
 
             // Previous version, with status for 'open', 'resolved', etc.
             // But it was too explicit, a simple boolean open/closed is enough

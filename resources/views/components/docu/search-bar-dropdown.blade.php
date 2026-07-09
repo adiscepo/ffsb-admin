@@ -1,6 +1,6 @@
 <?php
 use Livewire\Component;
-use App\Models\ProductionHouse;
+use App\Domains\ProductionHouses\ProductionHouse;
 
 new class extends Component {
     public string $query = '';
@@ -11,18 +11,21 @@ new class extends Component {
 
     public int $highlight_id = 0;
 
-    public function mount(array $datas) {
+    public function mount(array $datas)
+    {
         $this->datas = $datas;
     }
 
-    public function resetData() {
+    public function resetData()
+    {
         if (!$this->selected) {
-            $this->query = "";
+            $this->query = '';
         }
     }
 
-    public function resetSelection() {
-        error_log("Selection resetted");
+    public function resetSelection()
+    {
+        error_log('Selection resetted');
         $this->highlight_id = 0;
         $this->selected = false;
     }
@@ -75,16 +78,18 @@ new class extends Component {
 ?>
 
 <div class="relative">
-    <flux:input type="text" class="max-w-50" placeholder="Maison de production" wire:model.live="query" wire:keydown.escape="resetData"
-        wire:keydown.backspace="resetSelection"
-        wire:keydown.arrow-up="decrementHighlight" wire:keydown.arrow-down="incrementHighlight"
-        wire:keydown.enter="selectResult" value="query" />
+    <flux:input type="text" class="max-w-50" placeholder="Maison de production" wire:model.live="query"
+        wire:keydown.escape="resetData" wire:keydown.backspace="resetSelection" wire:keydown.arrow-up="decrementHighlight"
+        wire:keydown.arrow-down="incrementHighlight" wire:keydown.enter="selectResult" value="query" />
     @if (!empty($query) and !$selected)
         <div class="fixed top-0 bottom-0 left-0 right-0" wire:click="resetData"></div>
-        <div class="absolute text-sm flex flex-col gap-y-1 z-10 w-full bg-white py-2 rounded-t-none rounded-lg shadow-lg border-zinc-200 border-b-zinc-300/80">
+        <div
+            class="absolute text-sm flex flex-col gap-y-1 z-10 w-full bg-white py-2 rounded-t-none rounded-lg shadow-lg border-zinc-200 border-b-zinc-300/80">
             @if (!empty($results))
                 @foreach ($results as $i => $result)
-                    <span class="py-2 ps-3 pe-3 {{ ($i == $this->highlight_id) ? "bg-zinc-200" : "" }} hover:bg-zinc-200 cursor-pointer" x-on:click="$wire.highlight_id = {{ $i }}; $wire.$refresh(); $wire.selectResult()">{{ $result['name'] }}</span>
+                    <span
+                        class="py-2 ps-3 pe-3 {{ $i == $this->highlight_id ? 'bg-zinc-200' : '' }} hover:bg-zinc-200 cursor-pointer"
+                        x-on:click="$wire.highlight_id = {{ $i }}; $wire.$refresh(); $wire.selectResult()">{{ $result['name'] }}</span>
                 @endforeach
             @else
                 <div class="py-2 px-3">Pas de résultats</div>

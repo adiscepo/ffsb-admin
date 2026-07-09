@@ -12,7 +12,7 @@ use App\Domains\Docus\Factory\DocuFactory;
 use App\Domains\Events\Traits\Eventable;
 use App\Domains\Tags\Traits\Taggable;
 use App\Models\User;
-use App\Models\ProductionHouse;
+use App\Domains\ProductionHouses\ProductionHouse;
 use App\Models\EditionYear;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;

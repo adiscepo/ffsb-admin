@@ -2,7 +2,7 @@
 use Livewire\Component;
 use Carbon\CarbonImmutable;
 use Carbon\Carbon;
-use App\Models\ProductionHouse;
+use App\Domains\ProductionHouses\ProductionHouse;
 use App\Domains\Programs\Actions\CreateProgram;
 use Facades\App\Domains\Edition\Edition;
 

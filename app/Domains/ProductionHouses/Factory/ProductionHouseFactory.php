@@ -1,8 +1,9 @@
 <?php
 
-namespace Database\Factories;
+namespace App\Domains\ProductionHouses\Factory;
 
-use App\Models\ProductionHouse;
+use App\Domains\Docus\Enum\DocuLang;
+use App\Domains\ProductionHouses\ProductionHouse;
 use Database\Factories\FakerBinary;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -11,6 +12,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class ProductionHouseFactory extends Factory
 {
+    protected $model = ProductionHouse::class;
     use FakerBinary;
     /**
      * Define the model's default state.
@@ -21,6 +23,7 @@ class ProductionHouseFactory extends Factory
     {
         return [
             'name' => fake()->text(15),
+            'lang' => fake()->randomElement(DocuLang::cases()),
             'website' => FakerBinary::percentChance(50, fake()->url()),
             'contact_email' => fake()->safeEmail(),
             'contact_phone' => fake('fr_BE')->phoneNumber(),

@@ -34,7 +34,6 @@ class EditProgramEvent
                 'payload' => $payload,
             ]);
 
-            $user->events()->attach($event_edit);
             $program->events()->attach($event_edit);
         });
     }

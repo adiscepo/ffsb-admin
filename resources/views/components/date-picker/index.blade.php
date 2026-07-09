@@ -1,7 +1,7 @@
 <?php
 use Livewire\Component;
 use Carbon\CarbonImmutable;
-use App\Models\ProductionHouse;
+use App\Domains\ProductionHouses\ProductionHouse;
 
 new class extends Component {
     public string $query = '';

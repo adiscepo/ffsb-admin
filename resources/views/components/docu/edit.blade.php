@@ -3,7 +3,7 @@
 use Livewire\Component;
 use Livewire\Attributes\On;
 use App\Livewire\Forms\DocuForm;
-use App\Models\ProductionHouse;
+use App\Domains\ProductionHouses\ProductionHouse;
 use App\Models\EditionYear;
 use App\Domains\Docus\Docu;
 use App\Domains\Docus\DocuLink;

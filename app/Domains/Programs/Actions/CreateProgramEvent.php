@@ -30,7 +30,6 @@ class CreateProgramEvent
                 ]
             ]);
 
-            $user->events()->attach($event_create);
             $program->events()->attach($event_create);
         });
     }

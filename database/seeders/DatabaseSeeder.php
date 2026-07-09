@@ -13,8 +13,8 @@ use App\Domains\Programs\Enum\ProgramEventKind;
 use App\Domains\Programs\Program;
 use App\Domains\Programs\ProgramEvent;
 use App\Models\EditionYear;
-use App\Models\ProductionHouse;
-use App\Models\Status;
+use App\Domains\ProductionHouses\ProductionHouse;
+use App\Domains\Statuses\Status;
 use App\Domains\Tags\Tag;
 use App\Models\User;
 

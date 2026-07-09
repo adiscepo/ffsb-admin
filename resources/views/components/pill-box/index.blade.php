@@ -1,6 +1,6 @@
 <?php
 use Livewire\Component;
-use App\Models\ProductionHouse;
+use App\Domains\ProductionHouses\ProductionHouse;
 
 new class extends Component {
     public string $name = '';

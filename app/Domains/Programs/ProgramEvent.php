@@ -6,9 +6,6 @@ use App\Domains\Docus\Docu;
 use App\Domains\Events\Traits\Eventable;
 use App\Domains\Programs\Enum\ProgramEventKind;
 use App\Domains\Programs\Factory\ProgramEventFactory;
-use App\Models\EditionYear;
-use App\Models\Status;
-use App\Models\User;
 use Carbon\CarbonImmutable;
 use Carbon\CarbonPeriod;
 use Carbon\CarbonPeriodImmutable;
@@ -16,12 +13,6 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\MorphToMany;
-use Override;
-
-use function Laravel\Prompts\error;
 
 class ProgramEvent extends Model
 {

@@ -2,6 +2,9 @@
 
 use App\Models\User;
 use Laravel\Fortify\Features;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+
+uses(RefreshDatabase::class);
 
 test('login screen can be rendered', function () {
     $response = $this->get(route('login'));

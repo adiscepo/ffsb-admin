@@ -5,7 +5,7 @@ use Livewire\Attributes\Computed;
 use App\Domains\Docus\Docu;
 use App\Domains\Evaluations\Evaluation;
 use App\Domains\Docus\Field;
-use App\Models\ProductionHouse;
+use App\Domains\ProductionHouses\ProductionHouse;
 use App\Helpers\HumanTiming;
 
 new class extends Component {

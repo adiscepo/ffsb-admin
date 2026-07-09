@@ -36,10 +36,9 @@ class EvaluationCreate
 
             $event_create = Event::create([
                 'author_id' => $user->id,
-                'type' => 'add_evaluation',
+                'type' => 'create',
             ]);
 
-            $user->events()->attach($event_create);
             $evaluation->events()->attach($event_create);
         });
     }

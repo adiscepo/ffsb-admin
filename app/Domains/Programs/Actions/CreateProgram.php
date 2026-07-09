@@ -27,7 +27,6 @@ class CreateProgram
                 'type' => 'create_program',
             ]);
 
-            $user->events()->attach($event_create);
             $program->events()->attach($event_create);
         });
     }

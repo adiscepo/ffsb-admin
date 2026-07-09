@@ -8,7 +8,7 @@ use App\Domains\Docus\Docu;
 use App\Domains\Tags\Tag;
 use App\Models\EditionYear;
 use App\Domains\Docus\Field;
-use App\Models\ProductionHouse;
+use App\Domains\ProductionHouses\ProductionHouse;
 use function App\Helpers\HumanTiming\to_human;
 
 new class extends Component {

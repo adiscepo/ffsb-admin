@@ -29,7 +29,6 @@ class MoveProgramEvent
                 'start' => $start,
             ]);
 
-            $user->events()->attach($event_move);
             $program->events()->attach($event_move);
         });
     }

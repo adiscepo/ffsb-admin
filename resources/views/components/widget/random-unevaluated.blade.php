@@ -16,17 +16,19 @@ new class extends Component {
 
     public function fetchDocu()
     {
-        $query = Docu::whereDoesntHave('evaluations', function (Builder $query) {
-            $query->where('user_id', Auth::user()->id);
-        });
-        $unevaluated_docus = $query
-            ->whereRelation('edition_year', 'year', Edition::currentEdition()->year)
-            ->orderBy('id', 'DESC')
-            ->get();
-        if ($unevaluated_docus->count() > 0) {
-            $this->docu = $unevaluated_docus->random();
-        } else {
-            $this->docu = null;
+        if (Edition::currentEdition() != null) {
+            $query = Docu::whereDoesntHave('evaluations', function (Builder $query) {
+                $query->where('user_id', Auth::user()->id);
+            });
+            $unevaluated_docus = $query
+                ->whereRelation('edition_year', 'year', Edition::currentEdition()->year)
+                ->orderBy('id', 'DESC')
+                ->get();
+            if ($unevaluated_docus->count() > 0) {
+                $this->docu = $unevaluated_docus->random();
+            } else {
+                $this->docu = null;
+            }
         }
     }
 };

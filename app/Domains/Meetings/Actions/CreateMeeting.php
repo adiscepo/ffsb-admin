@@ -29,7 +29,6 @@ class CreateMeeting
                 'type' => 'create',
             ]);
 
-            $user->events()->attach($event_create);
             $meeting->events()->attach($event_create);
         });
     }

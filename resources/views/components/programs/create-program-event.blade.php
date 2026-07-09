@@ -5,7 +5,7 @@ use App\Domains\Docus\Docu;
 use Carbon\CarbonImmutable;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
-use App\Models\ProductionHouse;
+use App\Domains\ProductionHouses\ProductionHouse;
 use App\Domains\Programs\Actions\CreateProgramEvent;
 use App\Domains\Programs\Enum\ProgramEventKind;
 use Facades\App\Domains\Edition\Edition;
