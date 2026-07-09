@@ -7,6 +7,7 @@ use Closure;
 use App\Domains\Events\Event;
 use App\Domains\Docus\Docu;
 use App\Domains\Meetings\Meeting;
+use App\Domains\ProductionHouses\ProductionHouse;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
@@ -30,6 +31,12 @@ class TimelineEvent extends Component
             case 'assignation':
                 return view('components.timeline.events.assignation-bug');
 
+            case 'assign_production_house':
+                return view('components.timeline.events.assign-production-house');
+
+            case 'unassign_production_house':
+                return view('components.timeline.events.unassign-production-house');
+
             case 'remove_assignation':
                 return view('components.timeline.events.deassignation-bug');
 
@@ -41,11 +48,15 @@ class TimelineEvent extends Component
                         return view('components.timeline.events.create-docu');
                     case Meeting::class:
                         return view('components.timeline.events.create-meeting');
+                    case ProductionHouse::class:
+                        return view('components.timeline.events.create-production-house');
                 }
             case 'edit':
                 switch ($this->event->pivot->eventable_type) {
                     case Meeting::class:
                         return view('components.timeline.events.edit-meeting');
+                    case ProductionHouse::class:
+                        return view('components.timeline.events.edit-production-house');
                 }
             case 'comment':
                 return view('components.timeline.events.comment');
@@ -66,7 +77,7 @@ class TimelineEvent extends Component
                         return view('components.timeline.events.remove-tag');
                 }
             case 'remove_file':
-                        return view('components.timeline.events.remove-file');
+                return view('components.timeline.events.remove-file');
             case 'add_member':
                 switch ($this->event->pivot->eventable_type) {
                     case Meeting::class:

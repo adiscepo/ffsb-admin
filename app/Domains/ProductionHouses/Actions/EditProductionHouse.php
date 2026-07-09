@@ -8,12 +8,12 @@ use App\Domains\Events\Event;
 use App\Domains\ProductionHouses\ProductionHouse;
 use Illuminate\Support\Facades\DB;
 
-class CreateProductionHouse
+class EditProductionHouse
 {
-    public function execute(User $user, string $name, ?DocuLang $lang = null, ?string $website = null, ?string $contact_email = null, ?string $contact_phone = null, ?string $remark = null)
+    public function execute(User $user, ProductionHouse $production_house, string $name, ?DocuLang $lang, ?string $website, ?string $contact_email, ?string $contact_phone, ?string $remark)
     {
-        DB::transaction(function () use ($user, $name, $lang, $website, $contact_email, $contact_phone, $remark) {
-            $production_house = ProductionHouse::create([
+        DB::transaction(function () use ($user, $production_house, $name, $lang, $website, $contact_email, $contact_phone, $remark) {
+            $production_house->update([
                 'name' => $name,
                 'lang' => $lang?->value,
                 'website' => $website,
@@ -23,12 +23,12 @@ class CreateProductionHouse
                 'user_id' => $user->id,
             ]);
 
-            $event_create = Event::create([
+            $event_edit = Event::create([
                 'author_id' => $user->id,
-                'type' => 'create',
+                'type' => 'edit',
             ]);
 
-            $production_house->events()->attach($event_create);
+            $production_house->events()->attach($event_edit);
         });
     }
 }

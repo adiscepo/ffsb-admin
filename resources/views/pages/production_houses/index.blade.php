@@ -67,7 +67,7 @@ new class extends Component {
 
     public function redirectProductionHouse(int $id)
     {
-        // $this->redirect('/production_house/' . $id, navigate: true);
+        $this->redirect('/production_house/' . $id, navigate: true);
     }
 
     public function selectAll()
@@ -108,6 +108,7 @@ new class extends Component {
         foreach ($this->selected as $production_house) {
             $toggle_assignation->execute(Auth::user(), ProductionHouse::findOrFail($production_house), $user);
         }
+        $this->selected = collect();
     }
 
     public function refresh()
@@ -177,9 +178,10 @@ new class extends Component {
             <flux:table.column>
                 <flux:checkbox wire:click='selectAll()' wire:model='all_selected'></flux:checkbox>
             </flux:table.column>
+            <flux:table.column></flux:table.column>
             <flux:table.column>Nom</flux:table.column>
-            <flux:table.column>Langue</flux:table.column>
             <flux:table.column>Site web</flux:table.column>
+            <flux:table.column># Docus</flux:table.column>
             {{-- <flux:table.column>Téléphone</flux:table.column>
             <flux:table.column>Email</flux:table.column> --}}
             <flux:table.column>Remarque</flux:table.column>
@@ -191,27 +193,32 @@ new class extends Component {
             @foreach ($this->production_houses() as $production_house)
                 <flux:table.row wire:click="redirectProductionHouse({{ $production_house->id }})"
                     :key="$production_house->id" class="cursor-pointer hover:bg-zinc-50 dark:hover:bg-zinc-900">
-                    <flux:table.cell>
+                    <flux:table.cell wire:click.stop=''>
                         <input class="" type="checkbox" wire:model.defer="selected"
                             value="{{ $production_house->id }}" @if ($selected->contains($production_house->id)) checked @endif
                             wire:click.stop='selectToggle({{ $production_house->id }})' />
                     </flux:table.cell>
+
+                    <flux:table.cell variant="strong"><img class="w-5"
+                            src="{{ url('/images/flags/' . $production_house->lang->value . '.png') }}" alt=""
+                            srcset="">
+                    </flux:table.cell>
+
                     <flux:table.cell class="">
                         {{ $production_house->name }}
                     </flux:table.cell>
 
-                    <flux:table.cell variant="strong"><img class="w-5"
-                            src="{{ url('/images/flags/' . $production_house->lang . '.png') }}" alt=""
-                            srcset="">
-                    </flux:table.cell>
 
                     <flux:table.cell>
                         @if ($production_house->website)
-                            <a href="{{ $production_house->website }}"
-                                class="block w-50 overflow-hidden whitespace-nowrap text-ellipsis">
+                            <span class="block w-50 overflow-hidden whitespace-nowrap text-ellipsis">
                                 {{ $production_house->website }}
-                            </a>
+                            </span>
                         @endif
+                    </flux:table.cell>
+
+                    <flux:table.cell class="">
+                        {{ $production_house->docus->count() }}
                     </flux:table.cell>
 
                     <flux:table.cell>

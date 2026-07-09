@@ -1,11 +1,12 @@
 <?php
 use App\Domains\ProductionHouses\ProductionHouse;
 use App\Domains\Docus\Enum\DocuLang;
-use App\Domains\ProductionHouses\Actions\CreateProductionHouse;
+use App\Domains\ProductionHouses\Actions\EditProductionHouse;
 use Livewire\Component;
 use Illuminate\Validation\Rule;
 
 new class extends Component {
+    public ProductionHouse $production_house;
     public string $name = '';
     public ?DocuLang $lang = null;
     public ?string $website = null;
@@ -13,29 +14,42 @@ new class extends Component {
     public ?string $contact_email = null;
     public ?string $remark = null;
 
-    public function mount() {}
+    public function mount(ProductionHouse $production_house)
+    {
+        $this->production_house = $production_house;
+        $this->hydrateValues();
+    }
+
+    protected function hydrateValues()
+    {
+        $this->name = $this->production_house->name;
+        $this->lang = $this->production_house->lang;
+        $this->website = $this->production_house->website;
+        $this->contact_phone = $this->production_house->contact_phone;
+        $this->contact_email = $this->production_house->contact_email;
+        $this->remark = $this->production_house->remark;
+    }
 
     public function rules()
     {
         return [
-            'name' => ['string', 'required', Rule::unique('production_houses')->ignore($this->name)],
+            'name' => ['string', 'required', Rule::unique('production_houses')->ignore($this->production_house)],
         ];
     }
 
-    public function messages() {
+    public function messages()
+    {
         return [
             'name.unique' => 'Cette maison de production existe déjà',
         ];
     }
 
-    public function save(CreateProductionHouse $create)
+    public function save(EditProductionHouse $edit)
     {
         $validated = $this->validate($this->rules());
-        $create->execute(Auth::user(), $this->name, $this->lang, $this->website, $this->contact_email, $this->contact_phone, $this->remark);
-        $this->reset();
-        $this->dispatch('new-prod-house');
-        Flux::modal('create-house-prod')->close();
-        Flux::toast(variant: 'success', text: 'Nouvelle maison de production !');
+        $edit->execute(Auth::user(), $this->production_house, $this->name, $this->lang, $this->website, $this->contact_email, $this->contact_phone, $this->remark);
+        $this->dispatch('edit-prod-house');
+        Flux::toast(variant: 'success', text: 'Maison de production mise à jour');
     }
 };
 ?>
@@ -43,11 +57,8 @@ new class extends Component {
 <div>
     <div class="space-y-2">
         <flux:heading size="lg">
-            Ajouter une maison de production
+            Editer {{ $production_house->name }}
         </flux:heading>
-        <flux:text size="sm">
-            Une nouvelle maison de prod !
-        </flux:text>
     </div>
 
     <form wire:submit.prevent="save" class="space-y-4 mt-4">
@@ -75,7 +86,7 @@ new class extends Component {
             wire:model="remark" />
 
         <flux:button class="w-full cursor-pointer" variant="primary" type="submit" color="green">
-            Ajouter
+            Editer
         </flux:button>
     </form>
 </div>

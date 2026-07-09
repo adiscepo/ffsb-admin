@@ -20,7 +20,11 @@ new class extends Component {
     public function mount($taggable)
     {
         $this->tags = Tag::for($taggable::class);
-        $this->selected_tags = $taggable->tags->pluck('id')->toArray();
+        if ($this->tags->isNotEmpty()) {
+            $this->selected_tags = $taggable->tags->pluck('id')->toArray();
+        } else {
+            $this->selected_tags = [];
+        }
     }
 
     public function handleTags(ToggleTag $toggle, $selected)

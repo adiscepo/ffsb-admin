@@ -2,13 +2,17 @@
 
 namespace App\Domains\ProductionHouses;
 
+use App\Domains\Docus\Docu;
+use App\Domains\Docus\Enum\DocuLang;
 use App\Domains\Events\Traits\Eventable;
 use App\Domains\ProductionHouses\Factory\ProductionHouseFactory;
 use App\Domains\Statuses\Traits\Statusable;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ProductionHouse extends Model
 {
@@ -21,11 +25,19 @@ class ProductionHouse extends Model
         'contact_email',
         'contact_phone',
         'remark',
+        'user_id',
     ];
+
+    protected $casts = ['lang' => DocuLang::class];
+
+    public function author(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 
     public function docus(): BelongsToMany
     {
-        return $this->belongsToMany(ProductionHouse::class);
+        return $this->belongsToMany(Docu::class);
     }
 
     public function assignee(): BelongsToMany
