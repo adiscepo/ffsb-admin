@@ -297,5 +297,7 @@ new class extends Component {
             </div>
         </form>
     </flux:modal>
-    <livewire:house-prod.create />
+    <flux:modal name="create-house-prod" class="max-w-max">
+        <livewire:production_houses.create />
+    </flux:modal>
 </div>
