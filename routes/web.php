@@ -1,10 +1,16 @@
 <?php
 
-use App\Http\Controllers\DocuController;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 // Route::view('/', 'welcome')->name('home');
-Route::redirect('/', 'dashboard', 301);
+Route::get('/', function (Request $request) {
+    if (Auth::check())
+        return redirect('/dashboard');
+    return view('welcome');
+})->name('home');
+// Route::redirect('/', 'dashboard', 301);
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::view('dashboard', 'dashboard')->name('dashboard');
@@ -18,6 +24,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::livewire('programs', 'pages::programs.index')->name('programs');
     Route::livewire('programs/{year}', 'pages::programs.index');
     Route::livewire('program/{id}', 'pages::programs.single')->name('program');
+
+    Route::livewire('production_house', 'pages::production_houses.index')->name('production_houses');
 
     // Route::livewire('edition', 'pages::edition.index')->name('edition');
 
