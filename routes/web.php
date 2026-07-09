@@ -25,7 +25,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::livewire('programs/{year}', 'pages::programs.index');
     Route::livewire('program/{id}', 'pages::programs.single')->name('program');
 
-    Route::livewire('production_house', 'pages::production_houses.index')->name('production_houses');
+    Route::livewire('production_houses', 'pages::production_houses.index')->name('production_houses');
     Route::livewire('production_house/{id}', 'pages::production_houses.single')->name('production_house');
 
     // Route::livewire('edition', 'pages::edition.index')->name('edition');

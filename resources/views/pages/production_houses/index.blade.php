@@ -199,9 +199,12 @@ new class extends Component {
                             wire:click.stop='selectToggle({{ $production_house->id }})' />
                     </flux:table.cell>
 
-                    <flux:table.cell variant="strong"><img class="w-5"
-                            src="{{ url('/images/flags/' . $production_house->lang->value . '.png') }}" alt=""
-                            srcset="">
+                    <flux:table.cell variant="strong">
+                        @if ($production_house->lang)
+                            <img class="w-5"
+                                src="{{ url('/images/flags/' . $production_house->lang->value . '.png') }}"
+                                alt="" srcset="">
+                        @endif
                     </flux:table.cell>
 
                     <flux:table.cell class="">

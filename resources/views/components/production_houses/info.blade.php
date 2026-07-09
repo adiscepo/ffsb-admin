@@ -45,7 +45,9 @@ new class extends Component {
             {{ $production_house->name }}
         </p>
         <div class="mt-1 text-sm text-zinc-400">
+            @if ($production_house->lang)
             <img class="h-4" src="/images/flags/{{ $production_house->lang }}.png" />
+            @endif
         </div>
     </div>
     <flux:separator />
