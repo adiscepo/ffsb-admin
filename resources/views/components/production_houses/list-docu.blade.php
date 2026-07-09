@@ -31,7 +31,8 @@ new class extends Component {
         <div class="flex flex-col gap-y-2">
             @foreach ($production_house->docus as $docu)
                 <div wire:click='redirectDocu({{ $docu->id }})'>
-                    <livewire:docu-info class="p-2 border border-zinc-200 rounded cursor-pointer hover:border-zinc-300"
+                    <livewire:docu-info
+                        class="px-2 py-3 border border-zinc-200 rounded-xl cursor-pointer hover:border-zinc-300"
                         inline="true" :docu="$docu" />
                 </div>
             @endforeach

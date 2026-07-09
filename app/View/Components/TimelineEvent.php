@@ -37,6 +37,12 @@ class TimelineEvent extends Component
             case 'unassign_production_house':
                 return view('components.timeline.events.unassign-production-house');
 
+            case 'attach_docu_production_house':
+                return view('components.timeline.events.production-houses.attach-docu');
+
+            case 'detach_docu_production_house':
+                return view('components.timeline.events.production-houses.detach-docu');
+
             case 'remove_assignation':
                 return view('components.timeline.events.deassignation-bug');
 

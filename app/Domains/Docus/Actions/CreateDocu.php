@@ -6,6 +6,9 @@ use App\Domains\Docus\DocuLink;
 use App\Models\User;
 use App\Domains\Docus\Docu;
 use App\Domains\Events\Event;
+use App\Domains\ProductionHouses\Actions\AttachDocuProductionHouse;
+use App\Domains\ProductionHouses\ProductionHouse;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class CreateDocu
@@ -36,7 +39,7 @@ class CreateDocu
                 ]);
             }
             foreach ($data['production_houses'] as $id => $production_house) {
-                $docu->from()->attach($production_house);
+                new AttachDocuProductionHouse()->execute($user, ProductionHouse::findOrFail($production_house), $docu);
             }
 
             foreach ($data['fields'] as $id => $field) {

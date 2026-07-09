@@ -119,35 +119,35 @@ new class extends Component {
 ?>
 
 @component('partials.heading', ['route' => 'Maisons de production', 'bold' => 1])
-    <flux:modal name="create-house-prod" class="max-w-max">
-        <livewire:production_houses.create />
-    </flux:modal>
-    <flux:modal.trigger name="create-house-prod">
-        <flux:button size="sm" variant="primary" color="violet" class="cursor-pointer hidden! md:block!">
-            Ajouter une maison de production
-        </flux:button>
-        <flux:button size="sm" variant="primary" color="violet" class="cursor-pointer md:hidden" icon="document-plus">
-        </flux:button>
-    </flux:modal.trigger>
+<flux:modal name="create-house-prod" class="max-w-max">
+    <livewire:production_houses.create />
+</flux:modal>
+<flux:modal.trigger name="create-house-prod">
+    <flux:button size="sm" variant="primary" color="violet" class="cursor-pointer hidden! md:block!">
+        Ajouter une maison de production
+    </flux:button>
+    <flux:button size="sm" variant="primary" color="violet" class="cursor-pointer md:hidden" icon="document-plus">
+    </flux:button>
+</flux:modal.trigger>
 @endcomponent
 
 <div class="px-10 space-y-4 h-full overflow-scroll">
     <div class="mb-4"></div>
     <div class="flex flex-wrap-reverse lg:flex-nowrap gap-x-8 gap-y-3">
         @if ($selected->isNotEmpty())
-            <div class="flex gap-x-2">
-                <flux:field variant="inline" class="w-fit">
-                    <flux:label class="w-fit whitespace-nowrap">Assigner à</flux:label>
-                    <flux:select class="w-fit" size="sm" wire:model='assign_to'>
-                        <flux:select.option disabled>Assigné</flux:select.option>
-                        @foreach (User::all() as $user)
-                            <flux:select.option value="{{ $user->id }}">{{ $user->name }}
-                            </flux:select.option>
-                        @endforeach
-                    </flux:select>
-                </flux:field>
-                <flux:button wire:click='assign()' variant="primary" size="sm">Assigner</flux:button>
-            </div>
+        <div class="flex gap-x-2">
+            <flux:field variant="inline" class="w-fit">
+                <flux:label class="w-fit whitespace-nowrap">Assigner à</flux:label>
+                <flux:select class="w-fit" size="sm" wire:model='assign_to'>
+                    <flux:select.option disabled>Assigné</flux:select.option>
+                    @foreach (User::all() as $user)
+                    <flux:select.option value="{{ $user->id }}">{{ $user->name }}
+                    </flux:select.option>
+                    @endforeach
+                </flux:select>
+            </flux:field>
+            <flux:button wire:click='assign()' variant="primary" size="sm">Assigner</flux:button>
+        </div>
         @endif
         <flux:input wire:model.live='search' type="text" placeholder="Recherche" size="sm" />
         <div class="flex flex-wrap lg:flex-nowrap flex-row-reverse gap-1.5">
@@ -156,15 +156,15 @@ new class extends Component {
                 <flux:select.option value="">Tous</flux:select.option>
                 @foreach (Tag::for(Docu::class) as $tag)
                     <flux:select.option value="{{ $tag->name }}">{{ $tag->name }}
-                    </flux:select.option>
-                @endforeach
+            </flux:select.option>
+            @endforeach
             </flux:select> --}}
             <flux:select class="w-fit" size="sm" wire:model.live='assignee'>
                 <flux:select.option disabled>Assigné</flux:select.option>
                 <flux:select.option value="">Tous</flux:select.option>
                 @foreach (User::all() as $user)
-                    <flux:select.option value="{{ $user->name }}">{{ $user->name }}
-                    </flux:select.option>
+                <flux:select.option value="{{ $user->name }}">{{ $user->name }}
+                </flux:select.option>
                 @endforeach
             </flux:select>
             <flux:field class="flex items-center mr-5" variant="inline">
@@ -191,63 +191,63 @@ new class extends Component {
 
         <flux:table.rows>
             @foreach ($this->production_houses() as $production_house)
-                <flux:table.row wire:click="redirectProductionHouse({{ $production_house->id }})"
-                    :key="$production_house->id" class="cursor-pointer hover:bg-zinc-50 dark:hover:bg-zinc-900">
-                    <flux:table.cell wire:click.stop=''>
-                        <input class="" type="checkbox" wire:model.defer="selected"
-                            value="{{ $production_house->id }}" @if ($selected->contains($production_house->id)) checked @endif
-                            wire:click.stop='selectToggle({{ $production_house->id }})' />
-                    </flux:table.cell>
+            <flux:table.row wire:click="redirectProductionHouse({{ $production_house->id }})"
+                :key="$production_house->id" class="cursor-pointer hover:bg-zinc-50 dark:hover:bg-zinc-900">
+                <flux:table.cell wire:click.stop=''>
+                    <input class="" type="checkbox" wire:model.defer="selected"
+                        value="{{ $production_house->id }}" @if ($selected->contains($production_house->id)) checked @endif
+                    wire:click.stop='selectToggle({{ $production_house->id }})' />
+                </flux:table.cell>
 
-                    <flux:table.cell variant="strong">
-                        @if ($production_house->lang)
-                            <img class="w-5"
-                                src="{{ url('/images/flags/' . $production_house->lang->value . '.png') }}"
-                                alt="" srcset="">
-                        @endif
-                    </flux:table.cell>
+                <flux:table.cell variant="strong">
+                    @if ($production_house->lang)
+                    <img class="w-5"
+                        src="{{ url('/images/flags/' . $production_house->lang->value . '.png') }}"
+                        alt="" srcset="">
+                    @endif
+                </flux:table.cell>
 
-                    <flux:table.cell class="">
-                        {{ $production_house->name }}
-                    </flux:table.cell>
+                <flux:table.cell class="">
+                    {{ $production_house->name }}
+                </flux:table.cell>
 
 
-                    <flux:table.cell>
-                        @if ($production_house->website)
-                            <span class="block w-50 overflow-hidden whitespace-nowrap text-ellipsis">
-                                {{ $production_house->website }}
-                            </span>
-                        @endif
-                    </flux:table.cell>
+                <flux:table.cell>
+                    @if ($production_house->website)
+                    <span class="block w-50 overflow-hidden whitespace-nowrap text-ellipsis">
+                        {{ $production_house->website }}
+                    </span>
+                    @endif
+                </flux:table.cell>
 
-                    <flux:table.cell class="">
-                        {{ $production_house->docus->count() }}
-                    </flux:table.cell>
+                <flux:table.cell class="">
+                    {{ $production_house->docus->count() }}
+                </flux:table.cell>
 
-                    <flux:table.cell>
-                        @if ($production_house->remark)
-                            <span class="block w-100 overflow-hidden whitespace-nowrap text-ellipsis">
-                                {{ $production_house->remark }}
-                            </span>
-                        @endif
-                    </flux:table.cell>
-                    <flux:table.cell>
-                        @foreach ($production_house->statuses as $status)
-                            <flux:badge color="{{ $status->color }}">{{ $status->name }}</flux:badge>
+                <flux:table.cell>
+                    @if ($production_house->remark)
+                    <span class="block w-100 overflow-hidden whitespace-nowrap text-ellipsis">
+                        {{ $production_house->remark }}
+                    </span>
+                    @endif
+                </flux:table.cell>
+                <flux:table.cell>
+                    @foreach ($production_house->statuses as $status)
+                    <flux:badge color="{{ $status->color }}">{{ $status->name }}</flux:badge>
+                    @endforeach
+                </flux:table.cell>
+
+                <flux:table.cell>
+                    @if ($production_house->assignee->count() > 0)
+                    <flux:avatar.group>
+                        @foreach ($production_house->assignee as $assignee)
+                        <flux:avatar circle size="xs" :initials="$assignee->initials()"
+                            :src="$assignee->getProfilePicture()" />
                         @endforeach
-                    </flux:table.cell>
-
-                    <flux:table.cell>
-                        @if ($production_house->assignee->count() > 0)
-                            <flux:avatar.group>
-                                @foreach ($production_house->assignee as $assignee)
-                                    <flux:avatar circle size="xs" :initials="$assignee->initials()"
-                                        :src="$assignee->getProfilePicture()" />
-                                @endforeach
-                            </flux:avatar.group>
-                        @endif
-                    </flux:table.cell>
-                </flux:table.row>
+                    </flux:avatar.group>
+                    @endif
+                </flux:table.cell>
+            </flux:table.row>
             @endforeach
         </flux:table.rows>
     </flux:table>

@@ -6,6 +6,9 @@ use App\Domains\Docus\DocuLink;
 use App\Models\User;
 use App\Domains\Docus\Docu;
 use App\Domains\Events\Event;
+use App\Domains\ProductionHouses\Actions\AttachDocuProductionHouse;
+use App\Domains\ProductionHouses\Actions\DetachDocuProductionHouse;
+use App\Domains\ProductionHouses\ProductionHouse;
 use Illuminate\Support\Facades\DB;
 
 class EditDocu
@@ -55,14 +58,14 @@ class EditDocu
 
             foreach ($data['production_houses'] as $id => $production_house) {
                 if (!$docu->from->contains($production_house)) {
-                    $docu->from()->attach($production_house);
+                    new AttachDocuProductionHouse()->execute($user, ProductionHouse::findOrFail($production_house), $docu);
                 }
             }
 
             foreach ($docu->from as $production_house) {
                 if (!in_array($production_house->id, $data['production_houses'])) {
                     // Production house was removed
-                    $docu->from()->detach($production_house);
+                    new DetachDocuProductionHouse()->execute($user, ProductionHouse::findOrFail($production_house), $docu);
                 }
             }
 

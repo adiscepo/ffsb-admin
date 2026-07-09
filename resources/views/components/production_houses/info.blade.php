@@ -1,6 +1,7 @@
 <?php
 
 use Livewire\Component;
+use App\Models\User;
 use App\Domains\ProductionHouses\ProductionHouse;
 
 new class extends Component {
@@ -46,7 +47,7 @@ new class extends Component {
         </p>
         <div class="mt-1 text-sm text-zinc-400">
             @if ($production_house->lang)
-            <img class="h-4" src="/images/flags/{{ $production_house->lang }}.png" />
+                <img class="h-4" src="/images/flags/{{ $production_house->lang }}.png" />
             @endif
         </div>
     </div>
@@ -81,6 +82,34 @@ new class extends Component {
                 <span class="text-sm text-zinc-500 text-end">{{ $production_house->contact_email }}</span>
             @else
                 <span class="text-sm italic text-zinc-500 text-end">Non renseigné</span>
+            @endif
+        </div>
+        <div class="flex justify-between w-full h-fit">
+            <span class="flex items-center gap-1 text-sm">
+                <flux:icon.user variant="outline" class="size-4 bg-white! text-zinc-900" />En charge
+            </span>
+            @if ($production_house->assignee->isNotEmpty())
+                <flux:avatar.group>
+                    @foreach ($production_house->assignee as $assignee)
+                        <flux:avatar circle size="xs" :initials="$assignee->initials()"
+                            :src="$assignee->getProfilePicture()" />
+                    @endforeach
+                </flux:avatar.group>
+            @else
+                <div class="flex gap-x-2">
+                    <span class="text-sm italic text-zinc-500 text-end">Personne</span>
+                    {{-- <flux:modal.trigger name="toggle-members">
+                        <span
+                            class="flex gap-x-1 items-center w-fit py-0.5 px-2 text-xs text-zinc-500 bg-zinc-200 border border-zinc-300 rounded-full cursor-pointer hover:bg-zinc-300">
+                            Ajouter
+                        </span>
+                    </flux:modal.trigger>
+                    <flux:modal name="toggle-members" class="overflow-visible">
+                        <span class="text-zinc-900 font-semibold">Assigner quelqu'un</span>
+                        <div class="mb-3"></div>
+                        <livewire:pill-box class="text-zinc-900" name="members" :datas="User::all()->toArray()" :selected="$production_house->assignee->pluck('id')->toArray()" />
+                    </flux:modal> --}}
+                </div>
             @endif
         </div>
     </div>

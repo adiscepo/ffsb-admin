@@ -1,4 +1,6 @@
-@use('App\Models\User')
+<?php
+use App\Models\User;
+?>
 
 <x-timeline-item icon="user-minus" :author="$event->author->name" :time="$event->created_at->diffForHumans()">
     @php
