@@ -65,7 +65,7 @@ class EditDocu
             foreach ($docu->from as $production_house) {
                 if (!in_array($production_house->id, $data['production_houses'])) {
                     // Production house was removed
-                    new DetachDocuProductionHouse()->execute($user, ProductionHouse::findOrFail($production_house), $docu);
+                    new DetachDocuProductionHouse()->execute($user, ProductionHouse::findOrFail($production_house->id), $docu);
                 }
             }
 
