@@ -4,6 +4,7 @@ namespace App\Domains\Statuses\Actions;
 
 use App\Domains\Events\Event;
 use App\Domains\Events\Traits\Eventable;
+use App\Models\User;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -11,9 +12,9 @@ use Illuminate\Support\Facades\DB;
 class ToggleStatus
 {
 
-    public function execute($statusable, Collection $statuses)
+    public function execute(User $user, $statusable, Collection $statuses)
     {
-        DB::transaction(function () use ($statusable, $statuses) {
+        DB::transaction(function () use ($user, $statusable, $statuses) {
             // Need to use the id of the models, otherwise the metadatas of the
             // eloquent models fetched from the database contains values
             // that prevent doing diff on them correctly
@@ -29,7 +30,7 @@ class ToggleStatus
                 $statusable->statuses()->detach($status_id);
                 if ($eventable) {
                     $statusable->events()->attach(Event::create([
-                        'author_id' => Auth::user()->id,
+                        'author_id' => $user->id,
                         'type' => 'remove_status',
                         'payload' => [
                             'status_id' => $status_id,
@@ -41,7 +42,7 @@ class ToggleStatus
                 $statusable->statuses()->attach($status_id);
                 if ($eventable) {
                     $statusable->events()->attach(Event::create([
-                        'author_id' => Auth::user()->id,
+                        'author_id' => $user->id,
                         'type' => 'add_status',
                         'payload' => [
                             'status_id' => $status_id,

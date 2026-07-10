@@ -15,7 +15,7 @@ return new class extends Migration
         Schema::create('bugs', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->string('description');
+            $table->text('description');
             $table->foreignIdFor(User::class, 'user_id');
             $table->json('files_upload')->nullable();
             $table->foreignIdFor(User::class, 'assigned_to')->nullable();

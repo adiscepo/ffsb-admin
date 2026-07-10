@@ -37,6 +37,12 @@ class TimelineEvent extends Component
             case 'unassign_production_house':
                 return view('components.timeline.events.unassign-production-house');
 
+            case 'add_status':
+                return view('components.timeline.events.statuses.add');
+
+            case 'remove_status':
+                return view('components.timeline.events.statuses.remove');
+
             case 'attach_docu_production_house':
                 return view('components.timeline.events.production-houses.attach-docu');
 
@@ -65,6 +71,13 @@ class TimelineEvent extends Component
                         return view('components.timeline.events.edit-production-house');
                 }
             case 'comment':
+                // switch ($this->event->pivot->eventable_type) {
+                //     case ProductionHouse::class:
+                //         return view('components.timeline.events.production_houses.comment');
+                //     case Bug::class:
+                //     default:
+                //         return view('components.timeline.events.comment');
+                // }
                 return view('components.timeline.events.comment');
 
             case 'close':

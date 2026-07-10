@@ -17,7 +17,7 @@ return new class extends Migration
         Schema::create('docus', function (Blueprint $table) {
             $table->id();
             $table->string('title', 255);
-            $table->string('summary')->nullable();
+            $table->text('summary')->nullable();
             $table->integer('duration');
             $table->year('year');
             $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete();

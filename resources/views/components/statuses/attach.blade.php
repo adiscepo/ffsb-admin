@@ -9,6 +9,7 @@ use App\Helpers\HumanTiming;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Redirecr;
 use App\Domains\Statuses\Actions\ToggleStatus;
+use Illuminate\Support\Facades\Auth;
 
 new class extends Component {
     public $statusable;
@@ -33,7 +34,7 @@ new class extends Component {
         foreach ($selected as $status_id) {
             $datas->push(Status::find($status_id));
         }
-        $toggle->execute($this->statusable, $datas);
+        $toggle->execute(Auth::user(), $this->statusable, $datas);
         $this->redirect(request()->header('Referer'), navigate: true);
     }
 };

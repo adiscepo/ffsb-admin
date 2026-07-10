@@ -153,6 +153,15 @@ class DatabaseSeeder extends Seeder
             }
         }
 
+
+        $ph_statuses = collect();
+        $ph_statuses->push(Status::factory()->create(['name' => 'Contacté', 'color' => 'blue', 'model' => ProductionHouse::class]));
+        $ph_statuses->push(Status::factory()->create(['name' => 'Réponse positive', 'color' => 'green', 'model' => ProductionHouse::class]));
+        $ph_statuses->push(Status::factory()->create(['name' => 'Réponse négative', 'color' => 'red', 'model' => ProductionHouse::class]));
+        $ph_statuses->push(Status::factory()->create(['name' => 'Pas de réponse', 'color' => 'zinc', 'model' => ProductionHouse::class]));
+        $ph_statuses->push(Status::factory()->create(['name' => 'Recontacté', 'color' => 'orange', 'model' => ProductionHouse::class]));
+
+
         // Program
         $program = Program::factory(1)->create([
             'name' => 'FFSB 2024',

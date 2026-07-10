@@ -38,14 +38,14 @@ new class extends Component {
             <flux:button icon="tag" icon:variant="mini" color="violet" variant="primary" size="sm"
                 class="cursor-pointer" />
         </flux:modal.trigger> --}}
-        <flux:modal name="statuses" class="space-y-2 overflow-visible">
+        {{-- <flux:modal name="statuses" class="space-y-2 overflow-visible">
             <h2>Tags</h2>
             <livewire:statuses.attach :model="ProductionHouse::class" :statusable="$production_house" />
         </flux:modal>
         <flux:modal.trigger name="statuses">
             <flux:button icon="tag" icon:variant="mini" color="violet" variant="primary" size="sm"
                 class="cursor-pointer" />
-        </flux:modal.trigger>
+        </flux:modal.trigger> --}}
         <flux:modal name="edit-production-house" variant="flyout">
             <livewire:production_houses.edit :production_house="$production_house" />
         </flux:modal>
@@ -59,7 +59,7 @@ new class extends Component {
     </div>
 @endcomponent
 
-<main class="flex flex-col gap-y-4 lg:grid lg:grid-cols-[1fr_1.5fr_2fr] grow">
+<main class="flex flex-col gap-y-4 lg:grid lg:grid-cols-[1fr_1.5fr_1.5fr] grow">
     <livewire:production_houses.info :rounded="false" :production_house="$production_house" class="border-r border-zinc-200 h-full" />
     <livewire:production_houses.list-docu :production_house="$production_house" />
     <livewire:production_houses.timeline :production_house="$production_house" />

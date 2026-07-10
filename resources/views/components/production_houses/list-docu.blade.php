@@ -32,7 +32,7 @@ new class extends Component {
             @foreach ($production_house->docus as $docu)
                 <div wire:click='redirectDocu({{ $docu->id }})'>
                     <livewire:docu-info
-                        class="px-2 py-3 border border-zinc-200 rounded-xl cursor-pointer hover:border-zinc-300"
+                        class="px-2 py-3 border border-zinc-100 rounded-xl cursor-pointer hover:border-zinc-300"
                         inline="true" :docu="$docu" />
                 </div>
             @endforeach
