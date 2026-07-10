@@ -58,7 +58,7 @@ new class extends Component {
                 <flux:icon.link variant="outline" class="size-4 bg-white! text-zinc-900" />Site web
             </span>
             @if (isset($production_house->website))
-                <a href="{{ $production_house->website }}"
+                <a target="_blank" href="{{ $production_house->website }}"
                     class="text-sm text-zinc-500 text-end">{{ $production_house->website }}</a>
             @else
                 <span class="text-sm italic text-zinc-500 text-end">Non renseigné</span>
