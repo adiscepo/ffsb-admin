@@ -42,6 +42,12 @@ class DocuLink extends Model
         return 'Plus dispo depuis ' . $remaining;
     }
 
+    public function isAlmostOutdated(): bool
+    {
+        $remaining = now()->diffInDays($this->deadline);
+        return $remaining <= 7;
+    }
+
     protected static function newFactory(): DocuLinkFactory
     {
         return DocuLinkFactory::new();

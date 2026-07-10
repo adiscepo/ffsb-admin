@@ -176,7 +176,7 @@ new class extends Component {
                                     @if ($link->deadline)
                                         <flux:tooltip>
                                             <flux:button icon="clock" size="xs" variant="subtle"
-                                                class="size-4 {{ !$link->stillAvailable() ? 'text-red-600!' : '' }}" />
+                                                class="size-4 {{ !$link->stillAvailable() || $link->isAlmostOutdated() ? 'text-red-600!' : '' }}" />
                                             <flux:tooltip.content
                                                 class="max-w-[20rem] space-y-2 {{ !$link->stillAvailable() ? 'bg-red-500!' : '' }}">
                                                 <p>{{ $link->remainingDays() }}</p>
