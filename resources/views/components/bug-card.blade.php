@@ -34,7 +34,7 @@ new class extends Component {
             @endforeach
             <p class="text-zinc-500 dark:text-zinc-400 text-xs">#{{ $bug->id }} • Ajouté par <span
                     class="text-zinc-800 dark:text-zinc-300">{{ $bug->user->name }}</span></p>
-            <span class="flex text-zinc-400 text-sm items-center gap-x-1"><flux:icon.chat-bubble-oval-left
+            <span class="flex text-zinc-400 text-xs items-center gap-x-1"><flux:icon.chat-bubble-oval-left
                     class="size-4" />{{ $bug->comments()->count() }}</span>
         </div>
     </div>
