@@ -38,7 +38,16 @@ return new class extends Component {
 };
 ?>
 
-@include('partials.heading', ['route' => 'Support/Liste de Bugs'])
+@component('partials.heading', ['route' => 'Support/Liste de Bugs'])
+    <div class="flex gap-x-2">
+        <a href='{{ route('support.bugs.report') }}' wire:navigate>
+            <flux:button size="sm" variant="primary" color="violet" class="cursor-pointer hidden! md:block!">
+                Signaler un bug
+            </flux:button>
+        </a>
+    </div>
+@endcomponent
+
 
 <div class="p-5">
     <h2 class="text-lg text-zinc-700 dark:text-zinc-200">Liste des bugs</h2>

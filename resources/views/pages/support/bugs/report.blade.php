@@ -63,7 +63,7 @@ return new class extends Component {
 };
 ?>
 
-@include('partials.heading', ['route' => 'Support/Signaler un bug'])
+@include('partials.heading', ['route' => 'Support/Bugs:support.bugs.list/Signaler un bug'])
 
 <form wire:submit.prevent="save" class="w-fit py-15 mx-auto space-y-5 flex flex-col max-md:px-3">
     <h2 class="text-lg text-zinc-700 dark:text-zinc-200">Signaler un bug</h2>
