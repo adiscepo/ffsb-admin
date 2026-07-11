@@ -3,16 +3,23 @@
 use Livewire\Component;
 use App\Models\User;
 use App\Domains\Docus\Docu;
+use Facades\App\Domains\Edition\Edition;
+use App\Models\EditionYear;
 
 new class extends Component {
     public array $ladderboard;
 
-    public function mount()
+    public function mount(?EditionYear $edition_year = null)
     {
-        error_log('component mounted');
+        if ($edition_year == null) {
+            $edition_year = Edition::currentEdition();
+        }
         $ladderboard = collect();
         foreach (User::all() as $user) {
-            $number = $user->evaluations->count();
+            $evaluations = $user->evaluations->filter(function ($eval) use ($edition_year) {
+                return $eval->docu->edition_year_id == $edition_year->id;
+            });
+            $number = $evaluations->count();
             if ($number > 0) {
                 $ladderboard->push([
                     'user_id' => $user->id,

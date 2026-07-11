@@ -173,12 +173,12 @@ new class extends Component {
         <div class="mb-4"></div>
         <div class="flex flex-row-reverse items-center gap-4 peer">
             <div class="flex flex-col w-25">
-                <span class="text-sm text-zinc-500">{{ $this->edition_year }}</span>
-                <span class="text-xs text-zinc-400">{{ $this->docus->count() }} docus</span>
+                <span class="text-sm text-zinc-500">{{ $edition_year }}</span>
+                <span class="text-xs text-zinc-400">{{ $docus->count() }} docus</span>
             </div>
             <flux:select class="w-fit" size="sm" wire:model.live='edition_year_id'>
-                @foreach (Edition::allEditions() as $edition_year)
-                    <flux:select.option value="{{ $edition_year->id }}">FFSB {{ $edition_year->year }}
+                @foreach (Edition::allEditions() as $ed_year)
+                    <flux:select.option value="{{ $ed_year->id }}">FFSB {{ $ed_year->year }}
                     </flux:select.option>
                 @endforeach
             </flux:select>
@@ -256,7 +256,7 @@ new class extends Component {
                     </span>
                 </div>
             @endif
-            <livewire:evaluations.ladderboard />
+            <livewire:evaluations.ladderboard :edition_year="EditionYear::find($edition_year_id)" />
         </aside>
     </div>
 </div>
