@@ -160,7 +160,7 @@ new class extends Component {
 <div x-data='{ nb_links: 0 }'>
     <flux:modal variant="flyout" name="create-docu" class="max-w-max">
         <form class="space-y-6" wire:submit.prevent='save'>
-            <div class="space-y-2">
+            <div class="space-y-2 relative">
                 <flux:heading size="lg"
                     class="flex items-center justify-between gap-x-2 text-zinc-900 dark:text-white">
                     Editer le
