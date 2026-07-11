@@ -35,6 +35,7 @@ class CreateDocu
                     'url' => $link['url'],
                     'password' => $link['password'],
                     'deadline' => !empty($link['deadline']) ? $link['deadline'] : null,
+                    'comment' => !empty($link['comment']) ? $link['comment'] : null,
                     'docu_id' => $docu->id,
                 ]);
             }

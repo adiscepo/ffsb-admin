@@ -32,7 +32,7 @@ new class extends Component {
 
     public function addLink()
     {
-        $this->links[] = ['url' => '', 'password' => '', 'deadline' => ''];
+        $this->links[] = ['url' => '', 'password' => '', 'deadline' => '', 'comment' => ''];
     }
 
     public function removeLink(int $index)
@@ -248,11 +248,14 @@ new class extends Component {
                     <flux:textarea wire:model='comment' rows="2"></flux:textarea>
                 </flux:field>
                 {{-- LIEN --}}
-                <div>
+                <div class="space-y-2">
+                    @if (!empty($links))
+                        <flux:separator class="my-5" text="Liens de visionnage"></flux:separator>
+                    @endif
                     @foreach ($links as $index => $link)
                         <div class="space-y-2">
                             <flux:field>
-                                <flux:label>Lien</flux:label>
+                                <flux:label>Lien {{ $index + 1 }}</flux:label>
                                 <div class="flex gap-x-2">
                                     <flux:input iconLeading="link" wire:model="links.{{ $index }}.url"
                                         placeholder="https://arte.tv/documentaries/19" />
@@ -266,6 +269,11 @@ new class extends Component {
                                     <flux:label badge="optionnel">Date limite de visionnage</flux:label>
                                     <livewire:date-picker wire:model="links.{{ $index }}.deadline"
                                         :min_date="now()->format('d/m/Y')" :max_date="date('d/m/Y', strtotime('+10 years'))" :id="$index" />
+                                </flux:field>
+                                <flux:field class="col-span-2">
+                                    <flux:label>Commentaire</flux:label>
+                                    <flux:input iconLeading="link" wire:model="links.{{ $index }}.comment"
+                                        placeholder="Version 52'" />
                                 </flux:field>
                             </div>
                         </div>

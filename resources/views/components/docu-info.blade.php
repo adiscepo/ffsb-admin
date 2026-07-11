@@ -156,7 +156,6 @@ new class extends Component {
                 <div class="bg-zinc w-[94%] self-end border-zinc-200 mt-2"
                     x-bind:class="!expanded ? 'hidden' : 'block'">
                     @if ($docu->see_at->count() > 0)
-
                         @foreach ($docu->see_at as $link)
                             <a class="text-sm text-zinc-500" target="_blank"
                                 href="{{ $link->url }}">{{ mb_strimwidth($link->url, 0, 45, '...') }}</a>
@@ -173,6 +172,14 @@ new class extends Component {
                                     </flux:badge>
                                 @endif
                             </div>
+                            @if ($link->comment != null)
+                                <p class="text-xs text-zinc-600">
+                                    <flux:badge icon="chat-bubble-oval-left"
+                                        class="text-xs! bg-white! {{ !$link->stillAvailable() ? 'text-red-400!' : '' }}">
+                                        {{ $link->comment }}
+                                    </flux:badge>
+                                </p>
+                            @endif
                         @endforeach
                     @else
                         <p class="text-sm italic text-zinc-600">Il n'y a pas de lien de visionnage pour ce documentaire

@@ -12,7 +12,7 @@ class DocuLink extends Model
     /** @use HasFactory<\Database\Factories\DocuLinkFactory> */
     use HasFactory;
 
-    protected $fillable = ['url', 'password', 'deadline', 'docu_id'];
+    protected $fillable = ['url', 'password', 'deadline', 'docu_id', 'comment'];
 
     protected $casts = ['deadline' => 'immutable_datetime'];
     public function password(): ?string
