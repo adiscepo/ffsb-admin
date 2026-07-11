@@ -7,18 +7,15 @@ enum DocuLang: string
     case FR = 'fr';
     case EN = 'en';
     case BIL = 'bil';
-    // case NL = 'nederlands';
-    // case SP = 'spanish';
-    // case IT = 'italian';
+    case OTHER = 'other';
 
-    function label() : string {
-       return match($this) {
-        self::FR => "Français",
-        self::EN => "Anglais",
-        self::BIL => "Bilingue",
-        // self::SP => "Espagnol",
-        // self::IT => "Italien",
-        // self::NL => "Néerlandais",
-       };
+    function label(): string
+    {
+        return match ($this) {
+            self::FR => "Français",
+            self::EN => "Anglais",
+            self::BIL => "Bilingue",
+            self::OTHER => "Autre",
+        };
     }
 }
