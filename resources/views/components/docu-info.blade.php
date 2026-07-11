@@ -189,7 +189,7 @@ new class extends Component {
             </div>
         @endif
         @if (!$small)
-            <div class="mb-6"></div>
+            <div class="mb-8"></div>
             <div
                 class="absolute w-full bg-zinc-50 bottom-0 flex justify-between px-5 py-2 border-y border-zinc-200 @if ($rounded) rounded-b-lg @endif">
                 <span class="text-xs text-zinc-500">Ajouté par {{ $docu->user->name }}
