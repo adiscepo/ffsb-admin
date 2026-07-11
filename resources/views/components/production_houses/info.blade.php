@@ -117,7 +117,7 @@ new class extends Component {
     @if (isset($production_house->remark))
         <flux:separator variant="subtle" text="Remarque" />
         <div class="px-5 text-sm text-zinc-500">
-            <p>{{ $production_house->remark }}</p>
+            <p>{!! nl2br($production_house->remark) !!}</p>
         </div>
     @endif
     @if (!$small)
