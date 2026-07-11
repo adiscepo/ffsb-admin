@@ -104,7 +104,7 @@ new class extends Component {
         <flux:separator />
         <div class="flex flex-col px-5 gap-y-5">
             <div class="text-sm text-justify text-zinc-500">
-                <p><b class="text-zinc-700">Résumé: </b>{{ $docu->summary }}</p>
+                <p><b class="text-zinc-700">Résumé: </b>{!! nl2br($docu->summary) !!}</p>
             </div>
             <div class="flex items-center justify-around">
                 @foreach ($docu->fields as $field)
@@ -185,7 +185,7 @@ new class extends Component {
         @if (isset($docu->comment))
             <flux:separator variant="subtle" text="Commentaire" />
             <div class="px-5 text-sm text-zinc-500">
-                <p>{{ $docu->comment }}</p>
+                <p>{!! nl2br($docu->comment) !!}</p>
             </div>
         @endif
         @if (!$small)
