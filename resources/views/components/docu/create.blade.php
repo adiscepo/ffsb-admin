@@ -248,7 +248,7 @@ new class extends Component {
                     <flux:textarea wire:model='comment' rows="2"></flux:textarea>
                 </flux:field>
                 {{-- LIEN --}}
-                <div class="space-y-2">
+                <div class="space-y-2 mb-3">
                     @if (!empty($links))
                         <flux:separator class="my-5" text="Liens de visionnage"></flux:separator>
                     @endif
