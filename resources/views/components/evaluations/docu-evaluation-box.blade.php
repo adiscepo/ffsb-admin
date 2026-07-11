@@ -35,7 +35,7 @@ new class extends Component {
             <x-docu-evaluation-box-note :note=$note />
         @endforeach
     </div>
-    <p class="text-xs text-zinc-400 text-justify text-ellipsis overflow-hidden whitespace-nowrap w-full">
+    <p class="text-xs text-zinc-400 ">
         {{ $evaluation->comment }}
     </p>
 </div>
