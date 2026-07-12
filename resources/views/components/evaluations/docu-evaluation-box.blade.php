@@ -44,7 +44,7 @@ new class extends Component {
             </div>
         @endif
         @if (!$note_only || $comment_only)
-            <p class="text-xs text-zinc-400 col-span-2">
+            <p class="@if ($comment_only) text-sm @else text-xs @endif text-zinc-400 col-span-2">
                 {{ $evaluation->comment }}
             </p>
         @endif
