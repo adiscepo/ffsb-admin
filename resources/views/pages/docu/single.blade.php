@@ -66,7 +66,7 @@ new class extends Component {
     </div>
 @endcomponent
 
-<main class="flex flex-col gap-y-4 lg:grid lg:grid-cols-[1fr_1.5fr_2fr] grow">
+<main class="flex flex-col gap-y-4 lg:grid lg:grid-cols-[1fr_1.5fr_1.5fr] grow">
     <livewire:docu-info :rounded="false" :docu="$docu" class="border-r border-zinc-200 h-full" />
     <livewire:evaluations.docu-evaluations :docu="$docu" :note_only="true" />
     @if ($this->form_evaluation)
