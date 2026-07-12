@@ -15,22 +15,23 @@ new class extends Component {
 
     protected $listeners = [
         'form_evaluation' => 'formEvaluation',
+        'selected_evaluation' => 'changeEvaluation',
     ];
 
     public function mount(int $id)
     {
         $this->docu = Docu::findOrFail($id);
         $evaluations = Evaluation::where(['docu_id' => $id, 'draft' => false]);
-        if ($evaluations->count() == 0) {
-            if ($this->docu->hasDraftEvaluationFrom(Auth::user()->id)) {
-                $this->current_evaluation_author_id = Auth::user()->id;
-            } else {
-                $this->current_evaluation_author_id = null;
-            }
-        } else {
-            $this->current_evaluation_author_id = $evaluations->first()->user_id;
-            $this->form_evaluation = $this->current_evaluation_author_id == Auth::user()->id;
-        }
+        // if ($evaluations->count() == 0) {
+        //     if ($this->docu->hasDraftEvaluationFrom(Auth::user()->id)) {
+        //         $this->current_evaluation_author_id = Auth::user()->id;
+        //     } else {
+        //         $this->current_evaluation_author_id = null;
+        //     }
+        // } else {
+        //     $this->current_evaluation_author_id = $evaluations->first()->user_id;
+        //     $this->form_evaluation = $this->current_evaluation_author_id == Auth::user()->id;
+        // }
     }
 
     public function changeEvaluation(int $id)
@@ -67,10 +68,12 @@ new class extends Component {
 
 <main class="flex flex-col gap-y-4 lg:grid lg:grid-cols-[1fr_1.5fr_2fr] grow">
     <livewire:docu-info :rounded="false" :docu="$docu" class="border-r border-zinc-200 h-full" />
-    <livewire:evaluations.docu-evaluations :docu="$docu" />
+    <livewire:evaluations.docu-evaluations :docu="$docu" :note_only="true" />
     @if ($this->form_evaluation)
         <livewire:evaluations.new-evaluation :docu="$docu" />
     @elseif ($current_evaluation_author_id != null)
         <livewire:evaluations.evaluation :docu="$docu" :author_id="$current_evaluation_author_id" />
+    @else
+        <livewire:evaluations.docu-evaluations :docu="$docu" :note_only="false" :comment_only="true" />
     @endif
 </main>

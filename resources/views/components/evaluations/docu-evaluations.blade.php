@@ -18,6 +18,10 @@ new class extends Component {
     }
 };
 ?>
+@props([
+    'note_only' => true,
+    'comment_only' => false,
+])
 
 <div {{ $attributes->class(['relative border-r border-zinc-200 py-5']) }}>
     <x-loading-message>
@@ -27,10 +31,10 @@ new class extends Component {
         <h2 class="text-lg text-zinc-700">Evaluations pour {{ $docu->title }}</h2>
         <div class="mb-4"></div>
         @if ($docu->evaluations->count() > 0)
-            <div class="grid grid-cols-1 gap-5 xl:grid-cols-2">
+            <div class="grid grid-cols-1 gap-5 @if ($note_only && !$comment_only) xl:grid-cols-2 @endif">
                 @foreach ($docu->evaluations as $evaluation)
                     @if (!$evaluation->isDraft() || $evaluation->user_id == Auth::user()->id)
-                        <livewire:evaluations.docu-evaluation-box :evaluation="$evaluation" />
+                        <livewire:evaluations.docu-evaluation-box :evaluation="$evaluation" :$note_only :$comment_only />
                     @endif
                 @endforeach
                 @if ($docu->evaluations->where('user_id', Auth::user()->id)->count() == 0)

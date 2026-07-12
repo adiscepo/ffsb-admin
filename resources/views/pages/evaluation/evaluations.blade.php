@@ -248,7 +248,8 @@ new class extends Component {
 
             @if (isset($selected_docu))
                 <livewire:docu-info class="border" :rounded="true" :docu="$this->selected_docu" />
-                <livewire:evaluations.docu-evaluations class="py-5 border" :rounded="true" :docu="$this->selected_docu" />
+                <livewire:evaluations.docu-evaluations class="py-5 border" :rounded="true" :docu="$this->selected_docu"
+                    :note_only="false" :comment_only="false" />
             @else
                 <div class="flex items-center justify-center p-8 h-fit">
                     <span class="text-sm italic text-zinc-500">
