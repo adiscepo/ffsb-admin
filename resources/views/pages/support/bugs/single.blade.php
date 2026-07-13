@@ -88,7 +88,7 @@ new class extends Component {
         <div class="grid md:grid-cols-[3fr_1fr] gap-y-5 md:gap-x-6">
             <div class="flex flex-col gap-y-4">
                 <x-message :user="$bug->user">
-                    <x-slot:header>
+                    <x-slot:header name="header">
                         Ouvert par <span
                             class="text-zinc-800 dark:text-zinc-300 font-medium">{{ $bug->user->name }}</span>
                         • {{ $bug->created_at->diffForHumans() }}

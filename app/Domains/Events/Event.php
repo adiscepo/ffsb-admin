@@ -40,6 +40,14 @@ class Event extends Model
         return $this->morphedByMany(Bug::class, 'eventable');
     }
 
+    public function isEdited(): bool
+    {
+        if (isset($this->payload['edited']) && $this->payload['edited']) {
+            return true;
+        }
+        return false;
+    }
+
     /**
      * Set the factory (because use a non-common path)
      *

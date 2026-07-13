@@ -10,3 +10,5 @@ use App\Domains\Statuses\Status;
     <p>a retiré le status <flux:badge color="{{ $status->color }}" size="sm">{{ $status->name }}</flux:badge>
     </p>
 </x-timeline-item> --}}
+
+{{-- All is commented because usually a status is replace by another (I KNOW that I could have used some one-to-one relation instead of a many-morph but we never know, maybe later we will need two statuses for a model). So I prefer to not show in the timeline the deassignation of statuses --}}
