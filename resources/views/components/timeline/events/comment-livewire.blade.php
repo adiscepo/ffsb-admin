@@ -37,7 +37,7 @@ new class extends Component {
         <span class="text-zinc-800 dark:text-zinc-300 font-medium">{{ $event->author->name }}</span>
         • {{ $event->created_at->diffForHumans() }}
         @if ($event->isEdited())
-            <span class="text-xs text-zinc-400">(edité)</span>
+            <span class="text-xs text-zinc-400">(edité {{ $event->updated_at->diffForHumans() }})</span>
         @endif
     </x-slot:header>
     <div>
