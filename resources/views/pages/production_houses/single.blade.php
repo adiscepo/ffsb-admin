@@ -46,6 +46,17 @@ new class extends Component {
             <flux:button icon="tag" icon:variant="mini" color="violet" variant="primary" size="sm"
                 class="cursor-pointer" />
         </flux:modal.trigger> --}}
+        <flux:modal name="create-contact">
+            <livewire:contacts.create :model="$production_house" />
+        </flux:modal>
+        <flux:modal.trigger name="create-contact">
+            <flux:button size="sm" variant="primary" color="violet" class="cursor-pointer hidden! md:block!">
+                Ajouter un contact
+            </flux:button>
+            <flux:button size="sm" variant="primary" color="violet" class="cursor-pointer md:hidden" icon="user-plus">
+            </flux:button>
+        </flux:modal.trigger>
+
         <flux:modal name="edit-production-house" variant="flyout">
             <livewire:production_houses.edit :production_house="$production_house" />
         </flux:modal>

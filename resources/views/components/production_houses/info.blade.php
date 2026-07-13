@@ -113,7 +113,15 @@ new class extends Component {
             @endif
         </div>
     </div>
-    <div class="mb-2"></div>
+    @if ($production_house->contacts->isNotEmpty())
+        <div class="mb-2"></div>
+        <flux:separator variant="subtle" text="Contacts" />
+        <ol class="px-5 text-sm text-zinc-500">
+            @foreach ($production_house->contacts as $contact)
+                <li>{{ $contact->name }}</li>
+            @endforeach
+        </ol>
+    @endif
     @if (isset($production_house->remark))
         <flux:separator variant="subtle" text="Remarque" />
         <div class="px-5 text-sm text-zinc-500">

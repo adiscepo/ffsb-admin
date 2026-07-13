@@ -7,6 +7,7 @@ use App\Domains\Docus\Enum\DocuLang;
 use App\Domains\Events\Traits\Eventable;
 use App\Domains\ProductionHouses\Factory\ProductionHouseFactory;
 use App\Domains\Statuses\Traits\Statusable;
+use App\Domains\Contacts\Traits\Contactable;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -16,7 +17,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ProductionHouse extends Model
 {
-    use HasFactory, Eventable, Statusable;
+    use HasFactory, Eventable, Statusable, Contactable;
 
     protected $fillable = [
         'name',
