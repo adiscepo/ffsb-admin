@@ -39,7 +39,7 @@ new class extends Component {
     </x-slot:header>
     <div>
         @if (!$edit_mode)
-            {{ $value }}
+            {!! nl2br($value) !!}
         @else
             <div class="flex flex-col space-y-2">
                 <flux:textarea rows="2" wire:model='value' wire:key='edit_mode'></flux:textarea>
