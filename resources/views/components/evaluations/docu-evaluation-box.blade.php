@@ -24,9 +24,15 @@ new class extends Component {
 ?>
 
 @props([
-    'note_only' => true,
+    'note_only' => false,
     'comment_only' => false,
 ])
+
+@php
+    if ($note_only) {
+        $comment_only = false;
+    }
+@endphp
 
 <div wire:click='redirectEvaluation()'
     class="py-3 px-5 rounded border border-zinc-200 flex flex-col @if (!$comment_only) items-center @endif justify-between gap-y-3 cursor-pointer hover:border-zinc-300 transition">

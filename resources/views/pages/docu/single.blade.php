@@ -43,6 +43,11 @@ new class extends Component {
     {
         $this->form_evaluation = true;
     }
+
+    public function showListComment()
+    {
+        $this->current_evaluation_author_id = null;
+    }
 };
 ?>
 @component('partials.heading', ['route' => 'Documentaires:docus/' . $docu->title])
@@ -72,8 +77,13 @@ new class extends Component {
     @if ($this->form_evaluation)
         <livewire:evaluations.new-evaluation :docu="$docu" />
     @elseif ($current_evaluation_author_id != null)
-        <livewire:evaluations.evaluation :docu="$docu" :author_id="$current_evaluation_author_id" />
+        <div>
+            <flux:button wire:click='showListComment()' icon="arrow-left" icon:variant="micro" size="xs"
+                class="ml-2" />
+            <livewire:evaluations.evaluation :docu="$docu" :author_id="$current_evaluation_author_id" />
+        </div>
     @else
-        <livewire:evaluations.docu-evaluations :docu="$docu" :note_only="false" :comment_only="true" />
+        <livewire:evaluations.docu-evaluations :title="false" :docu="$docu" :note_only="false"
+            :comment_only="true" />
     @endif
 </main>

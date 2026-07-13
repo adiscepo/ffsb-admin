@@ -19,8 +19,9 @@ new class extends Component {
 };
 ?>
 @props([
-    'note_only' => true,
+    'note_only' => false,
     'comment_only' => false,
+    'title' => true,
 ])
 
 <div {{ $attributes->class(['relative border-r border-zinc-200 py-5']) }}>
@@ -28,7 +29,9 @@ new class extends Component {
         <span class="text-sm italic text-zinc-500">Chargement des évaluations</span>
     </x-loading-message>
     <div class="px-5">
-        <h2 class="text-lg text-zinc-700">Evaluations pour {{ $docu->title }}</h2>
+        @if ($title)
+            <h2 class="text-lg text-zinc-700">Evaluations pour {{ $docu->title }}</h2>
+        @endif
         <div class="mb-4"></div>
         @if ($docu->evaluations->count() > 0)
             <div class="grid grid-cols-1 gap-5 @if ($note_only && !$comment_only) xl:grid-cols-2 @endif">
