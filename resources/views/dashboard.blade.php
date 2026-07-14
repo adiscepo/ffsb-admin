@@ -17,10 +17,16 @@
             <x-placeholder-pattern class="absolute inset-0 size-full stroke-gray-900/20 dark:stroke-neutral-100/20" />
         </div> --}}
     </div>
-    {{-- <div class="absolute bottom-2 right-10 w-1/8">
-        <img src="{{ url('/images/Pouf.png') }}" class="">
-    </div> --}}
-    <div class="absolute top-0 right-0 w-20">
+    @if (rand(0, 10) % 2 == 0)
+        <div class="absolute bottom-2 right-10 w-1/8 rotate-y-180">
+            <img src="{{ url('/images/Transat.png') }}" class="">
+        </div>
+    @else
+        <div class="absolute bottom-2 right-10 w-1/8">
+            <img src="{{ url('/images/Pouf.png') }}" class="">
+        </div>
+    @endif
+    {{-- <div class="absolute top-0 right-0 w-20">
         <img src="{{ url('/images/RideauFurtif.png') }}" class="rotate-y-180">
-    </div>
+    </div> --}}
 </x-layouts::app>
