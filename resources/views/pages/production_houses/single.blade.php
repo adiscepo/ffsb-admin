@@ -73,7 +73,7 @@ new class extends Component {
 <main class="flex flex-col gap-y-4 lg:grid lg:grid-cols-[1fr_1.5fr_1.5fr] grow">
     <livewire:production_houses.info :rounded="false" :production_house="$production_house" class="border-r border-zinc-200 h-full" />
     <livewire:production_houses.list-docu :production_house="$production_house" />
-    <livewire:production_houses.timeline :production_house="$production_house" />
+    <livewire:production_houses.timeline class="max-h-[92vh] overflow-y-scroll" :production_house="$production_house" />
     {{-- <livewire:docu-info :rounded="false" :docu="$docu" class="border-r border-zinc-200 h-full" />
     <livewire:evaluations.docu-evaluations :docu="$docu" />
     @if ($this->form_evaluation)
