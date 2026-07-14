@@ -19,7 +19,7 @@
     </div>
     @if (rand(0, 10) % 2 == 0)
         <div class="absolute bottom-2 right-10 w-1/8 rotate-y-180">
-            <img src="{{ url('/images/Transat.png') }}" class="">
+            <img src="{{ url('/images/transat.png') }}" class="">
         </div>
     @else
         <div class="absolute bottom-2 right-10 w-1/8">
