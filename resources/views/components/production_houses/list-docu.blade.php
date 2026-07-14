@@ -20,7 +20,7 @@ new class extends Component {
 };
 ?>
 
-<div class="p-5 border-r border-zinc-200">
+<div {{ $attributes->only('class')->merge(['class' => 'p-5 border-r border-zinc-200']) }}>
     <h2 class="text-lg text-zinc-700">Documentaires proposés</h2>
     <div class="mb-4"></div>
     @if ($production_house->docus->isEmpty())

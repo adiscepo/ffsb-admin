@@ -120,7 +120,7 @@ new class extends Component {
     @endif
     @if (isset($production_house->remark))
         <flux:separator variant="subtle" text="Remarque" />
-        <div class="px-5 text-sm text-zinc-500">
+        <div class="px-5 text-sm text-zinc-500 max-h-95 overflow-y-scroll">
             <p>{!! nl2br($production_house->remark) !!}</p>
         </div>
     @endif
