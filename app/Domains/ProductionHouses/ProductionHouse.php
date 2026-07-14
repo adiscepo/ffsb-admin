@@ -45,6 +45,11 @@ class ProductionHouse extends Model
         return $this->belongsToMany(User::class);
     }
 
+    public function hasAssigned(User $user): bool
+    {
+        return $this->assignee->contains($user);
+    }
+
     protected static function newFactory(): ProductionHouseFactory
     {
         return ProductionHouseFactory::new();

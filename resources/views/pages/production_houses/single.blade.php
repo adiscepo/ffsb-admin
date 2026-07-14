@@ -46,17 +46,18 @@ new class extends Component {
             <flux:button icon="tag" icon:variant="mini" color="violet" variant="primary" size="sm"
                 class="cursor-pointer" />
         </flux:modal.trigger> --}}
-        <flux:modal name="create-contact">
-            <livewire:contacts.create :model="$production_house" />
-        </flux:modal>
-        <flux:modal.trigger name="create-contact">
-            <flux:button size="sm" variant="primary" color="violet" class="cursor-pointer hidden! md:block!">
-                Ajouter un contact
-            </flux:button>
-            <flux:button size="sm" variant="primary" color="violet" class="cursor-pointer md:hidden" icon="user-plus">
-            </flux:button>
-        </flux:modal.trigger>
-
+        @if ($production_house->hasAssigned(Auth::user()))
+            <flux:modal name="create-contact">
+                <livewire:contacts.create :model="$production_house" />
+            </flux:modal>
+            <flux:modal.trigger name="create-contact">
+                <flux:button size="sm" variant="primary" color="violet" class="cursor-pointer hidden! md:block!">
+                    Ajouter un contact
+                </flux:button>
+                <flux:button size="sm" variant="primary" color="violet" class="cursor-pointer md:hidden" icon="user-plus">
+                </flux:button>
+            </flux:modal.trigger>
+        @endif
         <flux:modal name="edit-production-house" variant="flyout">
             <livewire:production_houses.edit :production_house="$production_house" />
         </flux:modal>
@@ -74,11 +75,4 @@ new class extends Component {
     <livewire:production_houses.info :rounded="false" :production_house="$production_house" class="border-r border-zinc-200 h-full" />
     <livewire:production_houses.list-docu :production_house="$production_house" />
     <livewire:production_houses.timeline class="max-h-[92vh] overflow-y-scroll" :production_house="$production_house" />
-    {{-- <livewire:docu-info :rounded="false" :docu="$docu" class="border-r border-zinc-200 h-full" />
-    <livewire:evaluations.docu-evaluations :docu="$docu" />
-    @if ($this->form_evaluation)
-        <livewire:evaluations.new-evaluation :docu="$docu" />
-    @elseif ($current_evaluation_author_id != null)
-        <livewire:evaluations.evaluation :docu="$docu" :author_id="$current_evaluation_author_id" />
-    @endif --}}
 </main>

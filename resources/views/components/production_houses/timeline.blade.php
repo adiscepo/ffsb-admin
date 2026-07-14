@@ -52,7 +52,7 @@ new class extends Component {
         </div>
     @endif
     <div class="mb-4"></div>
-    @if ($production_house->assignee->contains(Auth::user()))
+    @if ($production_house->hasAssigned(Auth::user()))
         <div class="flex gap-x-3 items-start">
             <div class="w-full">
                 <div
