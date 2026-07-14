@@ -55,7 +55,7 @@
         <img src="{{ url('/images/Pouf.png') }}" class="">
     </div>
     <div class="absolute bottom-2 left-5 w-60  max-sm:hidden">
-        <img src="{{ url('/images/Transat.png') }}" class="">
+        <img src="{{ url('/images/transat.png') }}" class="">
     </div>
 
     @if (Route::has('login'))
