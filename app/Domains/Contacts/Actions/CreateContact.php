@@ -31,7 +31,7 @@ class CreateContact
                 ],
             ]);
 
-            $user->events()->attach($contact_create);
+            $contact->events()->attach($contact_create);
         });
     }
 }

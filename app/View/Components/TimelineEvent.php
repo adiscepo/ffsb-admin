@@ -24,6 +24,8 @@ class TimelineEvent extends Component
 
     /**
      * Get the view / contents that represent the component.
+     * Dans le plus grand respect des conventions de nommage de PHP, la nomen-
+     * clature des différents évènements ne supporte aucun standard
      */
     public function render(): View|Closure|string
     {
@@ -36,6 +38,9 @@ class TimelineEvent extends Component
 
             case 'unassign_production_house':
                 return view('components.timeline.events.unassign-production-house');
+
+            case 'attach_contact':
+                return view('components.timeline.events.contacts.attach');
 
             case 'add_status':
                 return view('components.timeline.events.statuses.add');
