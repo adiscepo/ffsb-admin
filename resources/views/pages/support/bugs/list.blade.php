@@ -18,16 +18,18 @@ return new class extends Component {
     public function updatedTag()
     {
         if (!empty($this->tag)) {
-            $this->bugs = Bug::whereAttachedTo(Tag::where('name', $this->tag)->get())->get();
+            $this->bugs = Bug::whereAttachedTo(Tag::where('name', $this->tag)->get())
+                ->orderBy('updated_at', 'DESC')
+                ->get();
             // dd($this->bugs);
         } else {
-            $this->bugs = Bug::all();
+            $this->bugs = Bug::orderBy('updated_at', 'desc')->get();
         }
     }
 
     public function updatedOpen()
     {
-        $this->bugs = Bug::where('open', $this->open)->get();
+        $this->bugs = Bug::where('open', $this->open)->orderBy('updated_at', 'DESC')->get();
     }
 
     public function setOpen(bool $open)
