@@ -116,11 +116,7 @@ new class extends Component {
     @if ($production_house->contacts->isNotEmpty())
         <div class="mb-2"></div>
         <flux:separator variant="subtle" text="Contacts" />
-        <ol class="px-5 text-sm text-zinc-500">
-            @foreach ($production_house->contacts as $contact)
-                <li>{{ $contact->name }}</li>
-            @endforeach
-        </ol>
+        <livewire:contacts.index :contacts="$production_house->contacts" />
     @endif
     @if (isset($production_house->remark))
         <flux:separator variant="subtle" text="Remarque" />

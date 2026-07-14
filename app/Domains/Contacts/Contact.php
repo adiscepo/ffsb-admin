@@ -16,7 +16,7 @@ class Contact extends Model
     public $fillable = ['name', 'contact_phone', 'contact_email', 'remark'];
 
     /**
-     * Return all the tags for a specific model
+     * Return all the contacts for a specific model
      *
      * @param string $model (Model::class)
      * @return Collection
