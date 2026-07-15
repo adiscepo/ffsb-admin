@@ -16,6 +16,7 @@ class DeleteComment
             if ($comment->type == 'comment') {
                 $comment->update([
                     'payload' => [
+                        'content' => $comment->payload['content'],
                         'removed' => true,
                     ],
                 ]);
