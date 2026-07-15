@@ -263,10 +263,6 @@ new class extends Component {
             </label>
             <input type="file" name="upload-file" id="upload-file" class="hidden"> --}}
         </div>
-        <ol class="mt-5 ml-10" data-timeline="" {{ $attributes }}>
-            @foreach ($meeting->events as $event)
-                <x-timeline-event :event="$event" />
-            @endforeach
-        </ol>
+        <livewire:meetings.timeline :meeting="$meeting" />
     </div>
 </div>

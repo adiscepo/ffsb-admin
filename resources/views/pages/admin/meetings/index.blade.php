@@ -40,8 +40,8 @@ new class extends Component {
     </flux:modal.trigger>
 @endcomponent
 
-<div class="grid md:grid-cols-3 max-sm:grid-rows-3 h-full overflow-y-scroll">
-    <div class="overflow-y-scroll px-10 pb-10">
+<div class="grid md:grid-cols-3 max-sm:grid-rows-3 h-full overflow-y-hidden">
+    <div class="overflow-y-scroll px-10 pb-10 row-span-2">
         @if ($future_meetings->isNotEmpty())
             <div class="mb-10"></div>
             <div class="space-y-2">
