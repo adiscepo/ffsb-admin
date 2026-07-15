@@ -113,11 +113,25 @@ new class extends Component {
             @endif
         </div>
     </div>
-    @if ($production_house->contacts->isNotEmpty())
-        <div class="mb-2"></div>
-        <flux:separator variant="subtle" text="Contacts" />
-        <livewire:contacts.index :contacts="$production_house->contacts" />
-    @endif
+    <div class="mb-2"></div>
+    <flux:separator variant="subtle" text="Contacts" />
+    <div class="flex flex-col gap-y-2 px-5">
+        @if ($production_house->contacts->isNotEmpty())
+            <livewire:contacts.index :contacts="$production_house->contacts" />
+        @else
+            <span class="text-sm italic text-zinc-500">Il n'y a aucun contact associé</span>
+        @endif
+        @if ($production_house->hasAssigned(Auth::user()))
+            <flux:modal.trigger name="new-contact" class="">
+                <flux:button size="xs" color="violet" class="cursor-pointer w-fit">
+                    Ajouter un contact
+                </flux:button>
+            </flux:modal.trigger>
+            <flux:modal name="new-contact">
+                <livewire:contacts.create :model="$production_house" />
+            </flux:modal>
+        @endif
+    </div>
     @if (isset($production_house->remark))
         <flux:separator variant="subtle" text="Remarque" />
         <div class="px-5 text-sm text-zinc-500 max-h-95 overflow-y-scroll">

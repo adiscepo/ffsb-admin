@@ -6,7 +6,7 @@ new class extends Component {};
 ?>
 @props(['contacts'])
 
-<div class="flex flex-col px-5 text-sm text-zinc-500 gap-y-0.5">
+<div class="flex flex-col text-sm text-zinc-500 gap-y-0.5">
     @foreach ($contacts as $contact)
         <flux:modal.trigger :name="'contact-' . $contact->id">
             <div class="flex gap-x-2 items-center cursor-pointer">
