@@ -9,7 +9,9 @@
             </div>
             <div
                 class="relative aspect-video overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700">
-                <livewire:widget.assigned-production-houses />
+                @if (Auth::user()->has('production_houses'))
+                    <livewire:widget.assigned-production-houses />
+                @endif
             </div>
         </div>
         {{-- <div class="relative h-full flex-1 overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700">

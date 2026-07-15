@@ -37,7 +37,8 @@ new class extends Component {
                 @endforeach
             </div>
         @else
-            <p class="text-zinc-500 dark:text-zinc-300 italic">Aucune maison de production assignée...
+            <p class="text-zinc-500 dark:text-zinc-300 italic">
+                Toutes les maisons de production assignées ont été contactées
             </p>
         @endif
     </div>

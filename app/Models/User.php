@@ -63,6 +63,11 @@ class User extends Authenticatable
         return $this->hasMany(Docu::class, "found_by");
     }
 
+    public function production_houses(): BelongsToMany
+    {
+        return $this->belongsToMany(ProductionHouse::class, "user_id");
+    }
+
     public function evaluations(): HasMany
     {
         return $this->hasMany(Evaluation::class, "user_id");
