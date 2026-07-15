@@ -2,9 +2,12 @@
 
 use Livewire\Component;
 use App\Domains\Meetings\Meeting;
+use Illuminate\Support\Collection;
 
 new class extends Component {
     public ?Meeting $current_meeting;
+    public Collection $past_meetings;
+    public Collection $future_meetings;
 
     public function mount(?int $id = null)
     {
@@ -13,6 +16,8 @@ new class extends Component {
         } else {
             $this->current_meeting = Meeting::latest()->get()->first() ?? null;
         }
+        $this->past_meetings = Meeting::where('datetime', '<=', now())->orderBy('datetime', 'desc')->get();
+        $this->future_meetings = Meeting::where('datetime', '>', now())->orderBy('datetime', 'desc')->get();
     }
 
     public function selectMeeting(Meeting $meeting)
@@ -37,14 +42,40 @@ new class extends Component {
 
 <div class="grid md:grid-cols-3 max-sm:grid-rows-3 h-full overflow-y-scroll">
     <div class="overflow-y-scroll px-10 pb-10">
+        @if ($future_meetings->isNotEmpty())
+            <div class="mb-10"></div>
+            <div class="space-y-2">
+                <h3 class="text-lg text-zinc-600 dark:text-zinc-300 w-fit whitespace-nowrap">
+                    Réunions planifiées
+                </h3>
+                <div class="flex flex-col gap-y-5">
+                    @foreach ($future_meetings as $meeting)
+                        <div class="border border-zinc-200 rounded-lg text-zinc-400 text-sm p-3 space-y-2 cursor-pointer hover:shadow"
+                            wire:click='selectMeeting({{ $meeting }})'>
+                            <div class="flex justify-between">
+                                <span class="font-semibold text-zinc-900 text-base">{{ $meeting->name }}</span>
+                                <span class="flex gap-x-1 items-center">
+                                    <flux:icon icon="user-group" variant="micro" />
+                                    {{ count($meeting->members) }} participant.e.s
+                                </span>
+                            </div>
+                            <span class="flex gap-x-1 items-center">
+                                <flux:icon icon="calendar-date-range" variant="micro" />
+                                {{ $meeting->datetime->translatedFormat('d F Y') }}
+                            </span>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        @endif
         <div class="mb-10"></div>
         <div class="space-y-2">
             <h3 class="text-lg text-zinc-600 dark:text-zinc-300 w-fit whitespace-nowrap">
                 Réunions passées
             </h3>
             <div class="flex flex-col gap-y-5">
-                @if ($current_meeting != null)
-                    @foreach (Meeting::orderBy('datetime', 'desc')->get() as $meeting)
+                @if ($past_meetings->isNotEmpty())
+                    @foreach ($past_meetings as $meeting)
                         <div class="border border-zinc-200 rounded-lg text-zinc-400 text-sm p-3 space-y-2 cursor-pointer hover:shadow"
                             wire:click='selectMeeting({{ $meeting }})'>
                             <div class="flex justify-between">

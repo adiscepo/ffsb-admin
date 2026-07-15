@@ -24,7 +24,7 @@ class MeetingFactory extends Factory
             'name' => 'Réunion ' . fake()->randomLetter(),
             'datetime' => fake()->dateTime(),
             'location' => fake()->city(),
-            'description' => fake()->randomHtml(2),
+            'description' => fake()->text(500),
         ];
     }
 
