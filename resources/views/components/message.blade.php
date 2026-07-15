@@ -1,7 +1,11 @@
-@props(['user'])
+@props(['user' => null])
 
 <div {{ $attributes->only('class')->merge(['class' => 'relative flex gap-x-3 items-start']) }}>
-    <flux:avatar :src="$user->getProfilePicture()" :initials="$user->initials()" />
+    @if (isset($user))
+        <flux:avatar :src="$user->getProfilePicture()" :initials="$user->initials()" />
+    @else
+        <flux:avatar initials="?" color="auto" />
+    @endif
     <div class="w-full">
         @if (isset($header))
             <div
@@ -11,9 +15,11 @@
                 </p>
             </div>
         @endif
-        <div
-            class="border @if (isset($header)) border-t-0 @endif border-zinc-300 dark:border-zinc-600 p-3 rounded-b-lg">
-            {{ $slot }}
-        </div>
+        @if (isset($slot))
+            <div
+                class="border @if (isset($header)) border-t-0 @else rounded-lg @endif border-zinc-300 dark:border-zinc-600 p-3 rounded-b-lg">
+                {{ $slot }}
+            </div>
+        @endif
     </div>
 </div>

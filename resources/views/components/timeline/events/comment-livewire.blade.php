@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Domains\Events\Actions\EditComment;
 use App\Domains\Events\Event;
+use App\Domains\Events\Actions\DeleteComment;
 
 new class extends Component {
     public bool $edit_mode = false;
@@ -22,6 +23,13 @@ new class extends Component {
     {
         $edit->execute(Auth::user(), $this->event, $this->value);
         $this->edit_mode = false;
+    }
+
+    public function deleteComment(DeleteComment $delete)
+    {
+        $delete->execute(Auth::user(), $this->event);
+        $this->edit_mode = false;
+        $this->redirect(request()->header('Referer'), navigate: true);
     }
 
     public function toggleEditMode()
@@ -47,6 +55,9 @@ new class extends Component {
             <div class="flex flex-col space-y-2">
                 <flux:textarea rows="2" wire:model='value' wire:key='edit_mode'></flux:textarea>
                 <div class="flex justify-end gap-x-1">
+                    <flux:button wire:click='deleteComment' variant="primary" color="red" size="sm"
+                        class="self-end cursor-pointer">
+                        Supprimer</flux:button>
                     <flux:button wire:click='toggleEditMode' size="sm" class="self-end cursor-pointer">
                         Annuler</flux:button>
                     <flux:button wire:click='editComment' size="sm" class="self-end cursor-pointer"

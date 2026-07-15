@@ -21,7 +21,7 @@ class CreateComment
                 'author_id' => $user->id,
                 'type' => 'comment',
                 'payload' => [
-                    'content' => $comment
+                    'content' => htmlspecialchars($comment)
                 ],
             ]);
             $model->events()->attach($comment);
