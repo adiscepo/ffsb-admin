@@ -189,27 +189,31 @@ new class extends Component {
                 @endif
             </span>
         </div>
-        <div class="flex gap-x-2 items-center text-sm">
-            <span class="flex gap-x-1 items-center text-zinc-400 ">
-                <flux:icon icon="user-group" variant="micro" />
-                Participant.e.s
-            </span>
-            @foreach ($meeting->members as $member)
-                <flux:avatar size="xs" circle :src="$member->getProfilePicture()"
-                    :initials="$member->initials()" />
-            @endforeach
-            <flux:modal.trigger name="toggle-members">
-                <span
-                    class="flex gap-x-1 items-center w-fit py-0.5 px-2 text-xs text-zinc-500 bg-zinc-200 border border-zinc-300 rounded-full cursor-pointer hover:bg-zinc-300">
-                    Ajouter
+        {{-- Les participants à la réunion ne s'affichent que lorsque la réunion a eu lieu (datetime < now) --}}
+        {{-- TODO: Faire un menu dans le style Doodle pour decider d'une date lorsque le meeting est planifié --}}
+        @if (!$meeting->isPlanned())
+            <div class="flex gap-x-2 items-center text-sm">
+                <span class="flex gap-x-1 items-center text-zinc-400 ">
+                    <flux:icon icon="user-group" variant="micro" />
+                    Participant.e.s
                 </span>
-            </flux:modal.trigger>
-            <flux:modal name="toggle-members" class="overflow-visible">
-                <span class="text-zinc-900 font-semibold">Ajouter des participant.e.s</span>
-                <div class="mb-3"></div>
-                <livewire:pill-box class="text-zinc-900" name="members" :datas="User::all()->toArray()" :selected="$meeting->members->pluck('id')->toArray()" />
-            </flux:modal>
-        </div>
+                @foreach ($meeting->members as $member)
+                    <flux:avatar size="xs" circle :src="$member->getProfilePicture()"
+                        :initials="$member->initials()" />
+                @endforeach
+                <flux:modal.trigger name="toggle-members">
+                    <span
+                        class="flex gap-x-1 items-center w-fit py-0.5 px-2 text-xs text-zinc-500 bg-zinc-200 border border-zinc-300 rounded-full cursor-pointer hover:bg-zinc-300">
+                        Ajouter
+                    </span>
+                </flux:modal.trigger>
+                <flux:modal name="toggle-members" class="overflow-visible">
+                    <span class="text-zinc-900 font-semibold">Ajouter des participant.e.s</span>
+                    <div class="mb-3"></div>
+                    <livewire:pill-box class="text-zinc-900" name="members" :datas="User::all()->toArray()" :selected="$meeting->members->pluck('id')->toArray()" />
+                </flux:modal>
+            </div>
+        @endif
         <div class="mb-5"></div>
         <div class="flex flex-col text-sm border border-zinc-200 rounded-lg py-4 px-5 space-y-2">
             @if ($edit_mode)

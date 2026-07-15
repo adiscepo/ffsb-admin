@@ -96,6 +96,11 @@ class Meeting extends Model
         return false;
     }
 
+    public function isPlanned(): bool
+    {
+        return $this->datetime > now();
+    }
+
     protected static function newFactory(): MeetingFactory
     {
         return MeetingFactory::new();
