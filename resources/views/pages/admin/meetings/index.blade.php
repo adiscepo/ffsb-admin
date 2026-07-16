@@ -9,6 +9,10 @@ new class extends Component {
     public Collection $past_meetings;
     public Collection $future_meetings;
 
+    protected $listeners = [
+        'select-meeting' => 'selectMeeting',
+    ];
+
     public function mount(?int $id = null)
     {
         if ($id != null) {
@@ -51,20 +55,7 @@ new class extends Component {
                 </h3>
                 <div class="flex flex-col gap-y-5">
                     @foreach ($future_meetings as $meeting)
-                        <div class="border border-zinc-200 rounded-lg text-zinc-400 text-sm p-3 space-y-2 cursor-pointer hover:shadow"
-                            wire:click='selectMeeting({{ $meeting }})'>
-                            <div class="flex justify-between">
-                                <span class="font-semibold text-zinc-900 text-base">{{ $meeting->name }}</span>
-                                <span class="flex gap-x-1 items-center">
-                                    <flux:icon icon="user-group" variant="micro" />
-                                    {{ count($meeting->members) }} participant.e.s
-                                </span>
-                            </div>
-                            <span class="flex gap-x-1 items-center">
-                                <flux:icon icon="calendar-date-range" variant="micro" />
-                                {{ $meeting->datetime->translatedFormat('d F Y') }}
-                            </span>
-                        </div>
+                        <livewire:meetings.box :$meeting />
                     @endforeach
                 </div>
             </div>
@@ -77,20 +68,7 @@ new class extends Component {
             <div class="flex flex-col gap-y-5">
                 @if ($past_meetings->isNotEmpty())
                     @foreach ($past_meetings as $meeting)
-                        <div class="border border-zinc-200 rounded-lg text-zinc-400 text-sm p-3 space-y-2 cursor-pointer hover:shadow"
-                            wire:click='selectMeeting({{ $meeting }})'>
-                            <div class="flex justify-between">
-                                <span class="font-semibold text-zinc-900 text-base">{{ $meeting->name }}</span>
-                                <span class="flex gap-x-1 items-center">
-                                    <flux:icon icon="user-group" variant="micro" />
-                                    {{ count($meeting->members) }} participant.e.s
-                                </span>
-                            </div>
-                            <span class="flex gap-x-1 items-center">
-                                <flux:icon icon="calendar-date-range" variant="micro" />
-                                {{ $meeting->datetime->translatedFormat('d F Y') }}
-                            </span>
-                        </div>
+                        <livewire:meetings.box :$meeting />
                     @endforeach
                 @else
                     <span class="italic text-zinc-500">Il n'y a pas encore de réunions</span>

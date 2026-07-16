@@ -5,8 +5,8 @@
         $user = User::find($event->payload['assignee_id']);
     @endphp
     @if ($user == $event->author)
-    <p>s'est assigné à la maison de production</p>
+        <p>s'est assigné à la maison de production</p>
     @else
-    <p>a assigné {{ $user->name }} à la maison de production</p>
+        <p>a assigné {{ $user->name }} à la maison de production</p>
     @endif
 </x-timeline-item>
