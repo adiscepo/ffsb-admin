@@ -14,7 +14,7 @@ new class extends Component {
         if ($id != null) {
             $this->current_meeting = Meeting::findOrFail($id);
         } else {
-            $this->current_meeting = Meeting::latest()->get()->first() ?? null;
+            // $this->current_meeting = Meeting::latest()->get()->first() ?? null;
         }
         $this->past_meetings = Meeting::where('datetime', '<=', now())->orderBy('datetime', 'desc')->get();
         $this->future_meetings = Meeting::where('datetime', '>', now())->orderBy('datetime', 'desc')->get();
@@ -41,7 +41,8 @@ new class extends Component {
 @endcomponent
 
 <div class="grid md:grid-cols-3 max-sm:grid-rows-3 h-full overflow-y-hidden">
-    <div class="overflow-y-scroll px-10 pb-10 row-span-2">
+    <div
+        class="overflow-y-scroll px-10 pb-10 @if (isset($current_meeting)) max-sm:row-span-1 md:row-span-full @else row-span-full @endif ">
         @if ($future_meetings->isNotEmpty())
             <div class="mb-10"></div>
             <div class="space-y-2">
@@ -99,6 +100,6 @@ new class extends Component {
     </div>
     @if ($current_meeting != null)
         <livewire:meetings.single :meeting="$current_meeting" :key="$current_meeting->id"
-            class="row-span-2 md:col-span-2 md:col-start-2 max-sm:mb-10 max-sm:border-t md:border-l border-zinc-200" />
+            class="max-sm:row-span-2 md:col-span-2 md:col-start-2 max-sm:mb-10 max-sm:border-t md:border-l border-zinc-200" />
     @endif
 </div>
