@@ -23,7 +23,7 @@ jobs:
           ssh -o StrictHostKeyChecking=no ${{ secrets.DEPLOY_SERVER_USER }}@${{ secrets.DEPLOY_SERVER_IP }} "
             cd /var/www/${{ secrets.DEPLOY_SERVER_DIR }} &&
             php artisan down &&
-            git reset --hard HEAD && git clean -df &&
+            git reset --hard HEAD &&
             git pull origin main &&
             cp .env.production .env &&
             composer install --no-interaction --prefer-dist --no-dev --optimize-autoloader &&
