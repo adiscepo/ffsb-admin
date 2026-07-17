@@ -29,7 +29,16 @@ new class extends Component {
         </p>
     @else
         <div class="flex flex-col gap-y-2">
-            @foreach ($production_house->docus as $docu)
+            @php
+                $current_year = -1;
+            @endphp
+            @foreach ($production_house->docus->sortBy('edition_year_id') as $docu)
+                @if ($current_year != $docu->edition_year_id)
+                    <flux:separator class="text-sm text-zinc-500" text="Edition {{ $docu->edition_year->year }}" />
+                @endif
+                @php
+                    $current_year = $docu->edition_year->id;
+                @endphp
                 <div wire:click='redirectDocu({{ $docu->id }})'>
                     <livewire:docu-info
                         class="px-2 py-3 border border-zinc-100 rounded-xl cursor-pointer hover:border-zinc-300"
