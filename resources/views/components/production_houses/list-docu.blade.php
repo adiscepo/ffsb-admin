@@ -32,7 +32,7 @@ new class extends Component {
             @php
                 $current_year = -1;
             @endphp
-            @foreach ($production_house->docus->sortBy('edition_year_id') as $docu)
+            @foreach ($production_house->docus->sortByDesc('edition_year_id') as $docu)
                 @if ($current_year != $docu->edition_year_id)
                     <flux:separator class="text-sm text-zinc-500" text="Edition {{ $docu->edition_year->year }}" />
                 @endif
