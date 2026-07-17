@@ -45,38 +45,54 @@
             </nav>
         @endif
     </main>
-    @if (rand(0, 1))
-        <div class="absolute bottom-2 left-5 w-100  max-sm:hidden">
-            <img src="{{ url('/images/Personnages2024.png') }}" class="">
-        </div>
-        <div class="absolute top-2 right-5 w-60 max-sm:hidden">
-            <img src="{{ url('/images/Logo2024.png') }}" class="">
-        </div>
-        <div class="absolute top-0 left-5 w-70">
-            <img src="{{ url('/images/HamacCoupe.png') }}" class="translate-y-[-15pt]">
-        </div>
-        <div class="absolute bottom-2 right-5 w-60 max-sm:hidden">
-            <img src="{{ url('/images/Pouf.png') }}" class="">
-        </div>
-    @else
-        <div class="absolute top-0 right-0 w-30 max-sm:hidden">
-            <img src="{{ url('/images/RideauFurtif.png') }}" class="rotate-y-180">
-        </div>
-        <div class="absolute top-0 left-5 w-70">
-            <img src="{{ url('/images/HamacCoupe.png') }}" class="translate-y-[-15pt]">
-        </div>
-        <div class="absolute bottom-2 right-5 w-60 max-sm:hidden">
-            <img src="{{ url('/images/Pouf.png') }}" class="">
-        </div>
-        <div class="absolute bottom-2 left-5 w-60  max-sm:hidden">
-            <img src="{{ url('/images/transat.png') }}" class="">
-        </div> --}}
-        {{--
-@endif
+    @switch(rand(0, 2))
+        @case(0)
+            <div class="absolute bottom-2 left-5 w-80  max-sm:hidden">
+                <img src="{{ url('/images/Clara_Samuel.png') }}" class="">
+            </div>
+            <div class="absolute top-2 right-5 w-60 max-sm:hidden">
+                <img src="{{ url('/images/Logo2024.png') }}" class="">
+            </div>
+            <div class="absolute bottom-2 right-30 w-20 max-sm:hidden">
+                <img src="{{ url('/images/Julie.png') }}" class="rotate-y-180">
+            </div>
+            <div class="absolute bottom-2 right-5 w-27 max-sm:hidden">
+                <img src="{{ url('/images/Eric.png') }}" class="rotate-y-180">
+            </div>
+        @break
 
+        @case(1)
+            <div class="absolute top-0 right-0 w-30 max-sm:hidden">
+                <img src="{{ url('/images/RideauFurtif.png') }}" class="rotate-y-180">
+            </div>
+            <div class="absolute top-0 left-5 w-70">
+                <img src="{{ url('/images/HamacCoupe.png') }}" class="translate-y-[-15pt]">
+            </div>
+            <div class="absolute bottom-2 right-5 w-60 max-sm:hidden">
+                <img src="{{ url('/images/Pouf.png') }}" class="">
+            </div>
+            <div class="absolute bottom-2 left-5 w-60  max-sm:hidden">
+                <img src="{{ url('/images/transat.png') }}" class="">
+            </div>
+        @break
+
+        @default
+            <div class="absolute bottom-2 left-5 w-100  max-sm:hidden">
+                <img src="{{ url('/images/Personnages2024.png') }}" class="">
+            </div>
+            <div class="absolute top-2 right-5 w-60 max-sm:hidden">
+                <img src="{{ url('/images/Logo2024.png') }}" class="">
+            </div>
+            <div class="absolute top-0 left-5 w-70">
+                <img src="{{ url('/images/HamacCoupe.png') }}" class="translate-y-[-15pt]">
+            </div>
+            <div class="absolute bottom-2 right-5 w-60 max-sm:hidden">
+                <img src="{{ url('/images/Pouf.png') }}" class="">
+            </div>
+    @endswitch
     @if (Route::has('login'))
-<div class="h-14.5 hidden lg:block"></div>
-@endif
+        <div class="h-14.5 hidden lg:block"></div>
+    @endif
 </body>
 
 </html>
