@@ -52,6 +52,12 @@
         <div class="absolute top-2 right-5 w-60 max-sm:hidden">
             <img src="{{ url('/images/Logo2024.png') }}" class="">
         </div>
+        <div class="absolute top-0 left-5 w-70">
+            <img src="{{ url('/images/HamacCoupe.png') }}" class="translate-y-[-15pt]">
+        </div>
+        <div class="absolute bottom-2 right-5 w-60 max-sm:hidden">
+            <img src="{{ url('/images/Pouf.png') }}" class="">
+        </div>
     @else
         <div class="absolute top-0 right-0 w-30 max-sm:hidden">
             <img src="{{ url('/images/RideauFurtif.png') }}" class="rotate-y-180">
@@ -64,12 +70,13 @@
         </div>
         <div class="absolute bottom-2 left-5 w-60  max-sm:hidden">
             <img src="{{ url('/images/transat.png') }}" class="">
-        </div>
-    @endif
+        </div> --}}
+        {{--
+@endif
 
     @if (Route::has('login'))
-        <div class="h-14.5 hidden lg:block"></div>
-    @endif
+<div class="h-14.5 hidden lg:block"></div>
+@endif
 </body>
 
 </html>
