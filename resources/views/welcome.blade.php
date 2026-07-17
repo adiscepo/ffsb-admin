@@ -49,7 +49,7 @@
         <div class="absolute bottom-2 left-5 w-100  max-sm:hidden">
             <img src="{{ url('/images/Personnages2024.png') }}" class="">
         </div>
-        <div class="absolute top-2 right-10 w-60 max-sm:hidden">
+        <div class="absolute top-2 right-5 w-60 max-sm:hidden">
             <img src="{{ url('/images/Logo2024.png') }}" class="">
         </div>
     @else
