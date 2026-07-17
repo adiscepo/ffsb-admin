@@ -55,7 +55,7 @@ new class extends Component {
                 </h3>
                 <div class="flex flex-col gap-y-5">
                     @foreach ($future_meetings as $meeting)
-                        <livewire:meetings.box :$meeting />
+                        <livewire:meetings.box :key="$current_meeting?->id" :selected="$current_meeting?->id == $meeting->id" :$meeting />
                     @endforeach
                 </div>
             </div>
@@ -68,7 +68,7 @@ new class extends Component {
             <div class="flex flex-col gap-y-5">
                 @if ($past_meetings->isNotEmpty())
                     @foreach ($past_meetings as $meeting)
-                        <livewire:meetings.box :$meeting />
+                        <livewire:meetings.box :key="$current_meeting?->id" :selected="$current_meeting?->id == $meeting->id" :$meeting />
                     @endforeach
                 @else
                     <span class="italic text-zinc-500">Il n'y a pas encore de réunions</span>

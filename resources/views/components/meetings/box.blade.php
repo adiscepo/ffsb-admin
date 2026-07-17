@@ -7,11 +7,11 @@ new class extends Component {
     public Meeting $meeting;
     public string $color = '';
 
-    public function mount(Meeting $meeting)
+    public function mount(Meeting $meeting, ?bool $selected = false)
     {
         $this->meeting = $meeting;
         // $this->color = Color::cases()[intval(hash('md5', $meeting->name)) % count(Color::cases())]->value;
-        if ($meeting->isPlanned()) {
+        if ($selected) {
             $this->color = 'violet';
         } else {
             $this->color = 'zinc';
