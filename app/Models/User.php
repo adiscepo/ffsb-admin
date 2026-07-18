@@ -7,9 +7,11 @@ namespace App\Models;
 use App\Domains\Evaluations\Evaluation;
 use App\Domains\Events\Traits\Eventable;
 use App\Domains\ProductionHouses\ProductionHouse;
+use App\Domains\Roles\Role;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -18,7 +20,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 
-#[Fillable(['name', 'email', 'password', 'profile_picture'])]
+#[Fillable(['name', 'email', 'password', 'profile_picture', 'validated'])]
 #[Hidden(['password', 'two_factor_secret', 'two_factor_recovery_codes', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -63,6 +65,11 @@ class User extends Authenticatable
         return $this->hasMany(Docu::class, "found_by");
     }
 
+    public function roles(): BelongsToMany
+    {
+        return $this->belongsToMany(Role::class);
+    }
+
     public function production_houses(): BelongsToMany
     {
         return $this->belongsToMany(ProductionHouse::class, "user_id");
@@ -76,5 +83,10 @@ class User extends Authenticatable
     public function assigned_production_houses(): BelongsToMany
     {
         return $this->belongsToMany(ProductionHouse::class);
+    }
+
+    public function isValidated(): bool
+    {
+        return $this->validated;
     }
 }

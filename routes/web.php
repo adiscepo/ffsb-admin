@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\EnsureValidatedUser;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -12,7 +13,15 @@ Route::get('/', function (Request $request) {
 })->name('home');
 // Route::redirect('/', 'dashboard', 301);
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth'])->group(function () {
+    Route::get('/unvalidated', function (Request $request) {
+        if (Auth::user()->isValidated())
+            return redirect('/dashboard');
+        return view('unvalidated');
+    });
+});
+
+Route::middleware(['auth', 'verified', EnsureValidatedUser::class])->group(function () {
     Route::view('dashboard', 'dashboard')->name('dashboard');
     // Route::resource('documentaries', DocuController::class);
     Route::livewire('docus', 'pages::docu.table')->name('docus');

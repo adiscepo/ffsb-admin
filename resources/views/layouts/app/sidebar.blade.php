@@ -13,101 +13,101 @@
             <flux:sidebar.collapse
                 class="in-data-flux-sidebar-on-desktop:not-in-data-flux-sidebar-collapsed-desktop:-mr-2" />
         </flux:sidebar.header>
-
-        <flux:sidebar.nav>
-            <flux:sidebar.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')"
-                wire:navigate>
-                {{ __('Tableau de bord') }}
-            </flux:sidebar.item>
-            {{-- <flux:sidebar.group icon="star" :heading="__('Programme')" class="grid"> --}}
-            @if (Route::has('docus'))
-                <flux:sidebar.item icon="film" :href="route('docus')" :current="request()->routeIs('docus')"
+        @if (Auth::user()->isValidated())
+            <flux:sidebar.nav>
+                <flux:sidebar.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')"
                     wire:navigate>
-                    {{ __('Documentaires') }}
+                    {{ __('Tableau de bord') }}
                 </flux:sidebar.item>
-            @endif
-            @if (Route::has('evaluations'))
-                <flux:sidebar.item icon="document-text" :href="route('evaluations')"
-                    :current="request()->routeIs('evaluations')" wire:navigate>
-                    {{ __('Evaluations') }}
-                </flux:sidebar.item>
-            @endif
-            @if (Route::has('programs'))
-                <flux:sidebar.item icon="calendar-date-range" :href="route('programs')"
-                    :current="request()->routeIs('programs')" wire:navigate>
-                    {{ __('Programmes') }}
-                </flux:sidebar.item>
-            @endif
-            @if (Route::has('fields'))
-                <flux:sidebar.item icon="tag" :href="route('fields')" :current="request()->routeIs('fields')"
-                    wire:navigate>
-                    {{ __('Catégories') }}
-                </flux:sidebar.item>
-            @endif
-            @if (Route::has('production_houses'))
-                <flux:sidebar.item icon="building-storefront" :href="route('production_houses')"
-                    :current="request()->routeIs('production_houses')" wire:navigate>
-                    {{ __('Maisons de production') }}
-                </flux:sidebar.item>
-            @endif
-            {{-- </flux:sidebar.group> --}}
-            @if (Route::has('tresorery'))
-                <flux:sidebar.group expandable="true" :heading="__('Trésorerie')" class="grid">
-                    @if (Route::has('subsides'))
-                        <flux:sidebar.item icon="building-office-2" :href="route('subsides')"
-                            :current="request()->routeIs('subsides')" wire:navigate>
-                            {{ __('Subsides') }}
-                        </flux:sidebar.item>
-                    @endif
-                    @if (Route::has('expenses'))
-                        <flux:sidebar.item icon="banknotes" :href="route('expenses')"
-                            :current="request()->routeIs('expenses')" wire:navigate>
-                            {{ __('Dépenses') }}
-                        </flux:sidebar.item>
-                    @endif
-                </flux:sidebar.group>
-            @endif
-            @if (Route::has('meetings'))
-                <flux:sidebar.group heading="Administratif">
-                    @if (Route::has('meetings'))
-                        <flux:sidebar.item icon="user-group" :href="route('meetings')"
-                            :current="request()->routeIs('meetings')" wire:navigate>
-                            {{ __('Réunions') }}
-                        </flux:sidebar.item>
-                    @endif
-                    @if (Route::has('bp'))
-                        <flux:sidebar.item icon="user-group" :href="route('bp')"
-                            :current="request()->routeIs('bp')" wire:navigate>
-                            {{ __('Bilan prévisionnel') }}
-                        </flux:sidebar.item>
-                    @endif
-                </flux:sidebar.group>
-            @endif
-            @if (Route::has('edition'))
-                <flux:sidebar.group heading="Gestion">
-                    @if (Route::has('edition'))
-                        <flux:sidebar.item icon="tag" :href="route('edition')"
-                            :current="request()->routeIs('edition')" wire:navigate>
-                            {{ __('Editions') }}
-                        </flux:sidebar.item>
-                    @endif
-                </flux:sidebar.group>
-            @endif
-        </flux:sidebar.nav>
-        <flux:sidebar.spacer />
-        {{-- TODO: Replace with a policy (admin, developer, etc.) --}}
-        <flux:sidebar.nav>
-            <flux:sidebar.group heading="Support" expandable icon="cog">
-                @if (Route::has('support.bugs.list'))
-                    <flux:sidebar.item icon="bug-ant" :href="route('support.bugs.list')"
-                        :current="request()->routeIs('support.bugs.list')" wire:navigate>
-                        {{ __('Liste des bugs') }}
+                {{-- <flux:sidebar.group icon="star" :heading="__('Programme')" class="grid"> --}}
+                @if (Route::has('docus'))
+                    <flux:sidebar.item icon="film" :href="route('docus')" :current="request()->routeIs('docus')"
+                        wire:navigate>
+                        {{ __('Documentaires') }}
                     </flux:sidebar.item>
                 @endif
-            </flux:sidebar.group>
-        </flux:sidebar.nav>
+                @if (Route::has('evaluations'))
+                    <flux:sidebar.item icon="document-text" :href="route('evaluations')"
+                        :current="request()->routeIs('evaluations')" wire:navigate>
+                        {{ __('Evaluations') }}
+                    </flux:sidebar.item>
+                @endif
+                @if (Route::has('programs'))
+                    <flux:sidebar.item icon="calendar-date-range" :href="route('programs')"
+                        :current="request()->routeIs('programs')" wire:navigate>
+                        {{ __('Programmes') }}
+                    </flux:sidebar.item>
+                @endif
+                @if (Route::has('fields'))
+                    <flux:sidebar.item icon="tag" :href="route('fields')" :current="request()->routeIs('fields')"
+                        wire:navigate>
+                        {{ __('Catégories') }}
+                    </flux:sidebar.item>
+                @endif
+                @if (Route::has('production_houses'))
+                    <flux:sidebar.item icon="building-storefront" :href="route('production_houses')"
+                        :current="request()->routeIs('production_houses')" wire:navigate>
+                        {{ __('Maisons de production') }}
+                    </flux:sidebar.item>
+                @endif
+                {{-- </flux:sidebar.group> --}}
+                @if (Route::has('tresorery'))
+                    <flux:sidebar.group expandable="true" :heading="__('Trésorerie')" class="grid">
+                        @if (Route::has('subsides'))
+                            <flux:sidebar.item icon="building-office-2" :href="route('subsides')"
+                                :current="request()->routeIs('subsides')" wire:navigate>
+                                {{ __('Subsides') }}
+                            </flux:sidebar.item>
+                        @endif
+                        @if (Route::has('expenses'))
+                            <flux:sidebar.item icon="banknotes" :href="route('expenses')"
+                                :current="request()->routeIs('expenses')" wire:navigate>
+                                {{ __('Dépenses') }}
+                            </flux:sidebar.item>
+                        @endif
+                    </flux:sidebar.group>
+                @endif
+                @if (Route::has('meetings'))
+                    <flux:sidebar.group heading="Administratif">
+                        @if (Route::has('meetings'))
+                            <flux:sidebar.item icon="user-group" :href="route('meetings')"
+                                :current="request()->routeIs('meetings')" wire:navigate>
+                                {{ __('Réunions') }}
+                            </flux:sidebar.item>
+                        @endif
+                        @if (Route::has('bp'))
+                            <flux:sidebar.item icon="user-group" :href="route('bp')"
+                                :current="request()->routeIs('bp')" wire:navigate>
+                                {{ __('Bilan prévisionnel') }}
+                            </flux:sidebar.item>
+                        @endif
+                    </flux:sidebar.group>
+                @endif
+                @if (Route::has('edition'))
+                    <flux:sidebar.group heading="Gestion">
+                        @if (Route::has('edition'))
+                            <flux:sidebar.item icon="tag" :href="route('edition')"
+                                :current="request()->routeIs('edition')" wire:navigate>
+                                {{ __('Editions') }}
+                            </flux:sidebar.item>
+                        @endif
+                    </flux:sidebar.group>
+                @endif
+            </flux:sidebar.nav>
+            <flux:sidebar.spacer />
+            {{-- TODO: Replace with a policy (admin, developer, etc.) --}}
+            <flux:sidebar.nav>
+                <flux:sidebar.group heading="Support" expandable icon="cog">
+                    @if (Route::has('support.bugs.list'))
+                        <flux:sidebar.item icon="bug-ant" :href="route('support.bugs.list')"
+                            :current="request()->routeIs('support.bugs.list')" wire:navigate>
+                            {{ __('Liste des bugs') }}
+                        </flux:sidebar.item>
+                    @endif
+                </flux:sidebar.group>
+            </flux:sidebar.nav>
 
-        {{-- <flux:sidebar.nav>
+            {{-- <flux:sidebar.nav>
                 <flux:sidebar.item icon="zanzibar-git-2" href="https://github.com/laravel/livewire-starter-kit" target="_blank">
                     {{ __('Repository') }}
                 </flux:sidebar.item>
@@ -116,7 +116,9 @@
                     {{ __('Documentation') }}
                 </flux:sidebar.item>
             </flux:sidebar.nav> --}}
-
+        @else
+            <flux:sidebar.spacer />
+        @endif
         <x-desktop-user-menu class="hidden lg:block" :name="auth()->user()->name" />
     </flux:sidebar>
 
