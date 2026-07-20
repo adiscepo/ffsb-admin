@@ -161,9 +161,11 @@ new class extends Component {
                                 href="{{ $link->url }}">{{ mb_strimwidth($link->url, 0, 45, '...') }}</a>
                             <div class="flex justify-between my-0.5">
                                 @if ($link->password != null)
-                                    <flux:badge icon="key" class="text-xs! text-zinc-800! bg-white!">
+                                    <span onclick="navigator.clipboard.writeText('{{ addslashes($link->password) }}')"
+                                        class="flex gap-x-2 whitespace-nowrap text-xs! text-zinc-800! bg-white!">
+                                        <flux:icon.key variant="micro" />
                                         {{ $link->password }}
-                                    </flux:badge>
+                                    </span>
                                 @endif
                                 @if ($link->deadline != null)
                                     <flux:badge icon="clock"
