@@ -7,8 +7,7 @@
             <div class="relative rounded-xl border border-neutral-200 dark:border-neutral-700">
                 <livewire:widget.random-unevaluated />
             </div>
-            <div
-                class="relative aspect-video overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700">
+            <div class="relative rounded-xl border border-neutral-200 dark:border-neutral-700">
                 @if (Auth::user()->has('production_houses'))
                     <livewire:widget.assigned-production-houses />
                 @endif
