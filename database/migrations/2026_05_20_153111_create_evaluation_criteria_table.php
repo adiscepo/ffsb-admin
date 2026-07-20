@@ -23,7 +23,7 @@ return new class extends Migration
             $table->foreignId('evaluation_id');
             $table->foreignId('evaluation_criterion_id');
             $table->integer('note');
-            $table->string('comment');
+            $table->text('comment');
             $table->timestamps();
         });
     }
