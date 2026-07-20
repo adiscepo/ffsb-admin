@@ -7,6 +7,8 @@ enum DocuTarget: string
     case PUBLIC = "public";
     case SCHOOL = "school";
     case EVENING = "evening";
+    case FAMILY = "family";
+    case YOUNG = "young";
 
     function label(): string
     {
@@ -14,6 +16,8 @@ enum DocuTarget: string
             self::PUBLIC => "Tout public",
             self::SCHOOL => "Ecoles",
             self::EVENING => "Soirées",
+            self::FAMILY => "Familial",
+            self::YOUNG => "Jeunes",
             // self::SP => "Espagnol",
             // self::IT => "Italien",
             // self::NL => "Néerlandais",
