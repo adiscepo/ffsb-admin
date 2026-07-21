@@ -160,14 +160,16 @@ new class extends Component {
                         {{ $docu->name }}
                     </flux:table.cell>
 
-                    <flux:table.cell class="flex items-baseline gap-3">
+                    <flux:table.cell class="flex items-baseline gap-3" wire:click.stop=''>
                         @if ($docu->see_at)
                             @foreach ($docu->see_at as $link)
                                 <div class="flex items-center gap-0.5">
                                     <flux:link href="{{ $link->url }}">Lien</flux:link>
                                     @if ($link->password())
                                         <flux:tooltip>
-                                            <flux:button icon="key" size="xs" variant="subtle" />
+                                            <flux:button icon="key" size="xs" variant="subtle"
+                                                class="cursor-pointer"
+                                                onclick="navigator.clipboard.writeText('{{ addslashes($link->password) }}')" />
                                             <flux:tooltip.content class="max-w-[20rem] space-y-2">
                                                 <p>{{ $link->password }}</p>
                                             </flux:tooltip.content>
