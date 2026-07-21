@@ -68,7 +68,7 @@
                     </flux:sidebar.group>
                 @endif
                 @if (Route::has('meetings'))
-                    <flux:sidebar.group heading="Administratif">
+                    <flux:sidebar.group heading="Administratif" expandable icon="user-circle">
                         @if (Route::has('meetings'))
                             <flux:sidebar.item icon="user-group" :href="route('meetings')"
                                 :current="request()->routeIs('meetings')" wire:navigate>
