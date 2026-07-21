@@ -201,7 +201,7 @@ new class extends Component {
                     <flux:table.cell>
                         {{-- <flux:button variant="ghost" size="sm" icon="ellipsis-horizontal" inset="top bottom">
                         </flux:button> --}}
-                        <flux:text class="overflow-hidden w-25 text-ellipsis whitespace-nowrap">
+                        <flux:text class="overflow-hidden w-fit text-ellipsis whitespace-nowrap">
                             {{ $docu->from->implode('name', ', ') }}</flux:text>
                     </flux:table.cell>
                     <flux:table.cell>
