@@ -43,7 +43,7 @@ new class extends Component {
     </div>
     <div class="grid @if (!$note_only && !$comment_only) grid-cols-3 gap-x-3 @endif">
         @if (!$comment_only)
-            <div class="grid grid-cols-5 gap-1 justify-self-center">
+            <div class="grid grid-cols-5 gap-1 justify-self-center content-center">
                 @foreach ($evaluation->notes() as $note)
                     <x-docu-evaluation-box-note :note=$note />
                 @endforeach
