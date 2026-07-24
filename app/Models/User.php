@@ -91,12 +91,13 @@ class User extends Authenticatable
         return $this->validated;
     }
 
-    public function getHoursViewed(): int
+    public function getTimeViewed(): int
     {
-        $hours = 0;
+        $duration = 0;
         foreach ($this->evaluations as $evaluation) {
-            $hours += $evaluation->docu->duration;
+            if (!$evaluation->isDraft())
+                $duration += $evaluation->docu->duration;
         };
-        return $hours;
+        return $duration;
     }
 }

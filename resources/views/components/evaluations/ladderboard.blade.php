@@ -72,7 +72,7 @@ new class extends Component {
                 <div class="flex items-center justify-center gap-x-2">
                     <span>{{ $user['number_evaluations'] }}</span>
                     <span class="flex text-zinc-500 text-xs">(
-                        <flux:icon.eye class="size-4" />{{ to_human($user['user']->getHoursViewed()) }})
+                        <flux:icon.eye class="size-4" />{{ to_human($user['user']->getTimeViewed()) }})
                     </span>
                 </div>
             </div>
