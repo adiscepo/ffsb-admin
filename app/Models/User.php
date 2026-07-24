@@ -8,6 +8,7 @@ use App\Domains\Evaluations\Evaluation;
 use App\Domains\Events\Traits\Eventable;
 use App\Domains\ProductionHouses\ProductionHouse;
 use App\Domains\Roles\Role;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -88,5 +89,14 @@ class User extends Authenticatable
     public function isValidated(): bool
     {
         return $this->validated;
+    }
+
+    public function getHoursViewed(): int
+    {
+        $hours = 0;
+        foreach ($this->evaluations as $evaluation) {
+            $hours += $evaluation->docu->duration;
+        };
+        return $hours;
     }
 }

@@ -5,6 +5,8 @@ use App\Models\User;
 use App\Domains\Docus\Docu;
 use Facades\App\Domains\Edition\Edition;
 use App\Models\EditionYear;
+use Carbon\Carbon;
+use function App\Helpers\HumanTiming\to_human;
 
 new class extends Component {
     public array $ladderboard;
@@ -22,6 +24,7 @@ new class extends Component {
             $number = $evaluations->count();
             if ($number > 0) {
                 $ladderboard->push([
+                    'user' => $user,
                     'user_id' => $user->id,
                     'user_name' => $user->name,
                     'number_evaluations' => $number,
@@ -66,7 +69,12 @@ new class extends Component {
                     @endswitch
                     <p class="text-sm text-zinc-800">{{ $user['user_name'] }}</p>
                 </div>
-                <span>{{ $user['number_evaluations'] }}</span>
+                <div class="flex items-center justify-center gap-x-2">
+                    <span>{{ $user['number_evaluations'] }}</span>
+                    <span class="flex text-zinc-500 text-xs">(
+                        <flux:icon.eye class="size-4" />{{ to_human($user['user']->getHoursViewed()) }})
+                    </span>
+                </div>
             </div>
             @php
                 $i += 1;
