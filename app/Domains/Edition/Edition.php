@@ -6,7 +6,7 @@ use App\Models\EditionYear;
 
 class Edition
 {
-    public function currentEdition()
+    public function currentEdition(): EditionYear
     {
         return EditionYear::where('current', true)->orderBy('year', 'desc')->first();
     }

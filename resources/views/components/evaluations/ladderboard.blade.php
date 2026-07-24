@@ -10,6 +10,7 @@ use function App\Helpers\HumanTiming\to_human;
 
 new class extends Component {
     public array $ladderboard;
+    public EditionYear $edition_year;
 
     public function mount(?EditionYear $edition_year = null)
     {
@@ -33,6 +34,7 @@ new class extends Component {
         }
         $ladderboard = $ladderboard->sortByDesc('number_evaluations');
         $this->ladderboard = $ladderboard->toArray();
+        $this->edition_year = $edition_year;
     }
 };
 ?>
@@ -72,7 +74,7 @@ new class extends Component {
                 <div class="flex items-center justify-center gap-x-2">
                     <span>{{ $user['number_evaluations'] }}</span>
                     <span class="flex text-zinc-500 text-xs">(
-                        <flux:icon.eye class="size-4" />{{ to_human($user['user']->getTimeViewed()) }})
+                        <flux:icon.eye class="size-4" />{{ to_human($user['user']->getTimeViewed($edition_year)) }})
                     </span>
                 </div>
             </div>

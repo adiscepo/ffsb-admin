@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use App\Domains\Edition\Edition;
 use App\Domains\Evaluations\Evaluation;
 use App\Domains\Events\Traits\Eventable;
 use App\Domains\ProductionHouses\ProductionHouse;
@@ -91,11 +92,11 @@ class User extends Authenticatable
         return $this->validated;
     }
 
-    public function getTimeViewed(): int
+    public function getTimeViewed(EditionYear $edition_year): int
     {
         $duration = 0;
         foreach ($this->evaluations as $evaluation) {
-            if (!$evaluation->isDraft())
+            if (!$evaluation->isDraft() and $evaluation->docu->edition_year == $edition_year)
                 $duration += $evaluation->docu->duration;
         };
         return $duration;
