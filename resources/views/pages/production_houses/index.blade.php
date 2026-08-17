@@ -182,7 +182,7 @@ new class extends Component {
             <flux:table.column></flux:table.column>
             <flux:table.column>Nom</flux:table.column>
             <flux:table.column>Site web</flux:table.column>
-            <flux:table.column># Docus</flux:table.column>
+            <flux:table.column>Docus</flux:table.column>
             {{-- <flux:table.column>Téléphone</flux:table.column>
             <flux:table.column>Email</flux:table.column> --}}
             <flux:table.column>Remarque</flux:table.column>
