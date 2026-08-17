@@ -71,14 +71,12 @@ new class extends Component {
                     @endswitch
                     <p class="text-sm text-zinc-800">{{ $user['user_name'] }}</p>
                 </div>
-                <div class="flex items-center justify-center gap-x-2">
+                <div class="flex items-center place-self-center justify-center gap-x-2">
                     <span>{{ $user['number_evaluations'] }}</span>
                 </div>
-                <div class="flex items-center justify-center gap-x-2">
-                    <span class="flex text-zinc-500 text-xs">
-                        <flux:icon.eye class="size-4" />{{ to_human($user['user']->getTimeViewed($edition_year)) }}
-                    </span>
-                </div>
+                <span class="flex text-zinc-500 text-xs place-self-end">
+                    <flux:icon.eye class="size-4" />{{ to_human($user['user']->getTimeViewed($edition_year)) }}
+                </span>
             </div>
             @php
                 $i += 1;
