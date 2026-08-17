@@ -48,7 +48,7 @@ new class extends Component {
             $i = 1;
         @endphp
         @foreach ($this->ladderboard as $user)
-            <div class="flex justify-between">
+            <div class="grid grid-cols-3 justify-between">
                 <div class="flex items-center gap-x-2">
                     @switch($i)
                         @case(1)
