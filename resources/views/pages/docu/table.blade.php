@@ -29,35 +29,50 @@ new class extends Component {
         $this->edition_year = EditionYear::where('current', true)->first()->year;
     }
 
-    public function docus()
+    // Filters
+    public function filter_search(Builder $query)
     {
         if (!empty($this->search)) {
             $search = '%' . $this->search . '%'; // Enable approximative search
-            $query = Docu::whereAny(['year', 'title', 'summary', 'lang', 'subtitles'], 'like', $search);
+            $query = $query->whereAny(['year', 'title', 'summary', 'lang', 'subtitles'], 'like', $search);
             $fields = Field::whereLike('field', $search)->get();
             if ($fields->count() > 0) {
                 $query = $query->orWhereAttachedTo($fields);
             }
-            $prod_house = ProductionHouse::whereLike('name', $search)->get();
-            if ($prod_house->count() > 0) {
-                $query = $query->orWhereAttachedTo($prod_house, 'from');
-            }
-            return $query->whereRelation('edition_year', 'year', $this->edition_year)->orderBy('id', 'DESC')->paginate(50);
+            return $query;
         }
+        return $query;
+    }
 
+    public function filter_tags(Builder $query)
+    {
         if (!empty($this->tag)) {
-            $query = Docu::whereRelation('edition_year', 'year', $this->edition_year)->whereAttachedTo(Tag::where('name', $this->tag)->get());
-            return $query->paginate(50);
+            return $query->whereAttachedTo(Tag::where('name', $this->tag)->get());
         }
+        return $query;
+    }
 
+    public function filter_evaluated(Builder $query)
+    {
         if ($this->not_evaluated) {
-            $query = Docu::whereDoesntHave('evaluations', function (Builder $query) {
+            $query = $query->whereDoesntHave('evaluations', function (Builder $query) {
                 $query->where('user_id', Auth::user()->id);
             });
-            return $query->whereRelation('edition_year', 'year', $this->edition_year)->orderBy('id', 'DESC')->paginate(50);
+            return $query;
         }
+        return $query;
+    }
 
-        return Docu::whereRelation('edition_year', 'year', $this->edition_year)->orderBy('id', 'DESC')->paginate(50);
+    public function docus()
+    {
+        // First filter (by default) is the edition year
+        $query = Docu::whereRelation('edition_year', 'year', $this->edition_year);
+
+        $query = $this->filter_tags($query);
+        $query = $this->filter_search($query);
+        $query = $this->filter_evaluated($query);
+
+        return $query->orderBy('id', 'DESC')->paginate(50);
     }
 
     public function redirectDocu(int $id)
