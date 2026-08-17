@@ -20,7 +20,7 @@ new class extends Component {
         $ladderboard = collect();
         foreach (User::all() as $user) {
             $evaluations = $user->evaluations->filter(function ($eval) use ($edition_year) {
-                return $eval->docu->edition_year_id == $edition_year->id;
+                return $eval->docu->edition_year_id == $edition_year->id && !$eval->isDraft();
             });
             $number = $evaluations->count();
             if ($number > 0) {
