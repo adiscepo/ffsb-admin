@@ -16,6 +16,7 @@ new class extends Component {
     public string $search = '';
     public string $edition_year;
     public string $tag = '';
+    public bool $with_link = false;
     public bool $not_evaluated = false;
 
     // Permet d'avoir une URL dédiée à la recherche effectuée (on peut alors
@@ -63,6 +64,15 @@ new class extends Component {
         return $query;
     }
 
+    public function filter_with_links(Builder $query)
+    {
+        if ($this->with_link) {
+            $query = $query->whereHas('see_at');
+            return $query;
+        }
+        return $query;
+    }
+
     public function docus()
     {
         // First filter (by default) is the edition year
@@ -71,6 +81,7 @@ new class extends Component {
         $query = $this->filter_tags($query);
         $query = $this->filter_search($query);
         $query = $this->filter_evaluated($query);
+        $query = $this->filter_with_links($query);
 
         return $query->orderBy('id', 'DESC')->paginate(50);
     }
@@ -111,6 +122,10 @@ new class extends Component {
                     </flux:select.option>
                 @endforeach
             </flux:select>
+            <flux:field class="flex items-center mr-5" variant="inline">
+                <flux:label class="whitespace-nowrap">Avec liens</flux:label>
+                <flux:checkbox wire:model.live="with_link" />
+            </flux:field>
             <flux:field class="flex items-center mr-5" variant="inline">
                 <flux:label class="whitespace-nowrap">Pas évalués</flux:label>
                 <flux:checkbox wire:model.live="not_evaluated" />
