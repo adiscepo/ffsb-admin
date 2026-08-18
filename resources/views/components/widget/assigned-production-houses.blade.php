@@ -22,10 +22,14 @@ new class extends Component {
             ->whereIn('payload->status_id', Status::whereIn('name', ['Contacté', 'Relancé', 'En discussion'])->pluck('id'))
             ->get();
 
-        // Nécessaire de séparer les status et la requête aux maisons de prod
-        // car whereAttachedTo ne fonctionne pas si la collection est vide
-        if ($last_week_recontacted->count() > 0) {
-            $this->to_recontact_production_houses = ProductionHouse::whereAttachedTo(Auth::user(), 'assignee')->whereAttachedTo($last_week_recontacted)->get();
+        $statuses_need_recontact = Status::whereIn('name', ['Contacté', 'Relancé', 'En discussion'])->pluck('id');
+        $assigned_production_houses = ProductionHouse::whereAttachedto(Auth::user(), 'assignee')->get();
+        $this->to_recontact_production_houses = collect();
+        foreach ($assigned_production_houses as $production_house) {
+            $last_status_added = $production_house->events->where('type', 'add_status')->last()->payload['status_id'];
+            if ($statuses_need_recontact->contains($last_status_added)) {
+                $this->to_recontact_production_houses->push($production_house);
+            }
         }
     }
 };
@@ -36,9 +40,8 @@ new class extends Component {
 <div class="py-5 relative h-full">
     <div class="relative flex flex-col gap-y-2 px-5 overflow-hidden text-sm h-full">
         <h2 class="text-zinc-700 dark:text-zinc-200">Maisons de production sans status</h2>
-        <div class="mb-1"></div>
         @if ($uncontacted_production_houses->isNotEmpty())
-            <div class="overflow-y-scroll h-50">
+            <div class="overflow-y-scroll h-50 ml-3">
                 @foreach ($uncontacted_production_houses as $production_house)
                     <div class="flex gap-2">
                         <a href="/production_house/{{ $production_house->id }}" wire:navigate
@@ -52,29 +55,30 @@ new class extends Component {
                 @endforeach
             </div>
         @else
-            <p class="text-zinc-500 dark:text-zinc-300 italic">
+            <p class="text-zinc-500 dark:text-zinc-300 italic ml-3">
                 Toutes les maisons de production assignées ont été contactées
             </p>
         @endif
-        <h2 class="text-zinc-700 dark:text-zinc-200">Maisons de productions à recontacter</h2>
         <div class="mb-1"></div>
+        <h2 class="text-zinc-700 dark:text-zinc-200">Maisons de productions à recontacter</h2>
         @if ($to_recontact_production_houses->isNotEmpty())
-            <div class="overflow-y-scroll">
+            <div class="overflow-y-scroll ml-3 flex flex-col gap-y-1.5">
                 @foreach ($to_recontact_production_houses as $production_house)
-                    <div class="flex gap-2">
+                    <div class="flex gap-2 ">
                         <a href="/production_house/{{ $production_house->id }}" wire:navigate
-                            class="text-zinc-800 dark:text-zinc-100">{{ $production_house->name }}</a>
-                        <div class="flex justify-center gap-2">
+                            class="text-zinc-500 dark:text-zinc-100">{{ $production_house->name }}</a>
+                        <div class="flex justify-center">
                             @foreach ($production_house->statuses as $status)
-                                <flux:badge size="sm" color="{{ $status->color }}">{{ $status->name }}</flux:badge>
+                                <flux:badge size="sm" color="{{ $status->color }}">
+                                    {{ $status->name }}</flux:badge>
                             @endforeach
                         </div>
                     </div>
                 @endforeach
             </div>
         @else
-            <p class="text-zinc-500 dark:text-zinc-300 italic">
-                Toutes les maisons de production assignées ont été contactées
+            <p class="text-zinc-500 dark:text-zinc-300 italic ml-3">
+                Toutes les maisons de production contactées ont répondus
             </p>
         @endif
     </div>
