@@ -18,7 +18,7 @@ new class extends Component {
 
         // Status (autre que Réponse) assignés il y a plus d'une semaine
         $last_week_recontacted = Event::where('type', 'add_status')
-            ->where('created_at', '<', now()->subWeek(1))
+            ->where('created_at', '<', now()->subWeek(2))
             ->whereIn('payload->status_id', Status::whereIn('name', ['Contacté', 'Relancé', 'En discussion'])->pluck('id'))
             ->get();
 
@@ -60,7 +60,8 @@ new class extends Component {
             </p>
         @endif
         <div class="mb-1"></div>
-        <h2 class="text-zinc-700 dark:text-zinc-200">Maisons de productions à recontacter</h2>
+        <h2 class="text-zinc-700 dark:text-zinc-200">Maisons de productions à recontacter (pas de réponses depuis 2
+            semaines)</h2>
         @if ($to_recontact_production_houses->isNotEmpty())
             <div class="overflow-y-scroll ml-3 flex flex-col gap-y-1.5">
                 @foreach ($to_recontact_production_houses as $production_house)
