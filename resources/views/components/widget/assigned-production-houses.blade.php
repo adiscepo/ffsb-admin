@@ -19,7 +19,7 @@ new class extends Component {
         // Status (autre que Réponse) assignés il y a plus d'une semaine
         $last_week_recontacted = Event::where('type', 'add_status')
             ->where('created_at', '<', now()->subWeek(1))
-            ->whereIn('payload->status_id', Status::whereNot('name', 'like', 'Réponse%')->pluck('id'))
+            ->whereIn('payload->status_id', Status::whereIn('name', ['Contacté', 'Relancé', 'En discussion'])->pluck('id'))
             ->get();
 
         // Nécessaire de séparer les status et la requête aux maisons de prod
