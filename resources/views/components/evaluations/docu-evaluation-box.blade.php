@@ -17,8 +17,8 @@ new class extends Component {
 
     public function redirectEvaluation()
     {
-        $this->dispatch('changed_eval', $this->evaluation->user_id);
-        $this->dispatch('selected_evaluation', $this->evaluation->user->id);
+        $this->dispatch('changed_eval:user-id', $this->evaluation->user_id);
+        $this->dispatch('changed_eval:eval-id', $this->evaluation->id);
     }
 };
 ?>

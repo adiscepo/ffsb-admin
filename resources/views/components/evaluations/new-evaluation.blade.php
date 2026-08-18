@@ -19,7 +19,7 @@ new class extends Component {
     public bool $draft;
 
     protected $listeners = [
-        'changed_eval' => 'changeEvaluation',
+        'changed_eval:user-id' => 'changeEvaluation',
     ];
 
     private function hydrateValues(int $author_id)

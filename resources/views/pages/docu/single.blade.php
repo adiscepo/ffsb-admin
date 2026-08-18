@@ -15,7 +15,7 @@ new class extends Component {
 
     protected $listeners = [
         'form_evaluation' => 'formEvaluation',
-        'selected_evaluation' => 'changeEvaluation',
+        'changed_eval:user-id' => 'changeEvaluation',
     ];
 
     public function mount(int $id)

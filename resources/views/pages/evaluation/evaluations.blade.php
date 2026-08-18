@@ -128,11 +128,10 @@ new class extends Component {
     }
 
     protected $listeners = [
-        'selected_evaluation' => 'redirectEval',
+        'changed_eval:eval-id' => 'redirectEval',
         'form_evaluation' => 'formEvaluation',
     ];
 
-    #On['changed_eval']
     public function redirectEval(int $id)
     {
         $docu_id = Evaluation::findOrFail($id)->docu_id;
