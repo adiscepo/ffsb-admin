@@ -63,7 +63,7 @@ new class extends Component {
         <h2 class="text-zinc-700 dark:text-zinc-200">Maisons de productions à recontacter (pas de réponses depuis 2
             semaines)</h2>
         @if ($to_recontact_production_houses->isNotEmpty())
-            <div class="overflow-y-scroll ml-3 flex flex-col gap-y-1.5">
+            <div class="overflow-y-scroll ml-3 flex flex-col gap-y-1.5 max-h-30">
                 @foreach ($to_recontact_production_houses as $production_house)
                     <div class="flex gap-2 ">
                         <a href="/production_house/{{ $production_house->id }}" wire:navigate
