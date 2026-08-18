@@ -34,17 +34,16 @@ new class extends Component {
 
 ?>
 @props(['meeting'])
-<div class="relative border border-{{ $this->getColor() }}-300 bg-{{ $this->getColor() }}-50 text-{{ $this->getColor() }}-800 rounded-lg text-sm pl-5 p-3 space-y-2 cursor-pointer hover:shadow"
+<div class="relative border border-{{ $this->getColor() }}-200 bg-{{ $this->getColor() }}-50 rounded-lg text-sm p-3 space-y-2 cursor-pointer hover:shadow"
     wire:click='selectMeeting'>
-    <div class="w-1 rounded h-9/10 bg-{{ $this->getColor() }}-200 absolute top-1 left-1.5"></div>
     <div class="flex justify-between">
-        <span class="font-semibold text-base text-{{ $this->getColor() }}-900">{{ $meeting->name }}</span>
-        <span class="flex gap-x-1 items-center text-{{ $this->getColor() }}-700">
+        <span class="font-semibold text-base text-{{ $this->getColor() }}-700">{{ $meeting->name }}</span>
+        <span class="flex gap-x-1 items-center text-{{ $this->getColor() }}-500">
             <flux:icon icon="user-group" variant="micro" />
             {{ count($meeting->members) }} participant.e.s
         </span>
     </div>
-    <span class="flex gap-x-1 items-center text-{{ $this->getColor() }}-700">
+    <span class="flex gap-x-1 items-center text-{{ $this->getColor() }}-400">
         <flux:icon icon="calendar-date-range" variant="micro" />
         {{ $meeting->datetime->translatedFormat('d F Y') }}
     </span>
