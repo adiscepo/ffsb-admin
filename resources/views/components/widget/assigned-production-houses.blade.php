@@ -26,9 +26,12 @@ new class extends Component {
         $assigned_production_houses = ProductionHouse::whereAttachedto(Auth::user(), 'assignee')->get();
         $this->to_recontact_production_houses = collect();
         foreach ($assigned_production_houses as $production_house) {
-            $last_status_added = $production_house->events->where('type', 'add_status')->last()->payload['status_id'];
-            if ($statuses_need_recontact->contains($last_status_added)) {
-                $this->to_recontact_production_houses->push($production_house);
+            $last_status_added = $production_house->events->where('type', 'add_status')->last();
+            if ($last_status_added != null) {
+                $last_status_added = $last_status_added->payload['status_id'];
+                if ($statuses_need_recontact->contains($last_status_added)) {
+                    $this->to_recontact_production_houses->push($production_house);
+                }
             }
         }
     }
@@ -41,7 +44,7 @@ new class extends Component {
     <div class="relative flex flex-col gap-y-2 px-5 overflow-hidden text-sm h-full">
         <h2 class="text-zinc-700 dark:text-zinc-200">Maisons de production sans status</h2>
         @if ($uncontacted_production_houses->isNotEmpty())
-            <div class="overflow-y-scroll h-50 ml-3">
+            <div class="overflow-y-scroll max-h-30 ml-3">
                 @foreach ($uncontacted_production_houses as $production_house)
                     <div class="flex gap-2">
                         <a href="/production_house/{{ $production_house->id }}" wire:navigate
