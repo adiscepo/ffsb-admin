@@ -37,6 +37,9 @@ Route::middleware(['auth', 'verified', EnsureValidatedUser::class])->group(funct
     Route::livewire('production_houses', 'pages::production_houses.index')->name('production_houses');
     Route::livewire('production_house/{id}', 'pages::production_houses.single')->name('production_house');
 
+    // Kanban
+    Route::livewire('kanbans', 'pages::kanbans.index')->name('kanbans');
+
     // Route::livewire('edition', 'pages::edition.index')->name('edition');
 
     // Route::livewire('meetings', 'pages::admin.meetings.index')->name('meetings');
