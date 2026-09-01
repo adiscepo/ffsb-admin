@@ -16,6 +16,25 @@ return new class extends Migration
             $table->string('name');
             $table->integer('position')->default(0);
             $table->foreignId('kanban_id')->constrained()->onDelete('cascade');
+            $table->enum('color', [
+                'red',
+                'orange',
+                'amber',
+                'yellow',
+                'lime',
+                'green',
+                'emerald',
+                'teal',
+                'cyan',
+                'sky',
+                'blue',
+                'indigo',
+                'violet',
+                'purple',
+                'fuchsia',
+                'pink',
+                'rose',
+            ])->default('zinc');
             $table->timestamps();
         });
     }

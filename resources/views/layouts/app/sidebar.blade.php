@@ -83,14 +83,10 @@
                                 {{ __('Bilan prévisionnel') }}
                             </flux:sidebar.item>
                         @endif
-                    </flux:sidebar.group>
-                @endif
-                @if (Route::has('edition'))
-                    <flux:sidebar.group heading="Gestion">
-                        @if (Route::has('edition'))
-                            <flux:sidebar.item icon="tag" :href="route('edition')"
-                                :current="request()->routeIs('edition')" wire:navigate>
-                                {{ __('Editions') }}
+                        @if (Route::has('kanbans'))
+                            <flux:sidebar.item icon="rectangle-group" :href="route('kanbans')"
+                                :current="request()->routeIs('kanbans')" wire:navigate>
+                                {{ __('Kanbans') }}
                             </flux:sidebar.item>
                         @endif
                     </flux:sidebar.group>
