@@ -39,6 +39,7 @@ Route::middleware(['auth', 'verified', EnsureValidatedUser::class])->group(funct
 
     // Kanban
     Route::livewire('kanbans', 'pages::kanbans.index')->name('kanbans');
+    Route::livewire('kanban/{id}', 'pages::kanbans.single')->name('kanban');
 
     // Route::livewire('edition', 'pages::edition.index')->name('edition');
 

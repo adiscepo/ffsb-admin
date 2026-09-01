@@ -29,8 +29,8 @@ class KanbanColumn extends Model
         return $this->belongsTo(Kanban::class);
     }
 
-    public function cards(): HasMany
+    public function tasks(): HasMany
     {
-        return $this->hasMany(KanbanCard::class)->orderBy('position');
+        return $this->hasMany(KanbanCard::class, 'kanban_column_id')->orderBy('position');
     }
 }

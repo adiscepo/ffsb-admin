@@ -7,6 +7,7 @@ namespace App\Models;
 use App\Domains\Edition\Edition;
 use App\Domains\Evaluations\Evaluation;
 use App\Domains\Events\Traits\Eventable;
+use App\Domains\Kanban\KanbanCard;
 use App\Domains\ProductionHouses\ProductionHouse;
 use App\Domains\Roles\Role;
 use Carbon\Carbon;
@@ -85,6 +86,11 @@ class User extends Authenticatable
     public function assigned_production_houses(): BelongsToMany
     {
         return $this->belongsToMany(ProductionHouse::class);
+    }
+
+    public function tasks(): BelongsToMany
+    {
+        return $this->belongsToMany(KanbanCard::class);
     }
 
     public function isValidated(): bool
