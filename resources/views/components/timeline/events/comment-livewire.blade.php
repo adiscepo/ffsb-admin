@@ -11,12 +11,14 @@ new class extends Component {
     public bool $edit_mode = false;
     public bool $is_author = false;
     public Event $event;
+    public bool $small = false;
     public ?string $value = null;
 
-    public function mount(Event $event, ?string $value = null)
+    public function mount(Event $event, ?string $value = null, bool $small = false)
     {
         $this->is_author = Auth::user()->id == $event->author_id;
         $this->value = $event->payload['content'];
+        $this->small = $small;
     }
 
     public function editComment(EditComment $edit)
@@ -40,14 +42,16 @@ new class extends Component {
 
 ?>
 
-<x-message :user="$event->author" class="ml-[-35pt]">
-    <x-slot:header>
-        <span class="text-zinc-800 dark:text-zinc-300 font-medium">{{ $event->author->name }}</span>
-        • {{ $event->created_at->diffForHumans() }}
-        @if ($event->isEdited())
-            <span class="text-xs text-zinc-400">(edité {{ $event->updated_at->diffForHumans() }})</span>
-        @endif
-    </x-slot:header>
+<x-message :user="$event->author" :$small class="ml-[-35pt]">
+    @if (!$small)
+        <x-slot:header>
+            <span class="text-zinc-800 dark:text-zinc-300 font-medium">{{ $event->author->name }}</span>
+            • {{ $event->created_at->diffForHumans() }}
+            @if ($event->isEdited())
+                <span class="text-xs text-zinc-400">(edité {{ $event->updated_at->diffForHumans() }})</span>
+            @endif
+        </x-slot:header>
+    @endif
     <div>
         @if (!$edit_mode)
             {!! nl2br($value) !!}
