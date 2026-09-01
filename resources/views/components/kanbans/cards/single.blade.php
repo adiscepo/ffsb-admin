@@ -28,4 +28,5 @@ new class extends Component {
             <flux:avatar circle size="xs" :initials="$assignee->initials()" :src="$assignee->getProfilePicture()" />
         @endforeach
     </flux:avatar.group>
+    <livewire:generic-timeline :small="true" :eventable="$card" />
 </flux:modal>

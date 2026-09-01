@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Policies;
+namespace App\Domains\Kanban\Policies;
 
-use App\Domains\Kanban\Kanban;
+use App\Domains\Kanban\KanbanCard;
 use App\Models\User;
 
 class KanbanCardPolicy
@@ -19,5 +19,10 @@ class KanbanCardPolicy
     {
         // TODO: implements when roles are working
         return true;
+    }
+
+    public function comment(User $user, KanbanCard $kanban_card): bool
+    {
+        return $kanban_card->assignee->contains($user->id);
     }
 }

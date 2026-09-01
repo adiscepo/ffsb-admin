@@ -14,12 +14,14 @@ use Illuminate\View\Component;
 class TimelineEvent extends Component
 {
     public Event $event;
+    public bool $small = false;
     /**
      * Create a new component instance.
      */
-    public function __construct(Event $event)
+    public function __construct(Event $event, bool $small = false)
     {
         $this->event = $event;
+        $this->small = $small;
     }
 
     /**

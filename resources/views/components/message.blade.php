@@ -1,4 +1,4 @@
-@props(['user' => null])
+@props(['user' => null, 'small' => false])
 
 <div {{ $attributes->only('class')->merge(['class' => 'relative flex gap-x-3 items-start']) }}>
     @if (isset($user))

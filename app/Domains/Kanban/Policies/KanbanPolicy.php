@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Policies;
+namespace App\Domains\Kanban\Policies;
 
 use App\Domains\Kanban\Kanban;
 use App\Models\User;
