@@ -34,6 +34,7 @@ return new class extends Migration
                 'fuchsia',
                 'pink',
                 'rose',
+                'zinc',
             ])->default('zinc');
             $table->timestamps();
         });

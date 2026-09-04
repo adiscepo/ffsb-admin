@@ -1,0 +1,5 @@
+@import 'tailwindcss';
+
+.kanban-dropzone[data-dragging] {
+    @apply brightness-95;
+}

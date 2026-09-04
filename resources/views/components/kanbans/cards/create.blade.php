@@ -4,16 +4,19 @@ use Livewire\Component;
 use App\Domains\Kanban\Services\CardService;
 use Carbon\Carbon;
 use App\Domains\Kanban\KanbanColumn;
+use App\Models\User;
 
 new class extends Component {
     public KanbanColumn $column;
     public string $title;
     public $deadline = null;
     public ?string $description = null;
+    public array $assignees = [];
 
     protected $listeners = [
         'text-editor-updated' => 'textEditorValueUpdated',
         'date-picker' => 'updateDate',
+        'pill-box:assigned' => 'updateAssigned',
     ];
 
     public function mount(KanbanColumn $column)
@@ -24,6 +27,7 @@ new class extends Component {
     public function updateDate(int $id, string $selected)
     {
         $date = Carbon::createFromFormat('d/m/Y', $selected);
+        $this->deadline = $date;
     }
 
     public function textEditorValueUpdated(string $value, int $id)
@@ -33,11 +37,17 @@ new class extends Component {
         }
     }
 
+    // Assign user to the task
+    public function updateAssigned(array $selected)
+    {
+        $this->assignees = $selected;
+    }
+
     protected function rules()
     {
         return [
             'title' => 'required|string',
-            // 'description' => 'string',
+            'description' => 'string',
         ];
     }
 
@@ -52,9 +62,10 @@ new class extends Component {
     public function save(CardService $card_service)
     {
         $this->validate($this->rules());
-        // $datetime = $this->date->setTimeFrom($this->time);
-        $card_service->createCard($this->column->id, $this->title, Auth::user()->id, $this->description, $this->deadline);
-        // $create->execute(Auth::user(), $this->name, $datetime->format('Y-m-d H:i:s'), $this->location, $this->odj);
+        $card = $card_service->createCard($this->column->id, $this->title, Auth::user()->id, $this->description, $this->deadline);
+        foreach ($this->assignees as $assignee_id) {
+            $card_service->assignUserCard($card, $assignee_id);
+        }
         Flux::toast(variant: 'success', text: 'La tâche a été créée');
         $this->redirect(request()->header('Referer'), navigate: true);
     }
@@ -70,14 +81,23 @@ new class extends Component {
             </span>
         </div>
     </div>
-    <flux:input wire:model='title' label="Nom de la tâche" placeholder="Envoyer mail" />
+    <div class="flex gap-x-5">
+        <flux:input wire:model='title' label="Nom de la tâche" placeholder="Envoyer mail" />
+        <flux:field>
+            <flux:label>Deadline</flux:label>
+            {{-- <livewire:date-picker class="w-fit" :min_date="date('d/m/Y')" :max_date="date('d/m/Y', strtotime('+5 years'))" :id="0" /> --}}
+            <livewire:date-picker class="" wire:model="deadline" :min_date="date('d/m/Y')" :max_date="date('d/m/Y', strtotime('+2 years'))"
+                :id="0" />
+        </flux:field>
+    </div>
     <flux:field>
-        <flux:label>Deadline</flux:label>
-        <livewire:date-picker class="w-fit" :min_date="date('d/m/Y')" :max_date="date('d/m/Y', strtotime('+5 years'))" :id="0" />
+        <flux:label>Assignés</flux:label>
+        <livewire:pill-box name="assigned" :datas="User::all()->toArray()" />
     </flux:field>
     <flux:field>
         <flux:label>Description</flux:label>
-        <livewire:text-editor value='' class="h-50 mb-15" placeholder="Description de la tâche" :id="$column->id" />
+        <livewire:text-editor value='' class="h-50 mb-15" placeholder="Description de la tâche"
+            :id="$column->id" />
     </flux:field>
     <flux:button wire:click='save'>Créer</flux:button>
 </div>
