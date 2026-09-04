@@ -86,7 +86,7 @@ new class extends Component {
 
 @php
     $classes =
-        'w-full border rounded-lg block disabled:shadow-none dark:shadow-none appearance-none text-base sm:text-sm py-2 h-10 leading-[1.375rem] ps-3 pe-3 bg-white dark:bg-white/10 dark:disabled:bg-white/[7%] text-zinc-700 disabled:text-zinc-500 placeholder-zinc-400 disabled:placeholder-zinc-400/70 dark:text-zinc-300 dark:disabled:text-zinc-400 dark:placeholder-zinc-400 dark:disabled:placeholder-zinc-500 shadow-xs border-zinc-200 border-b-zinc-300/80 disabled:border-b-zinc-200 dark:border-white/10 dark:disabled:border-white/5 data-invalid:shadow-none data-invalid:border-red-500 dark:data-invalid:border-red-500 disabled:data-invalid:border-red-500 dark:disabled:data-invalid:border-red-500 outline-none';
+        'flex gap-x-2 w-full border rounded-lg disabled:shadow-none dark:shadow-none appearance-none text-base sm:text-sm py-2 h-10 leading-[1.375rem] ps-3 pe-3 bg-white dark:bg-white/10 dark:disabled:bg-white/[7%] text-zinc-700 disabled:text-zinc-500 placeholder-zinc-400 disabled:placeholder-zinc-400/70 dark:text-zinc-300 dark:disabled:text-zinc-400 dark:placeholder-zinc-400 dark:disabled:placeholder-zinc-500 shadow-xs border-zinc-200 border-b-zinc-300/80 disabled:border-b-zinc-200 dark:border-white/10 dark:disabled:border-white/5 data-invalid:shadow-none data-invalid:border-red-500 dark:data-invalid:border-red-500 disabled:data-invalid:border-red-500 dark:disabled:data-invalid:border-red-500 outline-none';
     $class_element = 'flex items-center gap-2 list-none p-2 w-full cursor-pointer [:where(&)]:hover:bg-zinc-200';
     $class_clickable = 'rounded cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-500';
 @endphp
@@ -226,11 +226,12 @@ new class extends Component {
         return years;
     }
 }">
-    <div class="{{ $classes }} cursor-pointer flex gap-x-2" x-bind:class="open ? 'rounded-b-none border-b-0' : ''">
+    <div {{ $attributes->merge(['class' => $classes]) }} cursor-pointer flex gap-x-2"
+        x-bind:class="open ? 'rounded-b-none border-b-0' : ''">
         <flux:icon.calendar-days variant="mini" class="text-zinc-400" />
         {{-- <span x-text="selected_date"></span> --}}
-        <input type="text" @click="open = true" @keyup.enter="selectDate(selected_date)" x-model='selected_date'
-            x-bind:value="selected_date" />
+        <input class="w-9/10" type="text" @click="open = true" @keyup.enter="selectDate(selected_date)"
+            x-model='selected_date' x-bind:value="selected_date" />
     </div>
     <div class="w-full flex flex-col text-sm items-stretch rounded-lg shadow-lg bg-white overflow-y-scroll rounded-t-none border-t-0 absolute border p-3 space-y-5 dark:bg-zinc-700 dark:border-zinc-700 z-20"
         x-show="open">

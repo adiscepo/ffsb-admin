@@ -5,7 +5,7 @@ namespace App\Domains\Kanban\Services;
 use App\Domains\Kanban\Kanban;
 use App\Domains\Kanban\KanbanCard as Card;
 use App\Domains\Kanban\KanbanColumn;
-use DateTimeImmutable;
+use DateTime;
 
 class CardService
 {
@@ -14,7 +14,7 @@ class CardService
         string $title,
         int $author_id,
         ?string $description = null,
-        ?DateTimeImmutable $deadline = null,
+        ?DateTime $deadline = null,
     ): Card {
         $kanban_column = KanbanColumn::findOrFail($kanban_column_id);
 

@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class Kanban extends Model
 {
@@ -36,6 +37,16 @@ class Kanban extends Model
     public function tasks(): HasMany
     {
         return $this->hasMany(KanbanCard::class);
+    }
+
+    public function shares(): HasMany
+    {
+        return $this->hasMany(KanbanShare::class);
+    }
+
+    public function sharedWith(): HasManyThrough
+    {
+        return $this->hasManyThrough(User::class, KanbanShare::class, 'kanban_id', 'id', 'id', 'user_id');
     }
 
     // Status helper methods

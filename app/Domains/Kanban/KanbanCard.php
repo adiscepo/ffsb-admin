@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Domains\Kanban;
 
 use App\Domains\Events\Traits\Eventable;
+use App\Domains\Tags\Traits\Taggable;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;

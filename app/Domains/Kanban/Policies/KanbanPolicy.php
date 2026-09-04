@@ -15,14 +15,15 @@ class KanbanPolicy
         //
     }
 
-    public function view(User $user): bool
+    public function view(User $user, Kanban $kanban): bool
     {
         // TODO: implements when roles are working
+        return $kanban->user->id == $user->id || $kanban->sharedWith->contains($user);
         return true;
     }
 
     public function update(User $user, Kanban $kanban): bool
     {
-        return $kanban->user->id == $user->id;
+        return $kanban->user->id == $user->id || $kanban->sharedWith->contains($user);
     }
 }

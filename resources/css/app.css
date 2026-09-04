@@ -2,6 +2,7 @@
 @import '../../vendor/livewire/flux/dist/flux.css';
 @import "./timeline.css";
 @import "./program.css";
+@import "./kanban.css";
 @import "../../node_modules/quill/dist/quill.core.css";
 @import '../../node_modules/quill/dist/quill.snow.css';
 
@@ -14,7 +15,7 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @source inline('{sm:,md:,lg:,xl:,}grid-cols-{{1..20..1}}');
-@source inline('{sm:,md:,lg:,xl:,}{bg,border,text}-{red,orange,amber,yellow,lime,green,emerald,teal,cyan,sky,blue,indigo,violet,purple,fuchsia,pink,rose}-{50,{100..900..100}}');
+@source inline('{sm:,md:,lg:,xl:,dark:,hover:,dark:hover:,}{bg,border,text}-{red,orange,amber,yellow,lime,green,emerald,teal,cyan,sky,blue,indigo,violet,purple,fuchsia,pink,rose}-{50,{100..900..100},950}');
 @source inline('grid-cols-[repeat({1..40..1},var(--program-row-width))]');
 @source inline('{sm:,md:,lg:,xl:,hover:,dark:}{bg,text}-{red,orange,amber,yellow,lime,green,emerald,teal,cyan,sky,blue,indigo,violet,purple,fuchsia,pink,rose}-{50,{100..900..100},950}');
 
@@ -101,6 +102,11 @@ select:focus[data-flux-control] {
     /* background-color: #A78BFA;
     color: #6D28D9; */
 }
+
+.ql-viewer {
+    padding: 0px;
+}
+
 /* \[:where(&)\]:size-4 {
     @apply size-4;
 } */

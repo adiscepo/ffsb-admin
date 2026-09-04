@@ -33,4 +33,22 @@ class KanbanColumn extends Model
     {
         return $this->hasMany(KanbanCard::class, 'kanban_column_id')->orderBy('position');
     }
+
+    // Each column have a different meaning, the two main ones are
+    // "finished" and "dropped", if the task is not in those two column
+    // then it's an active task
+    public function isFulfilled(): bool
+    {
+        return $this->type === 'fulfilled';
+    }
+
+    public function isDropped(): bool
+    {
+        return $this->type === 'dropped';
+    }
+
+    public function isActive(): bool
+    {
+        return !$this->isFulfilled() and !$this->isDropped();
+    }
 }
