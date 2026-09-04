@@ -4,19 +4,19 @@ namespace App\Domains\Kanban\Services;
 
 use App\Domains\Kanban\Kanban;
 use App\Domains\Kanban\KanbanCard as Card;
+use App\Domains\Kanban\KanbanColumn;
 use DateTimeImmutable;
 
 class CardService
 {
     public function createCard(
-        int $kanban_id,
         int $kanban_column_id,
         string $title,
         int $author_id,
         ?string $description = null,
         ?DateTimeImmutable $deadline = null,
     ): Card {
-        $kanban = Kanban::findOrFail($kanban_id);
+        $kanban_column = KanbanColumn::findOrFail($kanban_column_id);
 
         // Find the highest position in the column
         $maxPosition = Card::where('kanban_column_id', $kanban_column_id)->max('position') ?? 0;
@@ -24,7 +24,7 @@ class CardService
             'title' => $title,
             'description' => $description,
             'deadline' => $deadline?->format('Y-m-d H:i:s'),
-            'kanban_id' => $kanban->id,
+            'kanban_id' => $kanban_column->kanban->id,
             'kanban_column_id' => $kanban_column_id,
             'user_id' => $author_id,
             'position' => $maxPosition + 1,

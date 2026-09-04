@@ -14,7 +14,7 @@ new class extends Component {
 
 <flux:modal name="card-info-{{ $card->id }}" class="w-1/2">
     <h2 class="text-lg text-zinc-700 dark:text-zinc-200">{{ $card->title }}</h2>
-    <h3 class="text-sm text-zinc-500 dark:text-zinc-400">{{ $card->description }}</h3>
+    <h3 class="text-sm text-zinc-500 dark:text-zinc-400 ql-editor">{!! $card->description !!}</h3>
     @if ($card->deadline)
         <div class="flex items-center gap-x-1 text-xs text-zinc-400">
             <flux:icon.clock class="size-3" variant="micro" />

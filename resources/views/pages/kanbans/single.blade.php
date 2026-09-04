@@ -37,9 +37,10 @@ new class extends Component {
     </div>
     <div class="mb-5"></div>
     <div class="w-full relative overflow-x-scroll">
-        <div class="grid grid-cols-4 h-250 overflow-y-clip scrollbar-none w-[calc(0.25rem*400)] gap-x-5 mx-5">
+        <div
+            class="grid grid-cols-4 h-250 overflow-y-clip scrollbar-none w-[calc(0.25rem*400)] gap-x-5 mx-5 snap-mandatory snap-center">
             @foreach ($kanban->columns as $column)
-                <x-kanbans.column :$column />
+                <livewire:kanbans.columns.column :$column />
             @endforeach
         </div>
     </div>
