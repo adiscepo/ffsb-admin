@@ -18,7 +18,7 @@ new class extends Component {
 
         // Status (autre que Réponse) assignés il y a plus d'une semaine
         $last_week_recontacted = Event::where('type', 'add_status')
-            ->where('created_at', '<', now()->subWeek(2))
+            ->old()
             ->whereIn('payload->status_id', Status::whereIn('name', ['Contacté', 'Relancé', 'En discussion'])->pluck('id'))
             ->get();
 
@@ -28,8 +28,7 @@ new class extends Component {
         foreach ($assigned_production_houses as $production_house) {
             $last_status_added = $production_house->events->where('type', 'add_status')->last();
             if ($last_status_added != null) {
-                $last_status_added = $last_status_added->payload['status_id'];
-                if ($statuses_need_recontact->contains($last_status_added)) {
+                if ($last_week_recontacted->contains($last_status_added)) {
                     $this->to_recontact_production_houses->push($production_house);
                 }
             }

@@ -48,6 +48,11 @@ class Event extends Model
         return false;
     }
 
+    public function scopeOld($query)
+    {
+        return $query->where('updated_at', '<', now()->subWeek(2));
+    }
+
     /**
      * Set the factory (because use a non-common path)
      *

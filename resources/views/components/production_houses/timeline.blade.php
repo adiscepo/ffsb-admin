@@ -24,7 +24,16 @@ new class extends Component {
         $status = Status::find($this->status_id);
         $remark = $this->remark;
         if ($status != null) {
-            $toggle->execute(Auth::user(), $this->production_house, collect([$status]));
+            // We can do the statuses->first() only because the production
+            // houses can have only one status attached at the time
+            if ($status->id == $this->production_house->statuses->first()->id) {
+                // If it's the same status that is reassigned, we only update
+                // the time of assignation
+                // dd($this->production_house->events()->where('type', 'add_status')->where('payload->status_id', $status->id)->latest()->get());
+                $this->production_house->events()->where('type', 'add_status')->where('payload->status_id', $status->id)->latest()->update([]);
+            } else {
+                $toggle->execute(Auth::user(), $this->production_house, collect([$status]));
+            }
         }
         if ($remark != null) {
             $add_remark->execute(Auth::user(), $this->production_house, $this->remark);
