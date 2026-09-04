@@ -16,7 +16,7 @@
 @source inline('{sm:,md:,lg:,xl:,}grid-cols-{{1..20..1}}');
 @source inline('{sm:,md:,lg:,xl:,}{bg,border,text}-{red,orange,amber,yellow,lime,green,emerald,teal,cyan,sky,blue,indigo,violet,purple,fuchsia,pink,rose}-{50,{100..900..100}}');
 @source inline('grid-cols-[repeat({1..40..1},var(--program-row-width))]');
-@source inline('{sm:,md:,lg:,xl:,hover:}bg-{red,orange,amber,yellow,lime,green,emerald,teal,cyan,sky,blue,indigo,violet,purple,fuchsia,pink,rose}-{50,{100..900..100}}');
+@source inline('{sm:,md:,lg:,xl:,hover:,dark:}{bg,text}-{red,orange,amber,yellow,lime,green,emerald,teal,cyan,sky,blue,indigo,violet,purple,fuchsia,pink,rose}-{50,{100..900..100},950}');
 
 @theme {
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';

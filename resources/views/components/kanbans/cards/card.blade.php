@@ -13,7 +13,7 @@ new class extends Component {
 ?>
 
 <flux:modal.trigger name="card-info-{{ $card->id }}">
-    <div class="relative py-1.5 px-3 text-sm bg-white border border-zinc-100 rounded-md text-zinc-600 cursor-pointer hover:bg-zinc-50"
+    <div class="relative py-1.5 px-3 text-sm bg-white border border-zinc-100 rounded-md text-zinc-600 dark:text-zinc-400 dark:border-zinc-900 dark:bg-zinc-800 cursor-pointer hover:bg-zinc-50 dark:hover:bg-zinc-700"
         draggable="true">
         <livewire:kanbans.cards.single :$card />
         <p>{{ $card->title }}</p>
