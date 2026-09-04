@@ -46,12 +46,8 @@ new class extends Component {
         }
 
         $validated = $this->validate($this->rules());
-        $create->execute(Auth::user(), $this->name, $this->contact_phone, $this->contact_email, $this->remark);
+        $contact = $create->execute(Auth::user(), $this->name, $this->contact_phone, $this->contact_email, $this->remark);
         if ($model !== null) {
-            $contact = Contact::where([
-                'name' => $this->name,
-                'contact_phone' => $this->contact_phone,
-            ])->first();
             $attach->execute(Auth::user(), $model, $contact);
         }
         $this->reset();
