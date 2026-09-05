@@ -17,6 +17,7 @@ class CardService
         ?DateTime $deadline = null,
     ): Card {
         $kanban_column = KanbanColumn::findOrFail($kanban_column_id);
+        assert($kanban_column->isActive());
 
         // Find the highest position in the column
         $maxPosition = Card::where('kanban_column_id', $kanban_column_id)->max('position') ?? 0;

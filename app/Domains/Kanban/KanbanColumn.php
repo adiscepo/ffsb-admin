@@ -49,6 +49,11 @@ class KanbanColumn extends Model
 
     public function isActive(): bool
     {
-        return !$this->isFulfilled() and !$this->isDropped();
+        return !($this->isFulfilled() or $this->isDropped());
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->where('type', '=', null);
     }
 }

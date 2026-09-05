@@ -16,9 +16,15 @@ new class extends Component {
 
     public function moveCard(CardService $card_service, int $card_id, int $new_column_id)
     {
-        $card_service->moveCard(KanbanCard::findOrFail($card_id), $new_column_id, 0);
-        // $move->execute(Auth::user(), Event::findOrFail($event_id), $this->formatDatetime($day, $hour));
-        $this->redirect(request()->header('Referer'), navigate: true);
+        // We only execute the action if the card is moved to a different column
+        $card = KanbanCard::findOrFail($card_id);
+        // It seems that $wire.moveCard call the method of the LAST component
+        // rendered with it, and not the method of the actual component, that's
+        // why 'new_column_id' is needed
+        if ($card->column->id != $new_column_id) {
+            $card_service->moveCard($card, $new_column_id, 0);
+            $this->redirect(request()->header('Referer'), navigate: true);
+        }
     }
 };
 ?>
@@ -46,14 +52,6 @@ new class extends Component {
             <livewire:kanbans.cards.card :$card />
         @endforeach
     </div>
-    <flux:modal name="create-task-{{ $column->id }}">
-        <livewire:kanbans.cards.create :$column />
-    </flux:modal>
-    <flux:modal.trigger name="create-task-{{ $column->id }}"
-        class="flex place-self-start gap-x-1.5 text-{{ $column->color }}-800  dark:text-{{ $column->color }}-400 text-sm items-center hover:bg-{{ $column->color }}-100 rounded-lg py-1.5 px-3 cursor-pointer">
-        <flux:icon.plus class="size-4" />
-        <span>Ajouter une tâche</span>
-    </flux:modal.trigger>
 </div>
 @script
     <script>
