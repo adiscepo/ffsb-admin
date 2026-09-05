@@ -3,27 +3,33 @@
 use Livewire\Component;
 use Livewire\Attributes\Computed;
 use App\Domains\Kanban\Kanban;
+use App\Domains\Kanban\KanbanColumn;
 
 new class extends Component {
     public Kanban $kanban;
+    public KanbanColumn $first_column;
     public int $nb_columns;
 
     public function mount(int $id)
     {
         $this->kanban = Kanban::findOrFail($id);
         $this->nb_columns = $this->kanban->columns->count();
+        $this->first_column = $this->kanban->columns->first();
     }
 };
 ?>
 @component('partials.heading', ['route' => 'Kanbans:kanbans/' . $kanban->name])
     <div class="flex gap-x-2">
         @can('update', $kanban)
-            {{-- <livewire:docu.edit :docu="$docu" /> --}}
-            <flux:modal.trigger name="edit-kanban">
+            <flux:modal name="create-task-{{ $first_column->id }}">
+                <livewire:kanbans.cards.create :column="$first_column" />
+            </flux:modal>
+            {{-- <flux:modal.trigger name="create-task-{{ $first_column->id }}"
+                class="flex place-self-start gap-x-1.5 text-{{ $first_column->color }}-800  dark:text-{{ $first_column->color }}-400 text-sm items-center hover:bg-{{ $first_column->color }}-100 rounded-lg py-1.5 px-3 cursor-pointer">
+                <flux:icon.plus class="size-4" /> --}}
+            <flux:modal.trigger name="create-task-{{ $first_column->id }}">
                 <flux:button size="sm" variant="primary" color="violet" class="cursor-pointer hidden! md:block!">
-                    Ajouter une colonne
-                </flux:button>
-                <flux:button size="sm" variant="primary" color="violet" class="cursor-pointer md:hidden" icon="pencil">
+                    Ajouter une tâche
                 </flux:button>
             </flux:modal.trigger>
         @endcan

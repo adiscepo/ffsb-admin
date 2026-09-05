@@ -25,4 +25,9 @@ class KanbanCardPolicy
     {
         return $kanban_card->assignee->contains($user->id);
     }
+
+    public function edit(User $user, KanbanCard $kanban_card): bool
+    {
+        return true;
+    }
 }

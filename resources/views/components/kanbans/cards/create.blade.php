@@ -47,7 +47,7 @@ new class extends Component {
     {
         return [
             'title' => 'required|string',
-            'description' => 'string',
+            // 'description' => 'string',
         ];
     }
 

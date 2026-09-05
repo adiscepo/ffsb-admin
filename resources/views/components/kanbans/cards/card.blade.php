@@ -29,7 +29,7 @@ new class extends Component {
                     @endif
                     {{ $card->title }}
                 </p>
-                @if ($card->deadline)
+                @if ($card->deadline and $card->column->isActive())
                     <div class="flex items-center gap-x-1 text-xs text-{{ $color_column }}-400">
                         <flux:icon.clock class="size-3" variant="micro" />
                         <span>

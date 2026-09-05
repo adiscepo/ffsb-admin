@@ -50,4 +50,14 @@ class KanbanCard extends Model
     {
         return $this->belongsToMany(User::class);
     }
+
+    public function scopeActive($query)
+    {
+        return $query->whereIn('kanban_column_id', KanbanColumn::active()->pluck('id'));
+    }
+
+    public function scopeUnassigned($query)
+    {
+        return $query->doesntHave('assignee');
+    }
 }
