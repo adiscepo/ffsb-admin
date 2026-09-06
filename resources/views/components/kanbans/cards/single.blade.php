@@ -1,6 +1,8 @@
 <?php
 use Livewire\Component;
 use App\Domains\Kanban\KanbanCard;
+use App\Domains\Kanban\Services\CardService;
+use Illuminate\Support\Facades\Auth;
 
 new class extends Component {
     public KanbanCard $card;
@@ -8,6 +10,12 @@ new class extends Component {
     public function mount(KanbanCard $card)
     {
         $this->card = $card;
+    }
+
+    public function selfAssign(CardService $card_service)
+    {
+        $card_service->assignUserCard($this->card, Auth::user()->id);
+        Flux::toast(variant: 'success', text: 'Vous êtes assigné à la tâche ' . $this->card->title);
     }
 };
 ?>
@@ -47,6 +55,8 @@ new class extends Component {
     </div>
     <livewire:generic-timeline :small="true" :eventable="$card" />
     @can('edit', $card)
-        <flux:button size="xs" class="cursor-pointer">Editer</flux:button>
+        @if (!$card->isAssignedTo(Auth::user()))
+            <flux:button size="xs" class="cursor-pointer" wire:click='selfAssign'>M'y assigner</flux:button>
+        @endif
     @endcan
 </div>

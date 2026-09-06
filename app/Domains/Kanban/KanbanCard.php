@@ -60,4 +60,9 @@ class KanbanCard extends Model
     {
         return $query->doesntHave('assignee');
     }
+
+    public function isAssignedTo(User $user): bool
+    {
+        return $this->assignee->contains($user);
+    }
 }

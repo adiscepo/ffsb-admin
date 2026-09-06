@@ -104,10 +104,10 @@ class KanbanService
     private function createDefaultColumns(Kanban $kanban): void
     {
         $defaultColumns = [
-            ['name' => 'À faire', 'position' => 0],
-            ['name' => 'En cours', 'position' => 1],
-            ['name' => 'A l\'aide', 'position' => 2],
-            ['name' => 'Terminé', 'position' => 3],
+            ['name' => 'À faire', 'position' => 0, 'color' => 'blue'],
+            ['name' => 'En cours', 'position' => 1, 'color' => 'purple'],
+            ['name' => 'Terminées', 'position' => 2, 'color' => 'emerald'],
+            ['name' => 'Abandonnées', 'position' => 3, 'color' => 'red'],
         ];
 
         foreach ($defaultColumns as $defaultColumn) {

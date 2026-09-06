@@ -29,7 +29,6 @@ new class extends Component {
 <div class="py-5 relative h-full">
     <div class="relative flex flex-col gap-y-2 px-5 overflow-hidden text-sm">
         <h2 class="text-zinc-700 dark:text-zinc-200">Tâches</h2>
-        <div class="mb-1"></div>
         <div class="overflow-y-scroll max-h-43">
             @if ($nothing_assigned)
                 <p class="text-zinc-500 dark:text-zinc-300 italic">
@@ -46,7 +45,7 @@ new class extends Component {
                             $current_column = $task->column;
                         @endphp
                         <flux:badge size="sm" class="mt-2 mb-1" :color="$current_column->color">
-                            {{ $current_column->name }}
+                            {{ $current_column->name }} ({{ $current_column->kanban->name }})
                         </flux:badge>
                     @endif
                     <flux:modal name="card-info-{{ $task->id }}" class="w-1/2">
