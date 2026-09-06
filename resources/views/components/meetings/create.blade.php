@@ -7,25 +7,13 @@ use Carbon\Carbon;
 new class extends Component {
     public string $name;
     public string $odj;
-    public $date;
+    public string $date;
     public string $time;
     public string $location;
 
     protected $listeners = [
         'text-editor-updated' => 'textEditorValueUpdated',
-        'date-picker' => 'updateDate',
     ];
-
-    public function mount()
-    {
-        $this->date = now();
-    }
-
-    public function updateDate(int $id, string $selected)
-    {
-        $date = Carbon::createFromFormat('d/m/Y', $selected);
-        $this->date = $date;
-    }
 
     public function textEditorValueUpdated(string $value)
     {
@@ -54,8 +42,8 @@ new class extends Component {
     public function save(CreateMeeting $create)
     {
         $this->validate($this->rules());
-        $datetime = $this->date->setTimeFrom($this->time);
-        $create->execute(Auth::user(), $this->name, $datetime->format('Y-m-d H:i:s'), $this->location, $this->odj);
+        $datetime = Carbon::createFromFormat('d/m/Y', $this->date)->setTimeFrom($this->time);
+        $create->execute(Auth::user(), $this->name, $datetime, $this->location, $this->odj);
         Flux::toast(variant: 'success', text: 'La réunion a été ajoutée');
         $this->redirect(request()->header('Referer'), navigate: true);
     }
@@ -75,15 +63,14 @@ new class extends Component {
     <flux:field>
         <flux:label>Date et heure</flux:label>
         <div class="flex items-center justify-between gap-x-2">
-            <livewire:date-picker class="w-fit" :min_date="date('d/m/Y', strtotime('-5 years'))" :max_date="date('d/m/Y', strtotime('+5 years'))" :selected_date="$date->format('d/m/Y')"
-                :id="0" />
+            <livewire:date-picker wire:model='date' :min_date="date('d/m/Y', strtotime('now'))" :max_date="date('d/m/Y', strtotime('+5 years'))" :id="0" />
             <flux:input wire:model='time' type="time" />
         </div>
     </flux:field>
     <flux:input wire:model='location' label="Lieu" placeholder="P.NO2.003, en ligne, etc." />
     <flux:field>
         <flux:label>Ordre du Jour</flux:label>
-        <livewire:text-editor value='' class="h-50 mb-15" placeholder="Ordre du jour de la réunion" />
+        <livewire:text-editor wire:model='odj' class="h-50 mb-15" placeholder="Ordre du jour de la réunion" />
     </flux:field>
     <flux:button wire:click='save'>Sauver</flux:button>
 </div>

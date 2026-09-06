@@ -5,13 +5,14 @@ namespace App\Domains\Meetings\Actions;
 use App\Domains\Events\Event;
 use App\Domains\Meetings\Meeting;
 use App\Models\User;
-use Illuminate\Support\Facades\Date;
+use Carbon\Carbon;
+use DateTime;
 use Illuminate\Support\Facades\DB;
 
 class CreateMeeting
 {
 
-    public function execute(User $user, string $name, string $datetime, string $location, string $description, ?array $files_upload = null)
+    public function execute(User $user, string $name, DateTime $datetime, string $location, string $description, ?array $files_upload = null)
     {
         DB::transaction(function () use ($user, $name, $datetime, $location, $description, $files_upload) {
             $meeting = Meeting::create([

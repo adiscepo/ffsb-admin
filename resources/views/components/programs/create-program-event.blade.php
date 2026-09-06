@@ -23,7 +23,6 @@ new class extends Component {
     protected $listeners = [
         'select-datetime' => 'setDateTime',
         'pill-box:docu' => 'setDocu',
-        'date-picker' => 'setDate',
     ];
 
     public function mount(Program $program)
@@ -36,11 +35,6 @@ new class extends Component {
         $this->selected_datetime = Carbon::parse($data);
         $this->date = $this->selected_datetime->format('Y-m-d');
         $this->hour = $this->selected_datetime->format('H:i');
-    }
-
-    public function setDate($id, $selected)
-    {
-        $this->date = Carbon::createFromFormat('d/m/Y', $selected)->format('Y-m-d');
     }
 
     public function setDocu($selected)
@@ -168,8 +162,8 @@ new class extends Component {
 
         <flux:field>
             <flux:label>Date</flux:label>
-            <livewire:date-picker :min_date="$program->start_date->format('d/m/Y')" :max_date="$program->end_date->format('d/m/Y')" :selected_date="$this->selected_datetime != null ? $this->selected_datetime->format('d/m/Y') : null" :id="1"
-                :key="'date-picker-' .
+            <livewire:date-picker wire:model='date' :min_date="$program->start_date->format('d/m/Y')" :max_date="$program->end_date->format('d/m/Y')" :selected_date="$this->selected_datetime != null ? $this->selected_datetime->format('d/m/Y') : null"
+                :id="1" :key="'date-picker-' .
                     ($this->selected_datetime != null ? $this->selected_datetime->format('dmY') : 'null')" />
         </flux:field>
         <flux:field>

@@ -8,21 +8,13 @@ use Facades\App\Domains\Edition\Edition;
 
 new class extends Component {
     public string $name;
-    public array $dates = [];
+    public array $dates = ['start' => null, 'end' => null];
     public int $key = 1;
 
-    protected $listeners = [
-        'date-picker' => 'selectDate',
-    ];
-
-    public function selectDate(int $id, string $selected)
+    public function mount()
     {
-        if ($id == 0) {
-            $this->dates['start'] = Carbon::createFromFormat('d/m/Y', $selected);
-        } else {
-            $this->dates['end'] = Carbon::createFromFormat('d/m/Y', $selected);
-        }
-        $this->key += 1;
+        $this->dates['start'] = date('d/m/Y');
+        $this->dates['end'] = date('d/m/Y', strtotime('+6 days'));
     }
 
     public function rules()
@@ -34,21 +26,30 @@ new class extends Component {
         ];
     }
 
+    public function messages()
+    {
+        return [
+            '*.required' => 'Ce champs est requis',
+        ];
+    }
+
     public function save(CreateProgram $create)
     {
         $max_duration_days = 14;
-        if ($this->dates['start']->diffInDays($this->dates['end']) > $max_duration_days) {
+        $start = Carbon::createFromFormat('d/m/Y', $this->dates['start']);
+        $end = Carbon::createFromFormat('d/m/Y', $this->dates['end']);
+        if ($start->diffInDays($end) > $max_duration_days) {
             Flux::toast(variant: 'danger', text: 'La durée du programme ne peut pas excéder ' . $max_duration_days . ' jours.');
             return;
         }
-        if ($this->dates['start']->greaterThan($this->dates['end'])) {
+        if ($start->greaterThan($end)) {
             Flux::toast(variant: 'danger', text: 'La début ne peut pas avoir lieu après la fin. Les calculs sont pas bons Kevin.');
             return;
         }
-        if ($this->dates['start']) {
+        if ($start) {
             $this->validate($this->rules());
         }
-        $create->execute(Auth::user(), $this->name, $this->dates['start']->format('Y-m-d'), $this->dates['end']->format('Y-m-d'), Edition::currentEdition()->id);
+        $create->execute(Auth::user(), $this->name, $start, $end, Edition::currentEdition()->id);
         $this->redirect('/programs/');
     }
 };
@@ -76,7 +77,8 @@ new class extends Component {
                         {{ $message }}
                     @enderror
                 </div>
-                <livewire:date-picker :min_date="date('d/m/Y', strtotime('-5 years'))" :max_date="date('d/m/Y', strtotime('+5 years'))" :selected_date="now()->format('d/m/Y')" :id="0" />
+                <livewire:date-picker wire:model='dates.start' :min_date="date('d/m/Y', strtotime('-5 years'))" :max_date="date('d/m/Y', strtotime('+5 years'))" :selected_date="now()->format('d/m/Y')"
+                    :id="0" />
             </flux:field>
             <flux:field>
                 <flux:label>Date de fin</flux:label>
@@ -85,12 +87,12 @@ new class extends Component {
                         {{ $message }}
                     @enderror
                 </div>
-                <livewire:date-picker :key="$key" :min_date="date('d/m/Y', strtotime('-5 years'))" :max_date="date('d/m/Y', strtotime('+5 years'))" :id="1"
-                    :selected_date="isset($dates['end'])
-                        ? $dates['end']->format('d/m/Y')
+                <livewire:date-picker wire:model='dates.end' :key="$key" :min_date="date('d/m/Y', strtotime('-5 years'))" :max_date="date('d/m/Y', strtotime('+5 years'))"
+                    :id="1" :selected_date="isset($dates['end'])
+                        ? $dates['end']
                         : (isset($dates['start'])
-                            ? $dates['start']->format('d/m/Y')
-                            : '')" />
+                            ? $dates['start']
+                            : date('d/m/Y', strtotime('+6 days')))" />
             </flux:field>
         </div>
         <flux:button class="w-full cursor-pointer" variant="primary" color="green" wire:click='save'>

@@ -1,36 +1,21 @@
 <?php
 
 use Livewire\Component;
+use Livewire\Attributes\Modelable;
 
 new class extends Component {
     const EVENT_VALUE_UPDATED = '';
 
-    public string $value;
+    #[Modelable]
+    public ?string $value = null;
 
     public string $quillId;
     public string $placeholder;
-    public ?int $id = null;
 
-    public function mount(string $value, string $placeholder, ?int $id = null)
+    public function mount(?string $placeholder)
     {
-        $this->value = $value;
         $this->placeholder = $placeholder;
-        if ($id != null) {
-            $this->quillId = 'quill-' . $id;
-        } else {
-            $this->quillId = 'quill-' . uniqid();
-        }
-        $this->id = $id; // I use the id as a way to be able to specify the text
-        // editor when there are several ones on the same page (eg. kanban cols)
-    }
-
-    public function updatedValue($value)
-    {
-        if ($this->id == null) {
-            $this->dispatch('text-editor-updated', $this->value);
-        } else {
-            $this->dispatch('text-editor-updated', $this->value, $this->id);
-        }
+        $this->quillId = 'quill-' . uniqid();
     }
 };
 ?>
