@@ -115,6 +115,7 @@ class KanbanService
                 'name' => $defaultColumn['name'],
                 'position' => $defaultColumn['position'],
                 'kanban_id' => $kanban->id,
+                'color' => $defaultColumn['color'],
             ]);
         }
     }
