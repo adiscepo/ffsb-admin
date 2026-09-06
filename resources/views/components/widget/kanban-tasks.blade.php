@@ -40,13 +40,16 @@ new class extends Component {
                     $current_column = null;
                 @endphp
                 @foreach ($tasks as $task)
-                    @if ($task->column != $current_column)
+                    @if ($task->column->id != $current_column?->id)
                         @php
                             $current_column = $task->column;
                         @endphp
-                        <flux:badge size="sm" class="mt-2 mb-1" :color="$current_column->color">
-                            {{ $current_column->name }} ({{ $current_column->kanban->name }})
-                        </flux:badge>
+                        <a wire:navigate href="/kanban/{{ $task->kanban->id }}">
+
+                            <flux:badge size="sm" class="mt-2 mb-1" :color="$current_column->color">
+                                {{ $current_column->name }} ({{ $current_column->kanban->name }})
+                            </flux:badge>
+                        </a>
                     @endif
                     <flux:modal name="card-info-{{ $task->id }}" class="w-1/2">
                         <livewire:kanbans.cards.single :card="$task" />
