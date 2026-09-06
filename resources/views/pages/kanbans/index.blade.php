@@ -21,7 +21,9 @@ new class extends Component {
 ?>
 @component('partials.heading', ['route' => 'Kanbans'])
     <div class="flex gap-x-2">
-        {{-- <livewire:docu.edit :docu="$docu" /> --}}
+        <flux:modal name="create-kanban">
+            <livewire:kanbans.create />
+        </flux:modal>
         <flux:modal.trigger name="create-kanban">
             <flux:button size="sm" variant="primary" color="violet" class="cursor-pointer hidden! md:block!">
                 Créer un kanban
