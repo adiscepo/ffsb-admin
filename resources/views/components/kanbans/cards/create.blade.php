@@ -14,8 +14,6 @@ new class extends Component {
     public array $assignees = [];
 
     protected $listeners = [
-        'text-editor-updated' => 'textEditorValueUpdated',
-        'date-picker' => 'updateDate',
         'pill-box:assigned' => 'updateAssigned',
     ];
 
@@ -62,6 +60,9 @@ new class extends Component {
     public function save(CardService $card_service)
     {
         $this->validate($this->rules());
+        if (isset($this->deadline)) {
+            $this->deadline = Carbon::createFromFormat('d/m/Y', $this->deadline);
+        }
         $card = $card_service->createCard($this->column->id, $this->title, Auth::user()->id, $this->description, $this->deadline);
         foreach ($this->assignees as $assignee_id) {
             $card_service->assignUserCard($card, $assignee_id);
@@ -85,9 +86,7 @@ new class extends Component {
         <flux:input wire:model='title' label="Nom de la tâche" placeholder="Envoyer mail" />
         <flux:field>
             <flux:label>Deadline</flux:label>
-            {{-- <livewire:date-picker class="w-fit" :min_date="date('d/m/Y')" :max_date="date('d/m/Y', strtotime('+5 years'))" :id="0" /> --}}
-            <livewire:date-picker class="" wire:model="deadline" :min_date="date('d/m/Y')" :max_date="date('d/m/Y', strtotime('+2 years'))"
-                :id="0" />
+            <livewire:date-picker wire:model="deadline" :min_date="date('d/m/Y')" :max_date="date('d/m/Y', strtotime('+2 years'))" :id="0" />
         </flux:field>
     </div>
     <flux:field>
@@ -96,7 +95,7 @@ new class extends Component {
     </flux:field>
     <flux:field>
         <flux:label>Description</flux:label>
-        <livewire:text-editor value='' class="h-50 mb-15" placeholder="Description de la tâche"
+        <livewire:text-editor wire:model='description' class="h-50 mb-15" placeholder="Description de la tâche"
             :id="$column->id" />
     </flux:field>
     <flux:button wire:click='save'>Créer</flux:button>

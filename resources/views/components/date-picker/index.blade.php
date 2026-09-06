@@ -1,12 +1,14 @@
 <?php
 use Livewire\Component;
 use Carbon\CarbonImmutable;
+use Livewire\Attributes\Modelable;
 use App\Domains\ProductionHouses\ProductionHouse;
 
 new class extends Component {
     public string $query = '';
     public int $id;
     public array $selected = [];
+    #[Modelable]
     public ?string $selected_date = null;
 
     public array $datas = [];
@@ -190,7 +192,7 @@ new class extends Component {
                 var selected_year = this.getYear(date)
                 this.changeMonth(selected_month, selected_year)
                 this.selected_date = date;
-                $wire.dispatch('date-picker', { id: this.id, selected: this.selected_date })
+                $wire.set('selected_date', date)
             } else {
                 $wire.errorMessage('La date doit être comprise dans l\'intervalle ' + this.min_date + ' - ' + this.max_date)
             }

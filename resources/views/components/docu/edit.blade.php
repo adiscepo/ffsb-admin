@@ -85,13 +85,6 @@ new class extends Component {
         }
     }
 
-    #[On('date-picker')]
-    public function updateDate(int $id, string $selected)
-    {
-        $date = date_create_from_format('d/m/Y', $selected);
-        $this->links[$id]['deadline'] = $date;
-    }
-
     public array $db_production_houses = [];
     public array $db_fields = [];
 
@@ -103,7 +96,6 @@ new class extends Component {
             ->get()
             ->toArray();
         if ($dispatch) {
-            error_log('New production house, dipatch event');
             $this->dispatch('update-datas-prod-house', datas: $this->db_production_houses);
         }
     }

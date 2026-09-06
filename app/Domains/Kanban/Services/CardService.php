@@ -36,10 +36,12 @@ class CardService
         Card $card,
         string $title,
         ?string $description = null,
+        ?DateTime $deadline = null,
     ): Card {
         $card->update([
             'title' => $title,
             'description' => $description,
+            'deadline' => $deadline,
         ]);
 
         return $card->fresh();
@@ -62,6 +64,11 @@ class CardService
     public function assignUserCard(Card $card, int $user_id)
     {
         $card->assignee()->attach($user_id);
+    }
+
+    public function unassignUserCard(Card $card, int $user_id)
+    {
+        $card->assignee()->detach($user_id);
     }
 
     private function reorderCardsInColumn(string $columnId, string $cardId, int $newPosition): void

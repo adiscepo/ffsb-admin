@@ -8,6 +8,7 @@ use App\Domains\Docus\Docu;
 use App\Domains\Events\Event;
 use App\Domains\ProductionHouses\Actions\AttachDocuProductionHouse;
 use App\Domains\ProductionHouses\ProductionHouse;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -34,7 +35,7 @@ class CreateDocu
                 DocuLink::create([
                     'url' => $link['url'],
                     'password' => $link['password'],
-                    'deadline' => !empty($link['deadline']) ? $link['deadline'] : null,
+                    'deadline' => !empty($link['deadline']) ? Carbon::createFromFormat('d/m/Y', $link['deadline']) : null,
                     'comment' => !empty($link['comment']) ? $link['comment'] : null,
                     'docu_id' => $docu->id,
                 ]);

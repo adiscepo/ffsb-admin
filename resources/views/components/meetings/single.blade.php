@@ -17,7 +17,7 @@ new class extends Component {
     public bool $edit_mode = false;
     public string $name;
     public string $odj;
-    public $date;
+    public string $date;
     public string $time;
     public string $location;
 
@@ -26,8 +26,6 @@ new class extends Component {
         'file-uploaded' => 'handleUploadFile',
         'file-removed' => 'handleRemoveFile',
         'pill-box:members' => 'updateMembers',
-        'text-editor-updated' => 'textEditorValueUpdated',
-        'date-picker' => 'updateDate',
         'delete-document' => 'deleteFile',
     ];
 
@@ -37,7 +35,7 @@ new class extends Component {
         $this->attachments = collect();
         $this->name = $meeting->name;
         $this->odj = $meeting->description;
-        $this->date = $meeting->datetime;
+        $this->date = $meeting->datetime->format('d/m/Y');
         $this->time = $meeting->datetime->format('H:i');
         $this->location = $meeting->location;
     }
@@ -77,12 +75,6 @@ new class extends Component {
         $this->edit_mode = !$this->edit_mode;
     }
 
-    public function updateDate(int $id, string $selected)
-    {
-        $date = Carbon::createFromFormat('d/m/Y', $selected);
-        $this->date = $date;
-    }
-
     public function textEditorValueUpdated(string $value)
     {
         $this->odj = $value;
@@ -110,7 +102,7 @@ new class extends Component {
     public function update(EditMeeting $update)
     {
         $this->validate($this->rules());
-        $datetime = $this->date->setTimeFrom($this->time);
+        $datetime = Carbon::createFromFormat('d/m/Y', $this->date)->setTimeFrom($this->time);
         $update->execute(Auth::user(), $this->meeting, $this->name, $datetime->format('Y-m-d H:i:s'), $this->location, $this->odj);
         Flux::toast(variant: 'success', text: 'La réunion a été modifiée');
         $this->meeting = Meeting::findorFail($this->meeting->id);
@@ -159,11 +151,8 @@ new class extends Component {
         <div class="flex gap-x-5 items-center text-zinc-400 text-sm">
             <span class="flex gap-x-1 items-center">
                 <flux:icon icon="calendar-date-range" variant="micro" />
-                @php
-                    $date = $meeting->datetime->translatedFormat('d F Y');
-                @endphp
                 @if ($edit_mode)
-                    <livewire:date-picker class="w-fit" :min_date="date('d/m/Y', strtotime('-5 years'))" :max_date="date('d/m/Y', strtotime('+5 years'))" :selected_date="$meeting->datetime->format('d/m/Y')"
+                    <livewire:date-picker wire:model='date' :selected_date="$date" :min_date="date('d/m/Y')" :max_date="date('d/m/Y', strtotime('+5 years'))"
                         :id="0" />
                 @else
                     {{ $date }}
@@ -217,7 +206,7 @@ new class extends Component {
         <div class="mb-5"></div>
         <div class="flex flex-col text-sm border border-zinc-200 rounded-lg py-4 px-5 space-y-2">
             @if ($edit_mode)
-                <livewire:text-editor :value='$meeting->description' placeholder="Ordre du jour de la réunion" />
+                <livewire:text-editor wire:model='odj' placeholder="Ordre du jour de la réunion" />
             @else
                 <p class="text-zinc-800 font-semibold">Ordre du jour</p>
                 <div class="text-zinc-600 ql-editor px-0! py-0! ">
