@@ -81,6 +81,16 @@ new class extends Component {
             </div>
         </div>
     </div>
+    @if ($column->isActive())
+        <flux:modal.trigger name="create-task-{{ $column->id }}"
+            class="flex place-self-start gap-x-1.5 text-{{ $column->color }}-800  dark:text-{{ $column->color }}-400 text-sm items-center hover:bg-{{ $column->color }}-100 rounded-lg py-1.5 px-3 cursor-pointer">
+            <flux:icon.plus class="size-4" />
+            Ajouter une tâche
+            <flux:modal name="create-task-{{ $column->id }}">
+                <livewire:kanbans.cards.create :column="$column" />
+            </flux:modal>
+        </flux:modal.trigger>
+    @endif
 </div>
 @script
     <script>

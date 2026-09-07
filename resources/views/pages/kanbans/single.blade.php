@@ -21,15 +21,15 @@ new class extends Component {
 @component('partials.heading', ['route' => 'Kanbans:kanbans/' . $kanban->name])
     <div class="flex gap-x-2">
         @can('update', $kanban)
-            <flux:modal name="create-task-{{ $first_column->id }}">
+            <flux:modal name="create-task">
                 <livewire:kanbans.cards.create :column="$first_column" />
             </flux:modal>
-            {{-- <flux:modal.trigger name="create-task-{{ $first_column->id }}"
-                class="flex place-self-start gap-x-1.5 text-{{ $first_column->color }}-800  dark:text-{{ $first_column->color }}-400 text-sm items-center hover:bg-{{ $first_column->color }}-100 rounded-lg py-1.5 px-3 cursor-pointer">
-                <flux:icon.plus class="size-4" /> --}}
-            <flux:modal.trigger name="create-task-{{ $first_column->id }}">
+            <flux:modal.trigger name="create-task">
                 <flux:button size="sm" variant="primary" color="violet" class="cursor-pointer hidden! md:block!">
                     Ajouter une tâche
+                </flux:button>
+                <flux:button size="sm" variant="primary" color="violet" class="cursor-pointer md:hidden!">
+                    <flux:icon.squares-plus variant="mini" />
                 </flux:button>
             </flux:modal.trigger>
         @endcan
