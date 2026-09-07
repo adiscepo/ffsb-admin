@@ -18,6 +18,8 @@ class KanbanColumn extends Model
         'name',
         'position',
         'kanban_id',
+        'color',
+        'type',
     ];
 
     protected $casts = [
