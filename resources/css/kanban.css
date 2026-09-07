@@ -3,3 +3,14 @@
 .kanban-dropzone[data-dragging] {
     @apply brightness-95;
 }
+
+.kanban-task-dropzone[data-dragging] {
+    @apply py-2;
+}
+
+.kanban-task-dropzone[data-dragging] > div {
+    @apply brightness-92;
+    @apply border;
+    @apply mx-auto;
+    @apply h-10;
+}
