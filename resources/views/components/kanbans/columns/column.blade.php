@@ -21,14 +21,16 @@ new class extends Component {
         // It seems that $wire.moveCard call the method of the LAST component
         // rendered with it, and not the method of the actual component, that's
         // why 'new_column_id' is needed
-        if ($position_card == null) {
+        if ($position_card === null) {
             if ($card->column->id != $new_column_id) {
                 $card_service->moveCard($card, $new_column_id, 0);
             }
         } else {
+            error_log($position_card);
             if ($card->position < $position_card) {
                 $position_card -= 1;
             }
+            error_log('from ' . $card->position . ' to ' . $position_card);
             $card_service->moveCard($card, $new_column_id, $position_card);
         }
         $this->redirect(request()->header('Referer'), navigate: true);
@@ -57,7 +59,7 @@ new class extends Component {
     <div class="pb-2 max-h-[400pt] overflow-y-scroll">
         @foreach ($column->tasks as $card)
             <div class="kanban-task-dropzone w-full min-h-2 z-10 transition-all" dropzone="true"
-                x-on:dragover="onDragenter($event)" x-on:drop.prevent="onDrop($event)"
+                x-on:dragover.prevent="onDragenter($event)" x-on:drop.prevent="onDrop($event)"
                 x-on:dragleave="onDragleave($event)" x-data="dropzone_task({
                     _this: @this,
                     column_id: @js($this->column->id),
@@ -68,6 +70,16 @@ new class extends Component {
             </div>
             <livewire:kanbans.cards.card :$card />
         @endforeach
+        <div class="kanban-task-dropzone w-full min-h-2 z-10 transition-all" dropzone="true"
+            x-on:dragover.prevent="onDragenter($event)" x-on:drop.prevent="onDrop($event)"
+            x-on:dragleave="onDragleave($event)" x-data="dropzone_task({
+                _this: @this,
+                column_id: @js($this->column->id),
+                position_card: @js($this->column->tasks->count() + 1),
+            })">
+            <div class="rounded-lg border-dashed border-{{ $column->color }}-500">
+            </div>
+        </div>
     </div>
 </div>
 @script
@@ -132,7 +144,7 @@ new class extends Component {
                 this.leaveTimer = setTimeout(() => {
                     this.isDragging = false;
                     this.$el.removeAttribute('data-dragging');
-                }, 60);
+                }, 300);
             }
         }));
     </script>
