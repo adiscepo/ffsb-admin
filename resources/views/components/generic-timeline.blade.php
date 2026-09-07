@@ -35,18 +35,22 @@ new class extends Component {
     @can('comment', $eventable)
         <div class="flex gap-x-3 items-start">
             <div class="w-full">
+                @if (!$small)
+                    <div
+                        class="flex items-center gap-x-4 py-1 px-3 rounded-t-lg border border-zinc-300 dark:border-zinc-600 bg-zinc-100 dark:bg-zinc-600 w-full">
+                        <p class="py-0.5 text-sm text-zinc-500 dark:text-zinc-400">
+                            Commentaire
+                        </p>
+                    </div>
+                @endif
                 <div
-                    class="flex items-center gap-x-4 py-1 px-3 rounded-t-lg border border-zinc-300 dark:border-zinc-600 bg-zinc-100 dark:bg-zinc-600 w-full">
-                    <p class="py-0.5 text-sm text-zinc-500 dark:text-zinc-400">
-                        Commentaire
-                    </p>
-                </div>
-                <div class="flex flex-col gap-y-2 p-2 border border-t-0 border-zinc-300 dark:border-zinc-600 rounded-b-lg">
-                    <flux:textarea wire:model='comment' class="w-full h-20 resize-none p-2 text-sm focus-visible:ring-0!"
+                    class="flex flex-col gap-y-2 p-2  @if (!$small) border border-t-0 rounded-b-lg @else rounded-lg @endif border-zinc-300 dark:border-zinc-600 ">
+                    <flux:textarea wire:model='comment'
+                        class="w-full {{ $small ? 'h-15' : 'h-20' }} resize-none p-2 text-sm focus-visible:ring-0!"
                         badge="optionel" placeholder="Entrez une remarque"></flux:textarea>
                     <div class="flex justify-end gap-x-2">
-                        <flux:button variant="primary" size="sm" color="violet" class="w-fit self-end"
-                            wire:click='addComment()'>
+                        <flux:button variant="primary" size="{{ $small ? 'xs' : 'sm' }}" color="violet"
+                            class="w-fit self-end" wire:click='addComment()'>
                             Ajouter un commentaire
                         </flux:button>
                     </div>
