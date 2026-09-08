@@ -6,7 +6,7 @@
     'color' => 'zinc',
 ])
 
-<li data-timeline-item="">
+<li data-timeline-item>
     <div data-timeline-icon=""
         class="p-2 rounded-full bg-zinc-000 dark:border-{{ $color }}-100  }} border bg-white dark:bg-zinc-800 w-fit">
         @if ($icon)

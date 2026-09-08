@@ -42,7 +42,7 @@ new class extends Component {
 
 ?>
 
-<x-message :user="$event->author" :$small class="ml-[-35pt]">
+<x-message :user="$event->author" :$small class="ml-[-35pt] {{ $small ? 'small' : '' }}">
     @if (!$small)
         <x-slot:header>
             <span class="text-zinc-800 dark:text-zinc-300 font-medium">{{ $event->author->name }}</span>

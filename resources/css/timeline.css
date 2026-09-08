@@ -19,3 +19,8 @@
     left: -43px;
     /* box-shadow: 0 0 0 5px white; */
 }
+
+.small[data-timeline-message] {
+    @apply text-sm;
+    @apply text-zinc-600 dark:text-zinc-400;
+}

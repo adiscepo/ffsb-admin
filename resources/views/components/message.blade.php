@@ -1,8 +1,8 @@
 @props(['user' => null, 'small' => false])
 
-<div {{ $attributes->only('class')->merge(['class' => 'relative flex gap-x-3 items-start']) }}>
+<div {{ $attributes->only('class')->merge(['class' => 'relative flex gap-x-3 items-start']) }} data-timeline-message>
     @if (isset($user))
-        <flux:avatar :src="$user->getProfilePicture()" :initials="$user->initials()" />
+        <flux:avatar :src="$user->getProfilePicture()" :initials="$user->initials()" :size="$small ? 'sm' : 'base'" />
     @else
         <flux:avatar initials="?" color="auto" />
     @endif
