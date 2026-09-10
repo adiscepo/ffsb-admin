@@ -39,9 +39,8 @@ new class extends Component {
 
 {{-- Need to check if the evaluation belongs to the connected user, if so the evaluation is in edit mode. Otherwise, the evaluation is readonly --}}
 
-<div class="py-5 relative h-full">
-    <div class="relative flex flex-col gap-y-2 px-5 overflow-hidden text-sm h-full">
-        <h2 class="text-zinc-700 dark:text-zinc-200">Maisons de production sans status</h2>
+<x:widget.layout icon="building-storefront" title="Maisons de productions" class="h-fit">
+    <div class="p-4 text-sm">
         @if ($uncontacted_production_houses->isNotEmpty())
             <div class="overflow-y-scroll max-h-30 ml-3">
                 @foreach ($uncontacted_production_houses as $production_house)
@@ -85,4 +84,4 @@ new class extends Component {
             </p>
         @endif
     </div>
-</div>
+</x:widget.layout>

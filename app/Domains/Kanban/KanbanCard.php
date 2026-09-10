@@ -51,6 +51,11 @@ class KanbanCard extends Model
         return $this->belongsToMany(User::class);
     }
 
+    public function scopeKanban($query, int $kanban_id)
+    {
+        return $query->where('kanban_id', $kanban_id);
+    }
+
     public function scopeActive($query)
     {
         return $query->whereIn('kanban_column_id', KanbanColumn::active()->pluck('id'));

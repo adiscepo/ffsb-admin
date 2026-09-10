@@ -38,12 +38,8 @@ new class extends Component {
     }
 };
 ?>
-<div class="flex flex-col p-5 border rounded-lg border-zinc-200">
-    <h3 class="text-sm text-zinc-500">
-        Classement du nombre de docus vu en {{ $edition_year->year }}
-    </h3>
-    <div class="mb-4"></div>
-    <div class="flex flex-col gap-y-1.5 px-5">
+<x:widget.layout icon="star" title="Classement du nombre de docus vu" class="h-fit">
+    <div class="flex flex-col gap-y-1.5 p-4">
         @php
             $i = 1;
         @endphp
@@ -83,4 +79,4 @@ new class extends Component {
             @endphp
         @endforeach
     </div>
-</div>
+</x:widget.layout>

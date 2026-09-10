@@ -13,35 +13,65 @@ use App\Domains\Kanban\KanbanCard;
 
 new class extends Component {
     public Collection $tasks;
-    public Kanban $selected_kanban;
+    // The selected kanban, 0 if all are selected
+    public int $selected_kanban_id = 0;
     public bool $nothing_assigned = false;
+    public bool $no_tasks = false;
 
     public function mount()
+    {
+        $this->fetchAllTasks();
+    }
+
+    private function fetchTasks(): void
+    {
+        $this->no_tasks = false;
+        if ($this->selected_kanban_id) {
+            $this->tasks = Auth::user()->tasks()->active()->kanban($this->selected_kanban_id)->orderBy('kanban_column_id', 'asc')->get();
+            $this->no_tasks = $this->tasks->isEmpty();
+        } else {
+            $this->fetchAllTasks();
+        }
+    }
+
+    private function fetchAllTasks()
     {
         $this->tasks = Auth::user()->tasks()->active()->orderBy('kanban_column_id', 'asc')->get();
         if ($this->tasks->isEmpty()) {
             $this->tasks = KanbanCard::active()->unassigned()->get();
             $this->nothing_assigned = true;
         }
-        $this->selected_kanban = Kanban::first();
+    }
+
+    public function updatedSelectedKanbanId()
+    {
+        $this->fetchTasks();
     }
 };
 ?>
 
 <x:widget.layout icon="clipboard-document-list" title="Tâches">
     <x-slot:trailing>
-        <flux:select wire:model.live='selected_kanban' class="w-fit" size="xs">
+        <flux:select wire:model.live='selected_kanban_id' class="w-fit" size="xs">
+            <flux:select.option :value="0">Tous</flux:select.option>
             @foreach (Kanban::all() as $kanban)
-                <flux:select.option>{{ $kanban->name }}</flux:select.option>
+                <flux:select.option :value="$kanban->id">{{ $kanban->name }}</flux:select.option>
             @endforeach
         </flux:select>
     </x-slot:trailing>
-    <div class="flex flex-col">
+    <div class="flex flex-col max-h-[50vh] overflow-y-scroll">
         <div>
             @if ($nothing_assigned)
                 <div class="flex justify-center pt-2 pb-1">
                     <span class="text-center text-sm text-zinc-500 dark:text-zinc-300 italic">
                         Voici la liste des tâches sans personnes pour s'en occuper
+                    </span>
+                </div>
+            @endif
+            @if ($no_tasks)
+                <div class="flex justify-center py-2">
+                    <span class="text-center text-sm text-zinc-500 dark:text-zinc-300 italic">
+                        Vous n'avez aucune tâche associée dans ce kanban
                     </span>
                 </div>
             @endif
