@@ -34,7 +34,11 @@ new class extends Component {
 
     public function update(CardService $card_service)
     {
-        $card_service->updateCard($this->card, $this->title, $this->description, Carbon::createFromFormat('d/m/Y', $this->deadline));
+        $deadline = $this->deadline;
+        if (isset($deadline)) {
+            $deadline = Carbon::createFromFormat('d/m/Y', $this->deadline);
+        }
+        $card_service->updateCard($this->card, $this->title, $this->description, $deadline);
         $this->redirect(request()->header('Referer'), navigate: true);
     }
 
