@@ -10,6 +10,7 @@ use function App\Helpers\HumanTiming\to_human;
 
 new class extends Component {
     public array $ladderboard;
+    public bool $see_times = false;
     public EditionYear $edition_year;
 
     public function mount(?EditionYear $edition_year = null)
@@ -36,10 +37,18 @@ new class extends Component {
         $this->ladderboard = $ladderboard->toArray();
         $this->edition_year = $edition_year;
     }
+
+    public function toggleTimes()
+    {
+        $this->see_times = !$this->see_times;
+    }
 };
 ?>
 <x:widget.layout icon="star" title="Classement du nombre de docus vu" class="h-fit">
-    <div class="flex flex-col gap-y-1.5 p-4">
+    <x-slot:trailing>
+        <flux:icon wire:click='toggleTimes()' icon="clock" class="size-6 p-1 hover:bg-zinc-100 rounded cursor-pointer" />
+    </x-slot:trailing>
+    <div class="flex flex-col gap-y-1.5 py-4 px-6">
         @php
             $i = 1;
         @endphp
@@ -67,12 +76,14 @@ new class extends Component {
                     @endswitch
                     <p class="text-sm text-zinc-800">{{ $user['user_name'] }}</p>
                 </div>
-                <div class="flex items-center place-self-center justify-center gap-x-2">
+                <span class="flex text-zinc-500 text-xs place-self-end">
+                    @if ($see_times)
+                        <flux:icon.eye class="size-4" />{{ to_human($user['user']->getTimeViewed($edition_year)) }}
+                    @endif
+                </span>
+                <div class="flex justify-end gap-x-2">
                     <span>{{ $user['number_evaluations'] }}</span>
                 </div>
-                <span class="flex text-zinc-500 text-xs place-self-end">
-                    <flux:icon.eye class="size-4" />{{ to_human($user['user']->getTimeViewed($edition_year)) }}
-                </span>
             </div>
             @php
                 $i += 1;
