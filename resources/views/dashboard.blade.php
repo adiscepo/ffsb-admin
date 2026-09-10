@@ -1,3 +1,5 @@
+@component('partials.heading', ['route' => 'Dashboard'])
+@endcomponent
 <x-layouts::app :title="__('Tableau de bord')" class="relative">
     <div class="flex h-full w-full flex-1 flex-col gap-4 rounded-xl p-10">
         <div class="grid auto-rows-min gap-4 md:grid-cols-3">
@@ -7,19 +9,17 @@
             <div class="relative rounded-xl border border-neutral-200 dark:border-neutral-700">
                 <livewire:widget.random-unevaluated />
             </div>
+            <div class="space-y-2">
+                <livewire:widget.kanban-tasks />
+                <livewire:widget.future-meetings />
+            </div>
             <div class="relative rounded-xl border border-neutral-200 dark:border-neutral-700">
                 @if (Auth::user()->has('production_houses'))
                     <livewire:widget.assigned-production-houses />
                 @endif
             </div>
-            <div class="relative rounded-xl border border-neutral-200 dark:border-neutral-700">
-                <livewire:widget.future-meetings />
-            </div>
-            <div class="">
+            <div class="relative">
                 <livewire:evaluations.ladderboard />
-            </div>
-            <div class="relative rounded-xl border border-neutral-200 dark:border-neutral-700">
-                <livewire:widget.kanban-tasks />
             </div>
         </div>
         {{-- <div class="relative h-full flex-1 overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700">
