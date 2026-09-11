@@ -9,26 +9,24 @@
                 <h2 class="font-bold text-2xl">Bonjour {{ Auth::user()->name }} !</h2>
             </div>
             {{-- Notification --}}
-            <div class="relative cursor-pointer">
-                <flux:icon.bell class="hover:text-zinc-700" />
-                @if (Auth::user()->unreadNotifications->isNotEmpty())
-                    <div class="absolute w-2 h-2 bg-purple-400 animate-ping rounded-full top-0 right-1"></div>
-                    <div class="absolute w-2 h-2 bg-purple-500 rounded-full top-0 right-1"></div>
-                @endif
-            </div>
+            <x-notifications.bell />
         </div>
         <div class="grid auto-rows-min gap-4 md:grid-cols-3">
-            <livewire:widget.last-added-docu />
-            <livewire:widget.random-unevaluated />
+            <div class="space-y-4">
+                <livewire:widget.last-added-docu />
+                @if (Auth::user()->has('production_houses'))
+                    <livewire:widget.assigned-production-houses />
+                @endif
+            </div>
+            <div class="space-y-4">
+                <livewire:widget.random-unevaluated />
+                <livewire:evaluations.ladderboard />
+            </div>
             <div class="space-y-4">
                 <livewire:widget.kanban-tasks />
                 <livewire:widget.future-meetings />
             </div>
-            @if (Auth::user()->has('production_houses'))
-                <livewire:widget.assigned-production-houses />
-            @endif
             <div class="relative">
-                <livewire:evaluations.ladderboard />
             </div>
         </div>
         {{-- <div class="relative h-full flex-1 overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700">

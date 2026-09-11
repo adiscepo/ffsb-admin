@@ -4,8 +4,10 @@ namespace App\Domains\Bugs\Actions;
 
 use App\Models\User;
 use App\Domains\Bugs\Bug;
+use App\Domains\Bugs\Events\BugCreated;
 use App\Domains\Events\Event;
 use App\Domains\Tags\Tag;
+use App\Notifications\BugReported;
 use Illuminate\Support\Facades\DB;
 
 class CreateBug
@@ -37,7 +39,7 @@ class CreateBug
             ]);
 
             $bug->events()->attach($event_create);
-
+            BugCreated::dispatch($bug);
             // Previous version, with status for 'open', 'resolved', etc.
             // But it was too explicit, a simple boolean open/closed is enough
             // (what was I thinking ? Recreating git ?)
