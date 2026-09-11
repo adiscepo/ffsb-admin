@@ -4,6 +4,7 @@ namespace App\Domains\Bugs\Actions;
 
 use App\Models\User;
 use App\Domains\Bugs\Bug;
+use App\Domains\Bugs\Events\BugClosed;
 use App\Domains\Events\Event;
 use Illuminate\Support\Facades\DB;
 
@@ -23,6 +24,7 @@ class CloseBug
             ]);
 
             $bug->events()->attach($event_create);
+            BugClosed::dispatch($bug);
         });
     }
 }
