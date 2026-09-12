@@ -15,14 +15,7 @@ new class extends Component {
 };
 ?>
 
-<div class="relative cursor-pointer">
-    <flux:modal.trigger name="notif-tab">
-        <flux:icon.bell class="hover:text-zinc-700" />
-        @if (Auth::user()->unreadNotifications->isNotEmpty())
-            <div class="absolute w-2 h-2 bg-purple-400 animate-ping rounded-full top-0 right-1"></div>
-            <div class="absolute w-2 h-2 bg-purple-500 rounded-full top-0 right-1"></div>
-        @endif
-    </flux:modal.trigger>
+<flux:modal.trigger name="notif-tab" class="cursor-pointer">
     <flux:modal name="notif-tab" variant="flyout" class="flex flex-col gap-y-1">
         <h3 class="font-bold text-zinc-900 mb-3">Notifications</h3>
         @if (Auth::user()->notifications->isNotEmpty())
@@ -47,4 +40,10 @@ new class extends Component {
             </span>
         @endif
     </flux:modal>
-</div>
+
+    <flux:icon.bell class="hover:text-zinc-700" />
+    @if (Auth::user()->unreadNotifications->isNotEmpty())
+        <div class="absolute w-2 h-2 bg-purple-400 animate-ping rounded-full top-0 right-1"></div>
+        <div class="absolute w-2 h-2 bg-purple-500 rounded-full top-0 right-1"></div>
+    @endif
+</flux:modal.trigger>
