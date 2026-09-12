@@ -9,6 +9,7 @@ use App\Domains\Bugs\Actions\RemoveAssignationBug;
 use App\Domains\Bugs\Actions\CommentBug;
 use App\Domains\Bugs\Actions\CloseBug;
 use App\Domains\Bugs\Actions\ToggleTagBug;
+use App\Domains\Events\Actions\CreateComment;
 
 new class extends Component {
     public ?Bug $bug;
@@ -45,7 +46,7 @@ new class extends Component {
         }
     }
 
-    public function commentBug(CommentBug $comment, CloseBug $close)
+    public function commentBug(CreateComment $comment, CloseBug $close)
     {
         if ($this->bug->open) {
             if (isset($this->comment) && $this->comment != '') {

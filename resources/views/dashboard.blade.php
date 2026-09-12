@@ -5,11 +5,11 @@
         <div class="flex justify-between">
             {{-- Header --}}
             <div>
-                <span class="text-xs text-zinc-500">{{ date('d F Y') }}</span>
+                <span class="text-xs text-zinc-500">{{ now()->locale('fr_FR')->isoFormat('LL') }}</span>
                 <h2 class="font-bold text-2xl">Bonjour {{ Auth::user()->name }} !</h2>
             </div>
             {{-- Notification --}}
-            <x-notifications.bell />
+            <livewire:notifications.bell />
         </div>
         <div class="grid auto-rows-min gap-4 md:grid-cols-3">
             <div class="space-y-4">

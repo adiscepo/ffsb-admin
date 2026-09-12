@@ -1,3 +1,16 @@
+<?php
+
+use Livewire\Component;
+use Illuminate\Notifications\DatabaseNotification;
+
+new class extends Component {
+    public function clearNotifications()
+    {
+        Auth::user()->notifications()->delete();
+    }
+};
+?>
+
 <div class="relative cursor-pointer">
     <flux:modal.trigger name="notif-tab">
         <flux:icon.bell class="hover:text-zinc-700" />
@@ -9,13 +22,15 @@
     <flux:modal name="notif-tab" variant="flyout" class="flex flex-col gap-y-1">
         <h3 class="font-bold text-zinc-900 mb-3">Notifications</h3>
         @if (Auth::user()->notifications->isNotEmpty())
-            @foreach (Auth::user()->notifications as $notification)
-                <x:notifications.line :title="$notification?->data['title']"
-                    :time="$notification->created_at->diffForHumans()"
-                    :description="$notification?->data['description']" :unread="$notification->unread()"
-                    wire:click='$notification->markAsRead'>
-                </x:notifications.line>
-            @endforeach
+            <div class="space-y-2">
+                @foreach (Auth::user()->notifications as $notification)
+                    <livewire:notifications.notification :$notification />
+                @endforeach
+            </div>
+            <span wire:click='clearNotifications'
+                class="text-center text-xs hover:underline text-zinc-400 dark:text-zinc-300 mt-3">
+                Supprimer toutes les notifications
+            </span>
         @else
             <span class="text-center text-sm text-zinc-500 dark:text-zinc-300 italic">
                 Vous n'avez aucune notification
