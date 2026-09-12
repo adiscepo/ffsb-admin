@@ -16,7 +16,7 @@ new class extends Component {
 ?>
 
 <flux:modal.trigger name="notif-tab" class="cursor-pointer">
-    <flux:modal name="notif-tab" variant="flyout" class="flex flex-col gap-y-1">
+    <flux:modal name="notif-tab" flyout variant="floating" class="flex flex-col gap-y-1">
         <h3 class="font-bold text-zinc-900 mb-3">Notifications</h3>
         @if (Auth::user()->notifications->isNotEmpty())
             <div class="space-y-2">
