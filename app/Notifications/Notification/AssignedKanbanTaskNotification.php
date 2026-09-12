@@ -2,20 +2,20 @@
 
 namespace App\Notifications\Notification;
 
-use App\Domains\Bugs\Bug;
+use App\Domains\Kanban\KanbanCard;
+use App\Models\User;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class BugClosedNotification extends Notification
+class AssignedKanbanTaskNotification extends Notification
 {
     use Queueable;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct(private Bug $bug) {}
+    public function __construct(private KanbanCard $kanban_card, private User $author) {}
 
     /**
      * Get the notification's delivery channels.
@@ -33,7 +33,8 @@ class BugClosedNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->line('Le bug ' . $this->bug->title . ' a été fermé');
+            ->line('')
+            ->action('Voir', url('/'));
     }
 
     /**
@@ -43,12 +44,11 @@ class BugClosedNotification extends Notification
      */
     public function toArray(object $notifiable): array
     {
-        $description = $this->bug->events->last()->author->name . ' a clôt <strong>' . $this->bug->title . '</strong>';
+        $description = $this->author->name . ' vous a assigné à la tâche <strong>' . mb_strimwidth($this->kanban_card->title, 0, 30, '...')  . '</strong>';
         return [
-            'bug_id' => $this->bug->id,
-            'title' => 'Bug clôturé',
+            'title' => 'Nouvelle tâche',
             'description' => $description,
-            'url' => route('support.bugs.single', $this->bug->id),
+            'url' => route('kanban', $this->kanban_card->kanban->id),
         ];
     }
 }

@@ -8,6 +8,10 @@ new class extends Component {
     {
         Auth::user()->notifications()->delete();
     }
+    public function markAllAsRead()
+    {
+        Auth::user()->notifications->markAsRead();
+    }
 };
 ?>
 
@@ -27,10 +31,16 @@ new class extends Component {
                     <livewire:notifications.notification :$notification />
                 @endforeach
             </div>
-            <span wire:click='clearNotifications'
-                class="text-center text-xs hover:underline text-zinc-400 dark:text-zinc-300 mt-3">
-                Supprimer toutes les notifications
-            </span>
+            <div class="flex gap-x-2 justify-around">
+                <span wire:click='markAllAsRead'
+                    class="text-center text-xs hover:underline text-zinc-400 dark:text-zinc-300 mt-3">
+                    Tout marquer comme lu
+                </span>
+                <span wire:click='clearNotifications'
+                    class="text-center text-xs hover:underline text-zinc-400 dark:text-zinc-300 mt-3">
+                    Supprimer toutes les notifications
+                </span>
+            </div>
         @else
             <span class="text-center text-sm text-zinc-500 dark:text-zinc-300 italic">
                 Vous n'avez aucune notification

@@ -5,6 +5,7 @@ use App\Domains\Kanban\Services\CardService;
 use Carbon\Carbon;
 use App\Domains\Kanban\KanbanColumn;
 use App\Models\User;
+use Livewire\Attributes\On;
 
 new class extends Component {
     public KanbanColumn $column;
@@ -14,7 +15,7 @@ new class extends Component {
     public array $assignees = [];
 
     protected $listeners = [
-        'pill-box:assigned' => 'updateAssigned',
+        'pill-box:assigned_task' => 'updateAssigned',
     ];
 
     public function mount(KanbanColumn $column)
@@ -91,7 +92,7 @@ new class extends Component {
     </div>
     <flux:field>
         <flux:label>Assignés</flux:label>
-        <livewire:pill-box name="assigned" :datas="User::all()->toArray()" />
+        <livewire:pill-box name="assigned_task" :datas="User::all()->toArray()" />
     </flux:field>
     <flux:field>
         <flux:label>Description</flux:label>
