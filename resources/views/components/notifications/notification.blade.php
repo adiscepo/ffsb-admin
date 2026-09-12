@@ -26,7 +26,8 @@ new class extends Component {
 };
 ?>
 
-<div class="relative flex gap-x-3.5 items-center" wire:click='markAsRead'>
+<div class="relative pl-2 flex gap-x-3.5 items-center border-l-2 border-white hover:border-l-violet-400"
+    wire:click='markAsRead'>
     <div>
         @if ($notification->unread())
             <div class="absolute w-2 h-2 bg-purple-400 rounded-full top-3 right-1"></div>
