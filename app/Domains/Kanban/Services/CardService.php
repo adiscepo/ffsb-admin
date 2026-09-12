@@ -2,9 +2,11 @@
 
 namespace App\Domains\Kanban\Services;
 
+use App\Domains\Kanban\Events\UserAssignedCard;
 use App\Domains\Kanban\Kanban;
 use App\Domains\Kanban\KanbanCard as Card;
 use App\Domains\Kanban\KanbanColumn;
+use App\Models\User;
 use DateTime;
 
 class CardService
@@ -64,6 +66,7 @@ class CardService
     public function assignUserCard(Card $card, int $user_id)
     {
         $card->assignee()->attach($user_id);
+        UserAssignedCard::dispatch(User::findOrFail($user_id), $card);
     }
 
     public function unassignUserCard(Card $card, int $user_id)

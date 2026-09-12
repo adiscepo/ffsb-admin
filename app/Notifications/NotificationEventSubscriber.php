@@ -6,13 +6,16 @@ use App\Domains\Bugs\Bug;
 use App\Domains\Bugs\Events\BugClosed;
 use App\Domains\Bugs\Events\BugCreated;
 use App\Domains\Events\Events\CommentCreated;
+use App\Domains\Kanban\Events\UserAssignedCard;
 use App\Domains\Kanban\KanbanCard;
 use App\Models\User;
+use App\Notifications\Notification\AssignedKanbanTaskNotification;
 use App\Notifications\Notification\BugClosedNotification;
 use App\Notifications\Notification\BugCommentedNotification;
 use App\Notifications\Notification\BugReportedNotification;
 use App\Notifications\Notification\KanbanTaskCommentedNotification;
 use Illuminate\Events\Dispatcher;
+use Illuminate\Support\Facades\Auth;
 
 class NotificationEventSubscriber
 {
@@ -27,6 +30,7 @@ class NotificationEventSubscriber
             BugCreated::class => 'handleBugCreated',
             BugClosed::class => 'handleBugClosed',
             CommentCreated::class => 'handleCommentCreated',
+            UserAssignedCard::class => 'handleUserAssignedCard',
             // EventClass::class => 'handleEvent',
             // Event2Class::class => 'handleEvent2',
         ];
@@ -77,6 +81,14 @@ class NotificationEventSubscriber
                     $relation->assignation->notify(new BugCommentedNotification($event->event, $relation));
                 }
             }
+        }
+    }
+
+    public function handleUserAssignedCard(UserAssignedCard $event)
+    {
+        // TODO(Policies): Replace with User::where('role','admin');
+        if (Auth::user() != $event->user) {
+            $event->user->notify(new AssignedKanbanTaskNotification($event->kanban_card, Auth::user()));
         }
     }
 }
