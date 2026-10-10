@@ -115,7 +115,7 @@ new class extends Component {
 
     public function save(CreateDocu $create)
     {
-        dd($this->links);
+        // dd($this->links);
         $this->validate($this->rules());
         $create->execute(Auth::user(), [
             'title' => $this->title,
